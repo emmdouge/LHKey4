@@ -10,7 +10,7 @@ roll := 60
 e:: Send, {}
 $~e up::
 pressed :=  (GetKeyState("w", "P") ||  GetKeyState("r", "P"))
-if !pressed
+if !pressed && (A_TimeSincePriorHotkey, "r") > roll
     send {e}
 if instr(A_PriorKey, "w")
 	send {u}
@@ -32,6 +32,8 @@ $~r up::
 pressed :=  (GetKeyState("e", "P"))
 if !pressed && (A_TimeSincePriorHotkey, "e") > roll
     send {r}
+if instr(A_PriorKey, "e")
+	send {i}
 pressed := 0 
 return 
 
