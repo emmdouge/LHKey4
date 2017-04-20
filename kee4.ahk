@@ -79,6 +79,37 @@ if instr(A_PriorKey, "d")
 pressed := 0 
 return 
 
+c:: Send, {}
+$~c up::
+pressed :=  (GetKeyState("x", "P") ||  GetKeyState("v", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "v") > roll
+    send {c}
+if instr(A_PriorKey, "x")
+	send {n}
+if instr(A_PriorKey, "v")
+	send {.}
+pressed := 0 
+return 
+
+x:: Send, {}
+$~x up::
+pressed :=  (GetKeyState("c", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "c") > roll
+    send {x}
+if instr(A_PriorKey, "c")
+	send {m}
+pressed := 0 
+return 
+
+v:: Send, {}
+$~v up::
+pressed :=  (GetKeyState("c", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "c") > roll
+    send {v}
+if instr(A_PriorKey, "c")
+	send {,}
+pressed := 0 
+return 
 
 Capslock::Enter
 LAlt::ScrollLock   
@@ -86,7 +117,8 @@ Tab Up::Send {Tab}
 
 Tab & 1:: Send, {=}
 Tab & 2:: Send, {_}
-Tab & 3:: Send, {\}
+Tab & 3:: Send, {?}
+Tab & 4:: Send, {\}
 
 Tab & Q:: Send, {>}
 Tab & W:: Send, {<}
