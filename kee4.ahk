@@ -3,14 +3,21 @@
 #Include <dual/dual>
 dual := new Dual
 SetCapsLockState, AlwaysOff
-roll := 70
+roll := 50
 
+numP := GetAllKeysPressed("P") ; see function below
 
+MaxIndex := numP.MaxIndex()
+
+;if MaxIndex > 1
+if MaxIndex > 2
+  roll := 0
+return
 
 e:: Send, {}
 $~e up::
 pressed :=  (GetKeyState("w", "P") ||  GetKeyState("r", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "r") > roll
+if !pressed && (A_TimeSincePriorHotkey, "r") > roll && (A_TimeSincePriorHotkey, "w") > roll
     send {e}
 if instr(A_PriorKey, "w")
 	send {u}
@@ -82,7 +89,7 @@ return
 c:: Send, {}
 $~c up::
 pressed :=  (GetKeyState("x", "P") ||  GetKeyState("v", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "v") > roll
+if !pressed && (A_TimeSincePriorHotkey, "v") > roll && (A_TimeSincePriorHotkey, "x")
     send {c}
 if instr(A_PriorKey, "x")
 	send {n}
@@ -161,27 +168,23 @@ Space & Z:: Send, {1}
 Space & X:: Send, {2}
 Space & C:: Send, {3}
 
-releaseAllModifiers() 
-{ 
-   list = LControl|RControl|LShift|RShift 
-   Loop Parse, list, | 
-   { 
-      if (GetKeyState(A_LoopField)) 
-         send {Blind}{%A_LoopField% up}       ; {Blind} is added.
-   } 
-} 
-
-restoreModifierPhysicalState()
-{
-	list = LControl|RControl|LShift|RShift
-	Loop Parse, list, |
-	{
-		if (GetKeyState(A_LoopField) != GetKeyState(A_LoopField, "P")) ;if logical and physical state do not match
+GetAllKeysPressed(mode = "L") {
+	
+	pressed := Array()
+	i := 1 
+		
+	keys = ``|1|2|3|4|5|6|7|8|9|0|-|=|[|]\|;|'|,|.|/|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|Esc|Tab|CapsLock|LShift|RShift|LCtrl|RCtrl|LWin|RWin|LAlt|RAlt|Space|AppsKey|Up|Down|Left|Right|Enter|BackSpace|Delete|Home|End|PGUP|PGDN|PrintScreen|ScrollLock|Pause|Insert|NumLock|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12|F13|F14|F15|F16|F17|F18|F19|F20
+	; '|' isn't a key itself (with '\' being the "actual" key), so okay to use is as a delimiter
+	Loop Parse, keys, |
+	{		
+		key = %A_LoopField%				
+		isDown :=  GetKeyState(key, mode)
+		if(isDown)
 		{
-			if (GetKeyState(A_LoopField, "P")) ;send an event to restore the physical key state
-				send {%A_LoopField% down}
-			else
-				send {%A_LoopField% up}
+			pressed[i] := key ; using 'i' instead of array.insert() for efficiency
+			i++
 		}
-	}
+	}   
+	
+	return pressed
 }
