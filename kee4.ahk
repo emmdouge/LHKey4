@@ -3,7 +3,7 @@
 #Include <dual/dual>
 dual := new Dual
 SetCapsLockState, AlwaysOff
-
+roll := 60
 
 
 
@@ -22,8 +22,16 @@ return
 w:: Send, {}
 $~w up::
 pressed :=  (GetKeyState("e", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "e") > 75
+if !pressed && (A_TimeSincePriorHotkey, "e") > roll
     send {w}
+pressed := 0 
+return 
+
+r:: Send, {}
+$~r up::
+pressed :=  (GetKeyState("e", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "e") > roll
+    send {r}
 pressed := 0 
 return 
 
