@@ -22,7 +22,7 @@ return
 w:: Send, {}
 $~w up::
 pressed :=  (GetKeyState("e", "P"))
-if !pressed && (A_TimeSincePriorHotkey) > 100
+if !pressed && (A_TimeSincePriorHotkey, "e") > 75
     send {w}
 pressed := 0 
 return 
