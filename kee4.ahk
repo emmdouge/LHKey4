@@ -1,19 +1,31 @@
-﻿#Include <dual/dual>
+﻿#InstallKeybdHook  
+#HotkeyModifierTimeout 500
+#Include <dual/dual>
 dual := new Dual
 SetCapsLockState, AlwaysOff
 
-w::
-    if (GetKeyState("e")=1) {
-        SendInput u
-    } else {
-	SendInput w
-    }
-    return
 
-if (GetKeyState("e")=0) and  (GetKeyState("w")=1){
-} else {
-}
-return
+
+
+e:: Send, {}
+$~e up::
+pressed :=  (GetKeyState("w", "P") ||  GetKeyState("r", "P"))
+if !pressed
+    send {e}
+if instr(A_PriorKey, "w")
+	send {u}
+if instr(A_PriorKey, "r")
+	send {o}
+pressed := 0 
+return 
+
+w:: Send, {}
+$~w up::
+pressed :=  (GetKeyState("e", "P"))
+if !pressed && (A_TimeSincePriorHotkey) > 100
+    send {w}
+pressed := 0 
+return 
 
 Capslock::Enter
 LAlt::ScrollLock   
@@ -63,3 +75,28 @@ Space & D:: Send, {6}
 Space & Z:: Send, {1}
 Space & X:: Send, {2}
 Space & C:: Send, {3}
+
+releaseAllModifiers() 
+{ 
+   list = LControl|RControl|LShift|RShift 
+   Loop Parse, list, | 
+   { 
+      if (GetKeyState(A_LoopField)) 
+         send {Blind}{%A_LoopField% up}       ; {Blind} is added.
+   } 
+} 
+
+restoreModifierPhysicalState()
+{
+	list = LControl|RControl|LShift|RShift
+	Loop Parse, list, |
+	{
+		if (GetKeyState(A_LoopField) != GetKeyState(A_LoopField, "P")) ;if logical and physical state do not match
+		{
+			if (GetKeyState(A_LoopField, "P")) ;send an event to restore the physical key state
+				send {%A_LoopField% down}
+			else
+				send {%A_LoopField% up}
+		}
+	}
+}
