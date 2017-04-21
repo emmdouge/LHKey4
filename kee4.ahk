@@ -1,9 +1,8 @@
 ﻿#InstallKeybdHook  
-#HotkeyModifierTimeout 500
 #Include <dual/dual>
 dual := new Dual
 SetCapsLockState, AlwaysOff
-roll := 50
+roll := 40
 
 numP := GetAllKeysPressed("P") ; see function below
 
@@ -68,7 +67,7 @@ return
 
 d:: Send, {}
 $~d up::
-pressed :=  (GetKeyState("a", "P"))
+pressed :=  (GetKeyState("f", "P"))
 if !pressed && (A_TimeSincePriorHotkey, "f") > roll
     send {d}
 if instr(A_PriorKey, "f")
