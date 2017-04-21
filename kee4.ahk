@@ -356,12 +356,12 @@ Space & D:: Send, {6}
 Space & Z:: Send, {1}
 Space & X:: Send, {2}
 Space & C:: Send, {3}
-LAlt & Q:: Send, {!}
-LAlt & W:: Send, {@}
-LAlt & E:: Send, {#}
-LAlt & A:: Send, {&}
-LAlt & S:: Send, {|}
-LAlt & D:: Send,  % "%"
+Alt & Q:: Send, {!}
+Alt & W:: Send, {@}
+Alt & E:: Send, {#}
+Alt & A:: Send, {&}
+Alt & S:: Send, {|}
+Alt & D:: Send,  % "%"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
