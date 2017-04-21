@@ -117,6 +117,100 @@ if instr(A_PriorKey, "c")
 pressed := 0 
 return 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
++e up::
+pressed :=  (GetKeyState("w", "P") ||  GetKeyState("r", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "r") > roll && (A_TimeSincePriorHotkey, "w") > roll
+    send {E}
+if instr(A_PriorKey, "w")
+	send {U}
+if instr(A_PriorKey, "r")
+	send {O}
+pressed := 0 
+return 
+
++w up::
+pressed :=  (GetKeyState("e", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "e") > roll
+    send {W}
+pressed := 0 
+return 
+
++r up::
+pressed :=  (GetKeyState("e", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "e") > roll
+    send {R}
+if instr(A_PriorKey, "e")
+	send {I}
+pressed := 0 
+return 
+
+;
+
++s up::
+pressed :=  (GetKeyState("a", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "a") > roll
+    send {S}
+if instr(A_PriorKey, "a")
+	send {H}
+pressed := 0 
+return 
+
++a up::
+pressed :=  (GetKeyState("s", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "s") > roll
+    send {A}
+if instr(A_PriorKey, "s")
+	send {J}
+pressed := 0 
+return 
+
++d up::
+pressed :=  (GetKeyState("f", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "f") > roll
+    send {D}
+if instr(A_PriorKey, "f")
+	send {L}
+pressed := 0 
+return 
+
++f up::
+pressed :=  (GetKeyState("d", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "d") > roll
+    send {F}
+if instr(A_PriorKey, "d")
+	send {K}
+pressed := 0 
+return 
+
++c up::
+pressed :=  (GetKeyState("x", "P") ||  GetKeyState("v", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "v") > roll && (A_TimeSincePriorHotkey, "x")
+    send {C}
+if instr(A_PriorKey, "x")
+	send {N}
+pressed := 0 
+return 
+
++x up::
+pressed :=  (GetKeyState("c", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "c") > roll
+    send {X}
+if instr(A_PriorKey, "c")
+	send {M}
+pressed := 0 
+return 
+
++v up::
+pressed :=  (GetKeyState("c", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "c") > roll
+    send {V}
+pressed := 0 
+return 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 Capslock::Enter
 LAlt::ScrollLock   
 Tab Up::Send {Tab}
@@ -166,6 +260,9 @@ Space & D:: Send, {6}
 Space & Z:: Send, {1}
 Space & X:: Send, {2}
 Space & C:: Send, {3}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 GetAllKeysPressed(mode = "L") {
 	
