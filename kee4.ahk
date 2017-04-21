@@ -153,7 +153,7 @@ return
 c:: Send, {}
 $~c up::
 pressed :=  (GetKeyState("x", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
-if (!pressed && (A_TimeSincePriorHotkey, "x")) {
+if (!pressed && (A_TimeSincePriorHotkey, "x") > roll) {
     send {c}
 	roll := 0
 }
