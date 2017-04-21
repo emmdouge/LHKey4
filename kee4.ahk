@@ -1,126 +1,212 @@
 ﻿#InstallKeybdHook
 SetCapsLockState, AlwaysOff
-roll := 50
 
-numP := GetAllKeysPressed("P") ; see function below
-
+roll := 70
+numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
-;if MaxIndex > 1
-if MaxIndex > 2
+#if MaxIndex < 1
   roll := 0
 return
 
 e:: Send, {}
 $~e up::
-pressed :=  (GetKeyState("w", "P") ||  GetKeyState("r", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "r") > roll && (A_TimeSincePriorHotkey, "w") > roll
+pressed :=  (GetKeyState("w", "P") ||  GetKeyState("r", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+if (!pressed && (A_TimeSincePriorHotkey, "r") > roll && (A_TimeSincePriorHotkey, "w") > roll) {
     send {e}
-if instr(A_PriorKey, "w")
+	roll := 0
+}
+if instr(A_PriorKey, "w") {
 	send {u}
-if instr(A_PriorKey, "r")
+	roll := 70
+}
+if instr(A_PriorKey, "r") {
 	send {o}
+	roll := 70
+}
 pressed := 0 
 return 
 
 w:: Send, {}
 $~w up::
 pressed :=  (GetKeyState("e", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "e") > roll
+if (!pressed && (A_TimeSincePriorHotkey, "e") > roll) {
     send {w}
+	roll := 0
+}
 pressed := 0 
 return 
 
 r:: Send, {}
 $~r up::
-pressed :=  (GetKeyState("e", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "e") > roll
+pressed :=  (GetKeyState("e", "P") || GetKeyState("q", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
+if (!pressed && (A_TimeSincePriorHotkey, "e") > roll && (A_TimeSincePriorHotkey, "q") > roll) {
     send {r}
-if instr(A_PriorKey, "e")
+	roll := 0
+}
+if instr(A_PriorKey, "e") {
 	send {i}
+	roll := 70
+}
+if instr(A_PriorKey, "q") {
+	send {y}
+	roll := 70
+}
 pressed := 0 
 return 
 
-;
+q:: Send, {}
+$~q up::
+pressed :=  (GetKeyState("r", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
+if (!pressed && (A_TimeSincePriorHotkey, "r") > roll) {
+    send {q}
+	roll := 0
+}
+if instr(A_PriorKey, "r") {
+	send {p}
+	roll := 70
+}
+pressed := 0 
+return 
 
 s:: Send, {}
 $~s up::
 pressed :=  (GetKeyState("a", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "a") > roll
+if (!pressed && (A_TimeSincePriorHotkey, "a") > roll) {
     send {s}
-if instr(A_PriorKey, "a")
+	roll := 0
+}
+if instr(A_PriorKey, "a") {
 	send {h}
+	roll := 70
+}
 pressed := 0 
 return 
 
 a:: Send, {}
 $~a up::
-pressed :=  (GetKeyState("s", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "s") > roll
+pressed :=  (GetKeyState("s", "P") || GetKeyState("g", "P") || GetKeyState("f", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
+if (!pressed && (A_TimeSincePriorHotkey, "s") > roll && (A_TimeSincePriorHotkey, "g") > roll && (A_TimeSincePriorHotkey, "f") > roll) {
     send {a}
-if instr(A_PriorKey, "s")
+	roll := 0
+}
+if instr(A_PriorKey, "s") {
 	send {j}
+	roll := 70
+}
+if instr(A_PriorKey, "g") {
+	send {;}
+	roll := 70
+}
+if instr(A_PriorKey, "f") {
+	send {"}
+	roll := 70
+}
 pressed := 0 
 return 
 
 d:: Send, {}
 $~d up::
 pressed :=  (GetKeyState("f", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "f") > roll
+if (!pressed && (A_TimeSincePriorHotkey, "f") > roll) {
     send {d}
-if instr(A_PriorKey, "f")
+	roll := 0
+}
+if instr(A_PriorKey, "f") {
 	send {l}
+	roll := 70
+}
 pressed := 0 
 return 
 
 f:: Send, {}
 $~f up::
-pressed :=  (GetKeyState("d", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "d") > roll
+pressed :=  (GetKeyState("d", "P") || GetKeyState("a", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
+if (!pressed && (A_TimeSincePriorHotkey, "d") > roll && (A_TimeSincePriorHotkey, "a") > roll) {
     send {f}
-if instr(A_PriorKey, "d")
+	roll := 0
+}
+if instr(A_PriorKey, "d") {
 	send {k}
+	roll := 70
+}
+if instr(A_PriorKey, "a") {
+	send {'}
+	roll := 70
+}
+pressed := 0 
+return 
+
+g:: Send, {}
+$~g up::
+pressed :=  (GetKeyState("a", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
+if (!pressed && (A_TimeSincePriorHotkey, "a") > roll) {
+    send {g}
+	roll := 0
+}
+if instr(A_PriorKey, "a") {
+	send {:}
+	roll := 70
+}
 pressed := 0 
 return 
 
 c:: Send, {}
 $~c up::
 pressed :=  (GetKeyState("x", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "v") > roll && (A_TimeSincePriorHotkey, "x")
+if (!pressed && (A_TimeSincePriorHotkey, "x")) {
     send {c}
-if instr(A_PriorKey, "x")
+	roll := 0
+}
+if instr(A_PriorKey, "x") {
 	send {n}
+	roll := 70
+}
 pressed := 0 
 return 
 
 x:: Send, {}
 $~x up::
-pressed :=  (GetKeyState("c", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "c") > roll
+pressed :=  (GetKeyState("c", "P") || GetKeyState("v", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
+if (!pressed && (A_TimeSincePriorHotkey, "c") > roll && (A_TimeSincePriorHotkey, "v") > roll) {
     send {x}
-if instr(A_PriorKey, "c")
+	roll := 0
+}
+if instr(A_PriorKey, "c") {
 	send {m}
-if instr(A_PriorKey, "v")
+	roll := 70
+}
+if instr(A_PriorKey, "v") {
 	send {.}
+	roll := 70
+}
 pressed := 0 
 return 
 
 v:: Send, {}
 $~v up::
 pressed :=  (GetKeyState("z", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "z") > roll
+if (!pressed && (A_TimeSincePriorHotkey, "z") > roll) {
     send {v}
-if instr(A_PriorKey, "z")
+	roll := 0
+}
+if instr(A_PriorKey, "z") {
 	send {,}
+	roll := 70
+}
 pressed := 0 
 return 
 
 z:: Send, {}
 $~z up::
 pressed :=  (GetKeyState("v", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "v") > roll
+if (!pressed && (A_TimeSincePriorHotkey, "v") > roll) {
     send {z}
-if instr(A_PriorKey, "v")
+	roll := 0
+}
+if instr(A_PriorKey, "v") {
 	send {.}
+	roll := 70
+}
 pressed := 0 
 return 
 
@@ -139,17 +225,30 @@ return
 
 +w up::
 pressed :=  (GetKeyState("e", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "e") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
+if !pressed && (A_TimeSincePriorHotkey, "e") > roll && (A_TimeSincePriorHotkey, "r") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
     send {W}
+if instr(A_PriorKey, "r")
+	send {P}
 pressed := 0 
 return 
 
 +r up::
-pressed :=  (GetKeyState("e", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "e") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
+pressed :=  (GetKeyState("e", "P") || GetKeyState("q", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "e") > roll && (A_TimeSincePriorHotkey, "q") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
     send {R}
 if instr(A_PriorKey, "e")
 	send {I}
+if instr(A_PriorKey, "q")
+	send {Y}
+pressed := 0 
+return 
+
++q up::
+pressed :=  (GetKeyState("r", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
+if !pressed && (A_TimeSincePriorHotkey, "r") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
+    send {Q}
+if instr(A_PriorKey, "r")
+	send {P}
 pressed := 0 
 return 
 
@@ -210,7 +309,6 @@ return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 Capslock::Enter
-LAlt::LAlt   
 Tab Up::Send {Tab}
 
 Tab & 1:: Send, {=}
@@ -243,11 +341,11 @@ Space & V:: Send, {/}
 Space & E:: Send, {(}
 Space & R:: Send, {)}
 
-Space & Q:: Send, {y}
-Space & T:: Send, {p}
+Space & Q:: Send, ^/
+Space & T:: Send, {^}
+Space & 4:: Send, {$}
 
 #If GetKeyState("Shift")=1
-Space & 4:: Send, ^/
 Space & Tab:: Send, {0}
 Space & Q:: Send, {7}
 Space & W:: Send, {8}
@@ -264,7 +362,6 @@ LAlt & E:: Send, {#}
 LAlt & A:: Send, {&}
 LAlt & S:: Send, {|}
 LAlt & D:: Send,  % "%"
-LAlt & F:: Send, {^}
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
