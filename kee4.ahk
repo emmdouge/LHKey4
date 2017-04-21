@@ -7,7 +7,6 @@ roll := 50
 numP := GetAllKeysPressed("P") ; see function below
 
 MaxIndex := numP.MaxIndex()
-
 ;if MaxIndex > 1
 if MaxIndex > 3
   roll := 0
@@ -15,7 +14,7 @@ return
 
 e:: Send, {}
 $~e up::
-pressed :=  (GetKeyState("w", "P") ||  GetKeyState("r", "P") || GetKeyState("Space", "P"))
+pressed :=  (GetKeyState("w", "P") ||  GetKeyState("r", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
 if !pressed && (A_TimeSincePriorHotkey, "r") > roll && (A_TimeSincePriorHotkey, "w") > roll
     send {e}
 if instr(A_PriorKey, "w")
@@ -27,7 +26,7 @@ return
 
 w:: Send, {}
 $~w up::
-pressed :=  (GetKeyState("e", "P") || GetKeyState("Space", "P"))
+pressed :=  (GetKeyState("e", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
 if !pressed && (A_TimeSincePriorHotkey, "e") > roll
     send {w}
 pressed := 0 
@@ -35,7 +34,7 @@ return
 
 r:: Send, {}
 $~r up::
-pressed :=  (GetKeyState("e", "P") || GetKeyState("Space", "P"))
+pressed :=  (GetKeyState("e", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
 if !pressed && (A_TimeSincePriorHotkey, "e") > roll
     send {r}
 if instr(A_PriorKey, "e")
@@ -47,7 +46,7 @@ return
 
 s:: Send, {}
 $~s up::
-pressed :=  (GetKeyState("a", "P") || GetKeyState("Space", "P"))
+pressed :=  (GetKeyState("a", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
 if !pressed && (A_TimeSincePriorHotkey, "a") > roll
     send {s}
 if instr(A_PriorKey, "a")
@@ -57,7 +56,7 @@ return
 
 a:: Send, {}
 $~a up::
-pressed :=  (GetKeyState("s", "P") || GetKeyState("Space", "P"))
+pressed :=  (GetKeyState("s", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
 if !pressed && (A_TimeSincePriorHotkey, "s") > roll
     send {a}
 if instr(A_PriorKey, "s")
@@ -67,7 +66,7 @@ return
 
 d:: Send, {}
 $~d up::
-pressed :=  (GetKeyState("f", "P") || GetKeyState("Space", "P"))
+pressed :=  (GetKeyState("f", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
 if !pressed && (A_TimeSincePriorHotkey, "f") > roll
     send {d}
 if instr(A_PriorKey, "f")
@@ -77,7 +76,7 @@ return
 
 f:: Send, {}
 $~f up::
-pressed :=  (GetKeyState("d", "P") || GetKeyState("Space", "P"))
+pressed :=  (GetKeyState("d", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
 if !pressed && (A_TimeSincePriorHotkey, "d") > roll
     send {f}
 if instr(A_PriorKey, "d")
@@ -87,7 +86,7 @@ return
 
 c:: Send, {}
 $~c up::
-pressed :=  (GetKeyState("x", "P") || GetKeyState("Space", "P"))
+pressed :=  (GetKeyState("x", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
 if !pressed && (A_TimeSincePriorHotkey, "v") > roll && (A_TimeSincePriorHotkey, "x")
     send {c}
 if instr(A_PriorKey, "x")
@@ -97,7 +96,7 @@ return
 
 x:: Send, {}
 $~x up::
-pressed :=  (GetKeyState("c", "P") || GetKeyState("Space", "P"))
+pressed :=  (GetKeyState("c", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
 if !pressed && (A_TimeSincePriorHotkey, "c") > roll
     send {x}
 if instr(A_PriorKey, "c")
@@ -109,7 +108,7 @@ return
 
 v:: Send, {}
 $~v up::
-pressed :=  (GetKeyState("z", "P") || GetKeyState("Space", "P"))
+pressed :=  (GetKeyState("z", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
 if !pressed && (A_TimeSincePriorHotkey, "z") > roll
     send {v}
 if instr(A_PriorKey, "z")
@@ -119,7 +118,7 @@ return
 
 z:: Send, {}
 $~z up::
-pressed :=  (GetKeyState("v", "P") || GetKeyState("Space", "P"))
+pressed :=  (GetKeyState("v", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
 if !pressed && (A_TimeSincePriorHotkey, "v") > roll
     send {z}
 if instr(A_PriorKey, "v")
