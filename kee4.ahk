@@ -1,6 +1,4 @@
-﻿#InstallKeybdHook  
-#Include <dual/dual>
-dual := new Dual
+﻿#InstallKeybdHook
 SetCapsLockState, AlwaysOff
 roll := 50
 
@@ -8,7 +6,7 @@ numP := GetAllKeysPressed("P") ; see function below
 
 MaxIndex := numP.MaxIndex()
 ;if MaxIndex > 1
-if MaxIndex > 3
+if MaxIndex > 2
   roll := 0
 return
 
@@ -130,7 +128,7 @@ return
 
 +e up::
 pressed :=  (GetKeyState("w", "P") ||  GetKeyState("r", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "r") > roll && (A_TimeSincePriorHotkey, "w") > roll
+if !pressed && (A_TimeSincePriorHotkey, "r") > roll && (A_TimeSincePriorHotkey, "w") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
     send {E}
 if instr(A_PriorKey, "w")
 	send {U}
@@ -141,25 +139,23 @@ return
 
 +w up::
 pressed :=  (GetKeyState("e", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "e") > roll
+if !pressed && (A_TimeSincePriorHotkey, "e") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
     send {W}
 pressed := 0 
 return 
 
 +r up::
 pressed :=  (GetKeyState("e", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "e") > roll
+if !pressed && (A_TimeSincePriorHotkey, "e") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
     send {R}
 if instr(A_PriorKey, "e")
 	send {I}
 pressed := 0 
 return 
 
-;
-
 +s up::
 pressed :=  (GetKeyState("a", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "a") > roll
+if !pressed && (A_TimeSincePriorHotkey, "a") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
     send {S}
 if instr(A_PriorKey, "a")
 	send {H}
@@ -168,7 +164,7 @@ return
 
 +a up::
 pressed :=  (GetKeyState("s", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "s") > roll
+if !pressed && (A_TimeSincePriorHotkey, "s") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
     send {A}
 if instr(A_PriorKey, "s")
 	send {J}
@@ -177,7 +173,7 @@ return
 
 +d up::
 pressed :=  (GetKeyState("f", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "f") > roll
+if !pressed && (A_TimeSincePriorHotkey, "f") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
     send {D}
 if instr(A_PriorKey, "f")
 	send {L}
@@ -186,7 +182,7 @@ return
 
 +f up::
 pressed :=  (GetKeyState("d", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "d") > roll
+if !pressed && (A_TimeSincePriorHotkey, "d") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
     send {F}
 if instr(A_PriorKey, "d")
 	send {K}
@@ -195,7 +191,7 @@ return
 
 +c up::
 pressed :=  (GetKeyState("x", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "v") > roll && (A_TimeSincePriorHotkey, "x")
+if !pressed && (A_TimeSincePriorHotkey, "x") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
     send {C}
 if instr(A_PriorKey, "x")
 	send {N}
@@ -204,7 +200,7 @@ return
 
 +x up::
 pressed :=  (GetKeyState("c", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "c") > roll
+if !pressed && (A_TimeSincePriorHotkey, "c") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
     send {X}
 if instr(A_PriorKey, "c")
 	send {M}
@@ -214,7 +210,7 @@ return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 Capslock::Enter
-LAlt::ScrollLock   
+LAlt::LAlt   
 Tab Up::Send {Tab}
 
 Tab & 1:: Send, {=}
@@ -262,7 +258,13 @@ Space & D:: Send, {6}
 Space & Z:: Send, {1}
 Space & X:: Send, {2}
 Space & C:: Send, {3}
-
+LAlt & Q:: Send, {!}
+LAlt & W:: Send, {@}
+LAlt & E:: Send, {#}
+LAlt & A:: Send, {&}
+LAlt & S:: Send, {|}
+LAlt & D:: Send,  % "%"
+LAlt & F:: Send, {^}
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
