@@ -29,16 +29,16 @@ CheckForKeyMouse:
 	MouseMove, x, y, , R
 return
 
-Space & p::
+Space & `;::
     if( not GetKeyState("LButton" , "P") )
         Click down
 return
 
-Space & p Up::Click up
+Space & `; Up::Click up
 
 Space & u:: Send, {MButton}
 Space & o:: Send, {Click right}
-Space & `;:: Send, {End}
+Space & ':: Send, {End}
 .:: 
 if not GetKeyState("Space", "P") {
     send {.}
@@ -463,7 +463,6 @@ Alt & E:: Send, {#}
 Alt & A:: Send, {&}
 Alt & S:: Send, {|}
 Alt & D:: Send,  % "%"
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 GetAllKeysPressed(mode = "L") {
