@@ -76,6 +76,7 @@ if (!pressed) {
 return
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+cons = 70;
 roll := 70
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
@@ -92,11 +93,11 @@ if (!pressed && (A_TimeSincePriorHotkey, "r") > roll && (A_TimeSincePriorHotkey,
 }
 if instr(A_PriorKey, "w") {
 	send {u}
-	roll := 70
+	roll := 60
 }
 if instr(A_PriorKey, "r") {
 	send {o}
-	roll := 70
+	roll := 60
 }
 pressed := 0 
 return 
@@ -120,11 +121,11 @@ if (!pressed && (A_TimeSincePriorHotkey, "e") > roll && (A_TimeSincePriorHotkey,
 }
 if instr(A_PriorKey, "e") {
 	send {i}
-	roll := 70
+	roll := 60
 }
 if instr(A_PriorKey, "q") {
 	send {y}
-	roll := 70
+	roll := 60
 }
 pressed := 0 
 return 
@@ -138,7 +139,7 @@ if (!pressed && (A_TimeSincePriorHotkey, "r") > roll) {
 }
 if instr(A_PriorKey, "r") {
 	send {p}
-	roll := 70
+	roll := 60
 }
 pressed := 0 
 return 
@@ -152,7 +153,7 @@ if (!pressed && (A_TimeSincePriorHotkey, "a") > roll) {
 }
 if instr(A_PriorKey, "a") {
 	send {h}
-	roll := 70
+	roll := 60
 }
 pressed := 0 
 return 
@@ -166,15 +167,15 @@ if (!pressed && (A_TimeSincePriorHotkey, "s") > roll && (A_TimeSincePriorHotkey,
 }
 if instr(A_PriorKey, "s") {
 	send {j}
-	roll := 70
+	roll := 60
 }
 if instr(A_PriorKey, "g") {
 	send {;}
-	roll := 70
+	roll := 60
 }
 if instr(A_PriorKey, "f") {
 	send {"}
-	roll := 70
+	roll := 60
 }
 pressed := 0 
 return 
@@ -188,7 +189,7 @@ if (!pressed && (A_TimeSincePriorHotkey, "f") > roll) {
 }
 if instr(A_PriorKey, "f") {
 	send {l}
-	roll := 70
+	roll := 60
 }
 pressed := 0 
 return 
@@ -202,11 +203,11 @@ if (!pressed && (A_TimeSincePriorHotkey, "d") > roll && (A_TimeSincePriorHotkey,
 }
 if instr(A_PriorKey, "d") {
 	send {k}
-	roll := 70
+	roll := 60
 }
 if instr(A_PriorKey, "a") {
 	send {'}
-	roll := 70
+	roll := 60
 }
 pressed := 0 
 return 
@@ -220,7 +221,7 @@ if (!pressed && (A_TimeSincePriorHotkey, "a") > roll) {
 }
 if instr(A_PriorKey, "a") {
 	send {:}
-	roll := 70
+	roll := 60
 }
 pressed := 0 
 return 
@@ -234,7 +235,7 @@ if (!pressed && (A_TimeSincePriorHotkey, "x") > roll) {
 }
 if instr(A_PriorKey, "x") {
 	send {n}
-	roll := 70
+	roll := 60
 }
 pressed := 0 
 return 
@@ -248,11 +249,11 @@ if (!pressed && (A_TimeSincePriorHotkey, "c") > roll && (A_TimeSincePriorHotkey,
 }
 if instr(A_PriorKey, "c") {
 	send {m}
-	roll := 70
+	roll := 60
 }
 if instr(A_PriorKey, "v") {
 	send {.}
-	roll := 70
+	roll := 60
 }
 pressed := 0 
 return 
@@ -266,7 +267,7 @@ if (!pressed && (A_TimeSincePriorHotkey, "z") > roll) {
 }
 if instr(A_PriorKey, "z") {
 	send {,}
-	roll := 70
+	roll := 60
 }
 pressed := 0 
 return 
@@ -280,7 +281,7 @@ if (!pressed && (A_TimeSincePriorHotkey, "v") > roll) {
 }
 if instr(A_PriorKey, "v") {
 	send {.}
-	roll := 70
+	roll := 60
 }
 pressed := 0 
 return 
