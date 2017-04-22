@@ -2,7 +2,7 @@
 SetCapsLockState, AlwaysOff
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 SetDefaultMouseSpeed, 0 
-distance = 63         ; - how far the mouse moves each turn of the timer
+; -distance := 63  how far the mouse moves each turn of the timer
 multiplier = 1.15     ; - how much farther (exponentially) the mouse moves in
                       ;   a direction the longer you hold that direction down
 CFKM = 45             ; - how often to run the timer
@@ -17,7 +17,13 @@ CheckForKeyMouse:
 	GetKeyState("K", "P") ? (d*=multiplier) : (d:=1)
 	GetKeyState("I", "P") ? (u*=multiplier) : (u:=1)
 	GetKeyState("L", "P") ? (r*=multiplier) : (r:=1)
-	GetKeyState("J", "P") ? (l*=multiplier) : (l:=1)	
+	GetKeyState("J", "P") ? (l*=multiplier) : (l:=1)
+	if GetKeyState(".", "P") {
+		distance := 700
+	}
+	else {
+		distance := 63
+	}
 	y := (d-u) * distance
 	x := (r-l) * distance
 	MouseMove, x, y, , R
@@ -26,6 +32,18 @@ return
 Space & u:: Send, {Click}
 Space & p:: Send, {MButton}
 Space & o:: Send, {Click right}
+Space & `;:: Send, {End}
+.:: 
+if not GetKeyState("Space", "P") {
+    send {.}
+}
+return
+$~. up::
+pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+if (!pressed) {
+    send {}
+}
+return 
 
 i:: 
 if not GetKeyState("Space", "P") {
