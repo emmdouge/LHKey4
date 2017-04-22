@@ -328,6 +328,7 @@ Capslock & W:: Send, {}}
 Space Up:: Send {Space}
 Space & Capslock:: Send, {Backspace}
 
+#If GetKeyState("Shift")=0
 Space & W:: Send, {Up}
 Space & A:: Send, {Left}
 Space & S:: Send, {Down}
