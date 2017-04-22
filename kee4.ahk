@@ -29,8 +29,14 @@ CheckForKeyMouse:
 	MouseMove, x, y, , R
 return
 
-Space & u:: Send, {Click}
-Space & p:: Send, {MButton}
+Space & p::
+    if( not GetKeyState("LButton" , "P") )
+        Click down
+return
+
+Space & p Up::Click up
+
+Space & u:: Send, {MButton}
 Space & o:: Send, {Click right}
 Space & `;:: Send, {End}
 .:: 
