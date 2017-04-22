@@ -1,6 +1,74 @@
 ﻿#InstallKeybdHook
 SetCapsLockState, AlwaysOff
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+SetDefaultMouseSpeed, 0 
+distance = 63         ; - how far the mouse moves each turn of the timer
+multiplier = 1.15     ; - how much farther (exponentially) the mouse moves in
+                      ;   a direction the longer you hold that direction down
+CFKM = 45             ; - how often to run the timer
 
+SetTimer, CheckForKeyMouse, %CFKM%
+
+return
+
+CheckForKeyMouse:
+	if not GetKeyState("Space", "P")
+		return
+	GetKeyState("K", "P") ? (d*=multiplier) : (d:=1)
+	GetKeyState("I", "P") ? (u*=multiplier) : (u:=1)
+	GetKeyState("L", "P") ? (r*=multiplier) : (r:=1)
+	GetKeyState("J", "P") ? (l*=multiplier) : (l:=1)	
+	y := (d-u) * distance
+	x := (r-l) * distance
+	MouseMove, x, y, , R
+return
+
+Space & u:: Send, {Click}
+Space & p:: Send, {MButton}
+Space & o:: Send, {Click right}
+
+i:: 
+if not GetKeyState("Space", "P") {
+    send {i}
+}
+return
+$~i up::
+pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+if (!pressed) {
+    send {}
+}
+return 
+
+j::
+if not GetKeyState("Space", "P") {
+    send {j}
+}
+$~j up::
+pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+if (!pressed) {
+    send {}
+}
+return 
+
+k:: 
+if not GetKeyState("Space", "P") {
+    send {}
+}
+$~k up::
+pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+if (!pressed) {
+    send {}
+}
+
+
+l:: Send, {}
+$~l up::
+pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+if (!pressed) {
+    send {}
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 roll := 70
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
