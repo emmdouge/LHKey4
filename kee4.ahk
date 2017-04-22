@@ -43,6 +43,7 @@ j::
 if not GetKeyState("Space", "P") {
     send {j}
 }
+return
 $~j up::
 pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
 if (!pressed) {
@@ -52,21 +53,27 @@ return
 
 k:: 
 if not GetKeyState("Space", "P") {
-    send {}
+    send {k}
 }
+return
 $~k up::
 pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
 if (!pressed) {
     send {}
 }
+return
 
-
-l:: Send, {}
+l:: 
+if not GetKeyState("Space", "P") {
+    send {l}
+}
+return
 $~l up::
 pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
 if (!pressed) {
     send {}
 }
+return
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 roll := 70
