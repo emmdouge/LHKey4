@@ -128,24 +128,10 @@ return
 
 w:: Send, {}
 $~w up::
-pressed :=  (GetKeyState("e", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+pressed :=  (GetKeyState("e", "P") || GetKeyState("q", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
 if (!pressed && (A_TimeSincePriorHotkey, "e") > roll) {
     send {w}
 	roll := 0
-}
-pressed := 0 
-return 
-
-r:: Send, {}
-$~r up::
-pressed :=  (GetKeyState("e", "P") || GetKeyState("q", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
-if (!pressed && (A_TimeSincePriorHotkey, "e") > roll && (A_TimeSincePriorHotkey, "q") > roll) {
-    send {r}
-	roll := 0
-}
-if instr(A_PriorKey, "e") {
-	send {i}
-	roll := 60
 }
 if instr(A_PriorKey, "q") {
 	send {y}
@@ -154,14 +140,28 @@ if instr(A_PriorKey, "q") {
 pressed := 0 
 return 
 
+r:: Send, {}
+$~r up::
+pressed :=  (GetKeyState("e", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+if (!pressed && (A_TimeSincePriorHotkey, "e") > roll && (A_TimeSincePriorHotkey, "q") > roll) {
+    send {r}
+	roll := 0
+}
+if instr(A_PriorKey, "e") {
+	send {i}
+	roll := 60
+}
+pressed := 0 
+return 
+
 q:: Send, {}
 $~q up::
-pressed :=  (GetKeyState("r", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+pressed :=  (GetKeyState("w", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
 if (!pressed && (A_TimeSincePriorHotkey, "r") > roll) {
     send {q}
 	roll := 0
 }
-if instr(A_PriorKey, "r") {
+if instr(A_PriorKey, "w") {
 	send {p}
 	roll := 60
 }
@@ -313,96 +313,163 @@ return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 +e up::
-pressed :=  (GetKeyState("w", "P") ||  GetKeyState("r", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "r") > roll && (A_TimeSincePriorHotkey, "w") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
+pressed :=  (GetKeyState("w", "P") ||  GetKeyState("r", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("LAlt", "P")=0)
+if (!pressed && (A_TimeSincePriorHotkey, "r") > roll && (A_TimeSincePriorHotkey, "w") > roll) {
     send {E}
-if instr(A_PriorKey, "w")
+	roll := 0
+}
+if instr(A_PriorKey, "w") {
 	send {U}
-if instr(A_PriorKey, "r")
+	roll := 60
+}
+if instr(A_PriorKey, "r") {
 	send {O}
+	roll := 60
+}
 pressed := 0 
 return 
 
 +w up::
-pressed :=  (GetKeyState("e", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "e") > roll && (A_TimeSincePriorHotkey, "r") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
+pressed :=  (GetKeyState("e", "P") || GetKeyState("q", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("LAlt", "P")=0)
+if (!pressed && (A_TimeSincePriorHotkey, "e") > roll) {
     send {W}
-if instr(A_PriorKey, "r")
-	send {P}
+	roll := 0
+}
+if instr(A_PriorKey, "q") {
+	send {Y}
+	roll := 60
+}
 pressed := 0 
 return 
 
 +r up::
-pressed :=  (GetKeyState("e", "P") || GetKeyState("q", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "e") > roll && (A_TimeSincePriorHotkey, "q") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
+pressed :=  (GetKeyState("e", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("LAlt", "P")=0)
+if (!pressed && (A_TimeSincePriorHotkey, "e") > roll && (A_TimeSincePriorHotkey, "q") > roll) {
     send {R}
-if instr(A_PriorKey, "e")
+	roll := 0
+}
+if instr(A_PriorKey, "e") {
 	send {I}
-if instr(A_PriorKey, "q")
-	send {Y}
+	roll := 60
+}
 pressed := 0 
 return 
 
 +q up::
-pressed :=  (GetKeyState("r", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "r") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
+pressed :=  (GetKeyState("w", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("LAlt", "P")=0)
+if (!pressed && (A_TimeSincePriorHotkey, "r") > roll) {
     send {Q}
-if instr(A_PriorKey, "r")
+	roll := 0
+}
+if instr(A_PriorKey, "w") {
 	send {P}
+	roll := 60
+}
 pressed := 0 
 return 
 
 +s up::
-pressed :=  (GetKeyState("a", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "a") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
+pressed := (GetKeyState("d", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("LAlt", "P")=0)
+if (!pressed && (A_TimeSincePriorHotkey, "d") > roll) {
     send {S}
-if instr(A_PriorKey, "a")
-	send {H}
+	roll := 0
+}
+if instr(A_PriorKey, "d") {
+	send {J}
+	roll := 60
+}
 pressed := 0 
 return 
 
 +a up::
-pressed :=  (GetKeyState("s", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "s") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
+pressed :=  (GetKeyState("g", "P") || GetKeyState("f", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("LAlt", "P")=0)
+if (!pressed && (A_TimeSincePriorHotkey, "s") > roll && (A_TimeSincePriorHotkey, "g") > roll && (A_TimeSincePriorHotkey, "f") > roll) {
     send {A}
-if instr(A_PriorKey, "s")
-	send {J}
+	roll := 0
+}
 pressed := 0 
 return 
 
 +d up::
-pressed :=  (GetKeyState("f", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "f") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
+pressed :=  (GetKeyState("f", "P") || GetKeyState("Space", "P") || GetKeyState("s", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+if (!pressed && (A_TimeSincePriorHotkey, "f") > roll) {
     send {D}
-if instr(A_PriorKey, "f")
+	roll := 0
+}
+if instr(A_PriorKey, "f") {
 	send {L}
+	roll := 60
+}
+if instr(A_PriorKey, "s") {
+	send {H}
+	roll := 60
+}
 pressed := 0 
 return 
 
 +f up::
-pressed :=  (GetKeyState("d", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "d") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
+pressed :=  (GetKeyState("d", "P") || GetKeyState("a", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("LAlt", "P")=0)
+if (!pressed && (A_TimeSincePriorHotkey, "d") > roll && (A_TimeSincePriorHotkey, "a") > roll) {
     send {F}
-if instr(A_PriorKey, "d")
+	roll := 0
+}
+if instr(A_PriorKey, "d") {
 	send {K}
+	roll := 60
+}
 pressed := 0 
-return  
+return 
+
++g up::
+pressed :=  (GetKeyState("a", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("LAlt", "P")=0)
+if (!pressed && (A_TimeSincePriorHotkey, "a") > roll) {
+    send {G}
+	roll := 0
+}
+pressed := 0 
+return 
 
 +c up::
-pressed :=  (GetKeyState("x", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "x") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
+pressed :=  (GetKeyState("x", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("LAlt", "P")=0)
+if (!pressed && (A_TimeSincePriorHotkey, "x") > roll) {
     send {C}
-if instr(A_PriorKey, "x")
+	roll := 0
+}
+if instr(A_PriorKey, "x") {
 	send {N}
+	roll := 60
+}
 pressed := 0 
 return 
 
 +x up::
-pressed :=  (GetKeyState("c", "P"))
-if !pressed && (A_TimeSincePriorHotkey, "c") > roll && GetKeyState("Space", "P")=0 && GetKeyState("LAlt", "P")=0
+pressed :=  (GetKeyState("c", "P") || GetKeyState("v", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("LAlt", "P")=0)
+if (!pressed && (A_TimeSincePriorHotkey, "c") > roll && (A_TimeSincePriorHotkey, "v") > roll) {
     send {X}
-if instr(A_PriorKey, "c")
+	roll := 0
+}
+if instr(A_PriorKey, "c") {
 	send {M}
+	roll := 60
+}
+pressed := 0 
+return 
+
++v up::
+pressed :=  (GetKeyState("z", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("LAlt", "P")=0)
+if (!pressed && (A_TimeSincePriorHotkey, "z") > roll) {
+    send {V}
+	roll := 0
+}
+pressed := 0 
+return 
+
++z up::
+pressed :=  (GetKeyState("v", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("LAlt", "P")=0)
+if (!pressed && (A_TimeSincePriorHotkey, "v") > roll) {
+    send {Z}
+	roll := 0
+}
 pressed := 0 
 return 
 
