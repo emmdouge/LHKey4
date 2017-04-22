@@ -108,10 +108,18 @@ MaxIndex := numP.MaxIndex()
   roll := 0
 return
 
+
++e::
+pressed :=  (GetKeyState("w", "P") ||  GetKeyState("r", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+	if (!pressed && instr(A_PriorKey, "w")=0  && instr(A_PriorKey, "r")=0) {
+   KeyWait e
+   send, {E}
+}
+Return
 e:: Send, {}
 $~e up::
 pressed :=  (GetKeyState("w", "P") ||  GetKeyState("r", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
-if (!pressed && (A_TimeSincePriorHotkey, "r") > roll && (A_TimeSincePriorHotkey, "w") > roll) {
+if (!pressed && (A_TimeSincePriorHotkey, "w") > roll && (A_TimeSincePriorHotkey, "r") > roll) {
     send {e}
 	roll := 0
 }
@@ -128,8 +136,8 @@ return
 
 w:: Send, {}
 $~w up::
-pressed :=  (GetKeyState("e", "P") || GetKeyState("q", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
-if (!pressed && (A_TimeSincePriorHotkey, "e") > roll) {
+pressed :=  (GetKeyState("q", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+if (!pressed && (A_TimeSincePriorHotkey, "q") > roll) {
     send {w}
 	roll := 0
 }
@@ -311,6 +319,7 @@ pressed := 0
 return 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 +e up::
 pressed :=  (GetKeyState("w", "P") ||  GetKeyState("r", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("LAlt", "P")=0)
@@ -530,7 +539,6 @@ Alt & E:: Send, {#}
 Alt & A:: Send, {&}
 Alt & S:: Send, {|}
 Alt & D:: Send,  % "%"
-
 
 GetAllKeysPressed(mode = "L") {
 	
