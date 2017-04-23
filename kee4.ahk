@@ -1,5 +1,7 @@
 ﻿#InstallKeybdHook
 SetCapsLockState, AlwaysOff
+
+cons = 60
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 SetDefaultMouseSpeed, 0 
 ; -distance := 63  how far the mouse moves each turn of the timer
@@ -99,8 +101,7 @@ if (!pressed) {
 return
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-cons = 70;
-roll := 70
+roll := cons
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
 #if MaxIndex < 1 || GetKeyState("Shift", "P")=1
@@ -127,7 +128,7 @@ if instr(A_PriorKey, "w") {
 	else {
 		send {u}
 	}
-	roll := 60
+	roll := cons
 }
 if instr(A_PriorKey, "r") {
 	if(GetKeyState("Shift", "P")) {
@@ -136,7 +137,7 @@ if instr(A_PriorKey, "r") {
 	else {
 		send {o}
 	}
-	roll := 60
+	roll := cons
 }
 pressed := 0 
 return 
@@ -161,7 +162,7 @@ if instr(A_PriorKey, "q") {
 	else {
 		send {y}
 	}
-	roll := 60
+	roll := cons
 }
 pressed := 0 
 return 
@@ -186,11 +187,11 @@ if instr(A_PriorKey, "e") {
 	else {
 		send {i}
 	}
-	roll := 60
+	roll := cons
 }
 if instr(A_PriorKey, "q") {
 	send {Home}
-	roll := 60
+	roll := cons
 }
 pressed := 0 
 return 
@@ -215,11 +216,11 @@ if instr(A_PriorKey, "w") {
 	else {
 		send {p}
 	}
-	roll := 60
+	roll := cons
 }
 if instr(A_PriorKey, "r") {
 	send {End}
-	roll := 60
+	roll := cons
 }
 pressed := 0 
 return 
@@ -244,7 +245,7 @@ if instr(A_PriorKey, "d") {
 	else {
 		send {j}
 	}
-	roll := 60
+	roll := cons
 }
 pressed := 0 
 return 
@@ -264,11 +265,11 @@ if (!pressed && (A_TimeSincePriorHotkey, "s") > roll && (A_TimeSincePriorHotkey,
 }
 if instr(A_PriorKey, "g") {
 	send {;}
-	roll := 60
+	roll := cons
 }
 if instr(A_PriorKey, "f") {
 	send {"}
-	roll := 60
+	roll := cons
 }
 pressed := 0 
 return 
@@ -293,7 +294,7 @@ if instr(A_PriorKey, "f") {
 	else {
 		send {l}
 	}
-	roll := 60
+	roll := cons
 }
 if instr(A_PriorKey, "s") {
 	if(GetKeyState("Shift", "P")) {
@@ -302,7 +303,7 @@ if instr(A_PriorKey, "s") {
 	else {
 		send {h}
 	}
-	roll := 60
+	roll := cons
 }
 pressed := 0 
 return 
@@ -327,11 +328,11 @@ if instr(A_PriorKey, "d") {
 	else {
 		send {k}
 	}
-	roll := 60
+	roll := cons
 }
 if instr(A_PriorKey, "a") {
 	send {'}
-	roll := 60
+	roll := cons
 }
 pressed := 0 
 return 
@@ -351,7 +352,7 @@ if (!pressed && (A_TimeSincePriorHotkey, "a") > roll) {
 }
 if instr(A_PriorKey, "a") {
 	send {:}
-	roll := 60
+	roll := cons
 }
 pressed := 0 
 return 
@@ -376,7 +377,7 @@ if instr(A_PriorKey, "x") {
 	else {
 		send {n}
 	}
-	roll := 60
+	roll := cons
 }
 pressed := 0 
 return 
@@ -401,11 +402,11 @@ if instr(A_PriorKey, "c") {
 	else {
 		send {m}
 	}
-	roll := 60
+	roll := cons
 }
 if instr(A_PriorKey, "v") {
 	send {.}
-	roll := 60
+	roll := cons
 }
 pressed := 0 
 return 
@@ -425,7 +426,7 @@ if (!pressed && (A_TimeSincePriorHotkey, "z") > roll) {
 }
 if instr(A_PriorKey, "z") {
 	send {,}
-	roll := 60
+	roll := cons
 }
 pressed := 0 
 return 
@@ -445,7 +446,7 @@ if (!pressed && (A_TimeSincePriorHotkey, "v") > roll) {
 }
 if instr(A_PriorKey, "v") {
 	send {.}
-	roll := 60
+	roll := cons
 }
 pressed := 0 
 return 
