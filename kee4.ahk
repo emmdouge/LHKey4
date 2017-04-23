@@ -1,7 +1,11 @@
 ﻿#SingleInstance force
+#Persistent
+#UseHook	
+#NoEnv
+#MaxThreadsPerHotkey 20
+#MaxThreadsBuffer ON
 #InstallKeybdHook
 SetCapsLockState, AlwaysOff
-
 cons = 60
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 SetDefaultMouseSpeed, 0 
@@ -520,9 +524,6 @@ Alt & E:: Send, {#}
 Alt & A:: Send, {&}
 Alt & S:: Send, {|}
 Alt & D:: Send,  % "%"
-
-
-
 
 GetAllKeysPressed(mode = "L") {
 	
