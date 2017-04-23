@@ -170,7 +170,7 @@ return
 r:: Send, {}
 $~*r up::
 pressed :=  (GetKeyState("e", "P") || GetKeyState("q", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
-if (!pressed && (A_TimeSincePriorHotkey, "e") > roll && (A_TimeSincePriorHotkey, "q")) {
+if (!pressed && (A_TimeSincePriorHotkey, "e") > roll && (A_TimeSincePriorHotkey, "q") > roll) {
 	if(GetKeyState("Shift", "P")) {
 		send {R}
 	}
@@ -199,7 +199,7 @@ return
 q:: Send, {}
 $~*q up::
 pressed :=  (GetKeyState("w", "P") || GetKeyState("r", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
-if (!pressed && (A_TimeSincePriorHotkey, "w") > roll && (A_TimeSincePriorHotkey, "r")) {
+if (!pressed && (A_TimeSincePriorHotkey, "w") > roll && (A_TimeSincePriorHotkey, "r") > roll) {
 	if(GetKeyState("Shift", "P")) {
 		send {Q}
 	}
