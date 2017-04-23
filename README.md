@@ -1,92 +1,91 @@
 # Kee4
-chorded keyboard
-R to E: I
-E to R: O
-E to W: U
+R to E: I<br />
+E to R: O<br />
+E to W: U<br /><br />
 
-W to Q: Y
-Q to W: P
+W to Q: Y<br />
+Q to W: P<br /><br />
 
-Q to R: End //go to end of line
-R to Q: Home //go to beginning of line
+Q to R: End //go to end of line <br />
+R to Q: Home //go to beginning of line <br /><br />
 
-S to D: J
-D to S: H
+S to D: J<br />
+D to S: H<br /><br />
 
-D to F: L
-F to D: K
+D to F: L<br />
+F to D: K<br /><br />
 
-A to F: "
-F to A: '
+A to F: "<br />
+F to A: '<br /><br />
 
-A to G: ;
-G to A: :
+A to G: ;<br />
+G to A: :<br /><br />
 
-X to C: N
-C to X: M
+X to C: N<br />
+C to X: M<br /><br />
 
-Z to V: .
-V to Z: ,
+Z to V: .<br />
+V to Z: ,<br /><br />
 
-Capslock : Enter
+Capslock : Enter<br /><br />
 
-Tab & 1:: =
-Tab & 2:: _  //underscore
-Tab & 3:: ?
-Tab & 4:: \
+Tab & 1:: =<br />
+Tab & 2:: _  //underscore<br />
+Tab & 3:: ?<br />
+Tab & 4:: \ <br /><br />
 
-Tab & Q:: >
-Tab & W:: <
+Tab & Q:: ><br />
+Tab & W:: <<br /><br />
 
-Capslock & A:: [
-Capslock & S:: ]
+Capslock & A:: [<br />
+Capslock & S:: ]<br /><br />
 
-Capslock & Q:: {
-Capslock & W:: }
+Capslock & Q:: {<br />
+Capslock & W:: }<br /><br />
 
-Space & Capslock:: Backspace
+Space & Capslock:: Backspace<br /><br />
 
-Space & Shift & W:: Up
-Space & & Shift & A:: Left
-Space & Shift & S:: Down
-Space & Shift & D:: Right
+Space & Shift & W:: Up<br />
+Space & & Shift & A:: Left<br />
+Space & Shift & S:: Down<br />
+Space & Shift & D:: Right<br /><br />
 
-Space & Z:: +
-Space & X:: -
-Space & C:: *
-Space & V:: /
+Space & Z:: +<br />
+Space & X:: -<br />
+Space & C:: *<br />
+Space & V:: /<br /><br />
 
-Space & E:: Send, {(}
-Space & R:: Send, {)}
+Space & E:: Send, {(}<br />
+Space & R:: Send, {)}<br /><br />
 
-Space & Q:: Ctrl+/      //for commenting out code in editors
+Space & Q:: Ctrl+/      //for commenting out code in editors<br /><br />
 
-Space & Shift & Tab:: 0
-Space & Shift & Q:: 7
-Space & Shift & W:: 8
-Space & Shift & E:: 9
-Space & Shift & A:: 4
-Space & Shift & S:: 5
-Space & Shift & D:: 6
-Space & Shift & Z:: 1
-Space & Shift & X:: 2
-Space & Shift & C:: 3
+Space & Shift & Tab:: 0<br />
+Space & Shift & Q:: 7<br />
+Space & Shift & W:: 8<br />
+Space & Shift & E:: 9<br />
+Space & Shift & A:: 4<br />
+Space & Shift & S:: 5<br />
+Space & Shift & D:: 6<br />
+Space & Shift & Z:: 1<br />
+Space & Shift & X:: 2<br />
+Space & Shift & C:: 3<br /><br />
 
-Alt &  Shift & Q:: !
-Alt & Shift & W:: @
-Alt & Shift & E:: #
-Alt & Shift & A:: &
-Alt & Shift & S:: |
-Alt & Shift & D:: %
-Space & T:: ^
-Space & 4:: $
-
+Alt &  Shift & Q:: !<br />
+Alt & Shift & W:: @<br />
+Alt & Shift & E:: #<br />
+Alt & Shift & A:: &<br />
+Alt & Shift & S:: |<br />
+Alt & Shift & D:: %<br />
+Space & T:: ^<br />
+Space & 4:: $<br /><br />
 
 
-Space & ; = Left Click
-Space & U = Middle Mouse Button
-Space & O = Right Click
 
-Space and IJKL for mouse movement
-Hold . to increase distance per key press
+Space & ; = Left Click<br />
+Space & U = Middle Mouse Button<br />
+Space & O = Right Click<br /><br />
+
+Space and IJKL for mouse movement<br />
+Hold . to increase distance per key press<br /><br />
 
