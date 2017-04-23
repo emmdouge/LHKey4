@@ -38,7 +38,6 @@ Space & `; Up::Click up
 
 Space & u:: Send, {MButton}
 Space & o:: Send, {Click right}
-Space & ':: Send, {End}
 .:: 
 if not GetKeyState("Space", "P") {
     send {.}
@@ -170,8 +169,8 @@ return
 +r:: Send, {}
 r:: Send, {}
 $~*r up::
-pressed :=  (GetKeyState("e", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
-if (!pressed && (A_TimeSincePriorHotkey, "e") > roll) {
+pressed :=  (GetKeyState("e", "P") || GetKeyState("q", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+if (!pressed && (A_TimeSincePriorHotkey, "e") > roll && (A_TimeSincePriorHotkey, "q")) {
 	if(GetKeyState("Shift", "P")) {
 		send {R}
 	}
@@ -189,14 +188,18 @@ if instr(A_PriorKey, "e") {
 	}
 	roll := 60
 }
+if instr(A_PriorKey, "q") {
+	send {Home}
+	roll := 60
+}
 pressed := 0 
 return 
 
 +q:: Send, {}
 q:: Send, {}
 $~*q up::
-pressed :=  (GetKeyState("w", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
-if (!pressed && (A_TimeSincePriorHotkey, "r") > roll) {
+pressed :=  (GetKeyState("w", "P") || GetKeyState("r", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+if (!pressed && (A_TimeSincePriorHotkey, "w") > roll && (A_TimeSincePriorHotkey, "r")) {
 	if(GetKeyState("Shift", "P")) {
 		send {Q}
 	}
@@ -212,6 +215,10 @@ if instr(A_PriorKey, "w") {
 	else {
 		send {p}
 	}
+	roll := 60
+}
+if instr(A_PriorKey, "r") {
+	send {End}
 	roll := 60
 }
 pressed := 0 
