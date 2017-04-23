@@ -1,4 +1,5 @@
-﻿#InstallKeybdHook
+﻿#SingleInstance force
+#InstallKeybdHook
 SetCapsLockState, AlwaysOff
 
 cons = 60
