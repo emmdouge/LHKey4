@@ -508,8 +508,8 @@ Space & E:: Send, {(}
 Space & R:: Send, {)}
 
 Space & Q:: Send, ^/
-Space & T:: Send, {^}
-Space & 4:: Send, {$}
+;Space & T:: Send, {}
+Space & 4:: Send, {^}
 
 #If GetKeyState("Shift")=1
 Space & Tab:: Send, {0}
