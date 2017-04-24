@@ -22,21 +22,27 @@ SetTimer, CheckForKeyMouse, %CFKM%
 return
 
 CheckForKeyMouse:
-	if not GetKeyState("Space", "P")
-		return
+	if GetKeyState("Space", "P") {
 	GetKeyState("K", "P") ? (d*=multiplier) : (d:=1)
 	GetKeyState("I", "P") ? (u*=multiplier) : (u:=1)
 	GetKeyState("L", "P") ? (r*=multiplier) : (r:=1)
 	GetKeyState("J", "P") ? (l*=multiplier) : (l:=1)
-	if GetKeyState(".", "P") {
-		distance := 700
-	}
-	else {
-		distance := 63
-	}
+	distance := 55
 	y := (d-u) * distance
 	x := (r-l) * distance
 	MouseMove, x, y, , R
+	}
+
+	if GetKeyState("Alt", "P") {
+	GetKeyState("K", "P") ? (d*=multiplier) : (d:=1)
+	GetKeyState("I", "P") ? (u*=multiplier) : (u:=1)
+	GetKeyState("L", "P") ? (r*=multiplier) : (r:=1)
+	GetKeyState("J", "P") ? (l*=multiplier) : (l:=1)
+	distance := 700
+	y := (d-u) * distance
+	x := (r-l) * distance
+	MouseMove, x, y, , R
+	}
 return
 
 Space & `;::
