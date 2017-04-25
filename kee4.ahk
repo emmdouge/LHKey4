@@ -7,112 +7,112 @@ SetBatchLines, -1                 ;makes the script run at max speed
 SetKeyDelay , -1, -1              ;faster response (might be better with -1, 0)
 ListLines, Off
 #KeyHistory 3
-
 SetCapsLockState, AlwaysOff
 cons = 70
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-SetDefaultMouseSpeed, 0 
+;SetDefaultMouseSpeed, 0 
 ; -distance := 63  how far the mouse moves each turn of the timer
-multiplier = 1.15     ; - how much farther (exponentially) the mouse moves in
+;multiplier = 1.15     ; - how much farther (exponentially) the mouse moves in
                       ;   a direction the longer you hold that direction down
-CFKM = 45             ; - how often to run the timer
+;CFKM = 45             ; - how often to run the timer
 
-SetTimer, CheckForKeyMouse, %CFKM%
+;SetTimer, CheckForKeyMouse, %CFKM%
 
-return
+;return
 
-CheckForKeyMouse:
-	if GetKeyState("Space", "P") {
-	GetKeyState("K", "P") ? (d*=multiplier) : (d:=1)
-	GetKeyState("I", "P") ? (u*=multiplier) : (u:=1)
-	GetKeyState("L", "P") ? (r*=multiplier) : (r:=1)
-	GetKeyState("J", "P") ? (l*=multiplier) : (l:=1)
-	distance := 55
-	y := (d-u) * distance
-	x := (r-l) * distance
-	MouseMove, x, y, , R
-	}
+;CheckForKeyMouse:
+;	if GetKeyState("Space", "P") {
+;	GetKeyState("K", "P") ? (d*=multiplier) : (d:=1)
+;	GetKeyState("I", "P") ? (u*=multiplier) : (u:=1)
+;	GetKeyState("L", "P") ? (r*=multiplier) : (r:=1)
+;	GetKeyState("J", "P") ? (l*=multiplier) : (l:=1)
+;	distance := 55
+;	y := (d-u) * distance
+;	x := (r-l) * distance
+;	MouseMove, x, y, , R
+;	}
+;
+;	if GetKeyState("Alt", "P") {
+;	GetKeyState("K", "P") ? (d*=multiplier) : (d:=1)
+;	GetKeyState("I", "P") ? (u*=multiplier) : (u:=1)
+;	GetKeyState("L", "P") ? (r*=multiplier) : (r:=1)
+;	GetKeyState("J", "P") ? (l*=multiplier) : (l:=1)
+;	distance := 700
+;	y := (d-u) * distance
+;	x := (r-l) * distance
+;	MouseMove, x, y, , R
+;	}
+;return
 
-	if GetKeyState("Alt", "P") {
-	GetKeyState("K", "P") ? (d*=multiplier) : (d:=1)
-	GetKeyState("I", "P") ? (u*=multiplier) : (u:=1)
-	GetKeyState("L", "P") ? (r*=multiplier) : (r:=1)
-	GetKeyState("J", "P") ? (l*=multiplier) : (l:=1)
-	distance := 700
-	y := (d-u) * distance
-	x := (r-l) * distance
-	MouseMove, x, y, , R
-	}
-return
+;Space & `;::
+;   if( not GetKeyState("LButton" , "P") )
+;        Click down
+;return
 
-Space & `;::
-    if( not GetKeyState("LButton" , "P") )
-        Click down
-return
+;Space & `; Up::Click up
 
-Space & `; Up::Click up
+;Space & u:: Send, {MButton}
+;Space & o:: Send, {Click right}
+;.:: 
+;if not GetKeyState("Space", "P") {
+;    send {.}
+;}
+;return
+;$~. up::
+;pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+;if (!pressed) {
+;    send {}
+;}
+;return 
+;
+;i:: 
+;if not GetKeyState("Space", "P") {
+;    send {i}
+;}
+;return
+;$~i up::
+;pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+;if (!pressed) {
+;    send {}
+;}
+;return 
 
-Space & u:: Send, {MButton}
-Space & o:: Send, {Click right}
-.:: 
-if not GetKeyState("Space", "P") {
-    send {.}
-}
-return
-$~. up::
-pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
-if (!pressed) {
-    send {}
-}
-return 
+;j::
+;if not GetKeyState("Space", "P") {
+;    send {j}
+;}
+;return
+;$~j up::
+;pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+;if (!pressed) {
+;    send {}
+;}
+;return 
+;
+;k:: 
+;if not GetKeyState("Space", "P") {
+;    send {k}
+;}
+;return
+;$~k up::
+;pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+;if (!pressed) {
+;    send {}
+;}
+;return
 
-i:: 
-if not GetKeyState("Space", "P") {
-    send {i}
-}
-return
-$~i up::
-pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
-if (!pressed) {
-    send {}
-}
-return 
-
-j::
-if not GetKeyState("Space", "P") {
-    send {j}
-}
-return
-$~j up::
-pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
-if (!pressed) {
-    send {}
-}
-return 
-
-k:: 
-if not GetKeyState("Space", "P") {
-    send {k}
-}
-return
-$~k up::
-pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
-if (!pressed) {
-    send {}
-}
-return
-
-l:: 
-if not GetKeyState("Space", "P") {
-    send {l}
-}
-return
-$~l up::
-pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
-if (!pressed) {
-    send {}
-}
-return
+;l:: 
+;if not GetKeyState("Space", "P") {
+;    send {l}
+;}
+;return
+;$~l up::
+;pressed :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P"))
+;if (!pressed) {
+;    send {}
+;}
+;return
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 roll := cons
@@ -464,9 +464,9 @@ return
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;ddsDHSJHJ628&@|JD===		0000
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-Capslock::Enter
+
 
 Capslock & A:: Send, {[}
 Capslock & S:: Send, {]}
@@ -474,12 +474,16 @@ Capslock & S:: Send, {]}
 Capslock & Q:: Send, {{}
 Capslock & W:: Send, {}}
 
+Space & E:: Send, {(}
+Space & R:: Send, {)}
 
+Space & Q:: Send, ^/
 
 Space Up:: Send {Space}																				
-Space & Capslock:: Send, {Backspace}
+Space & Capslock Up:: Send, {Backspace}
 
 #if GetKeyState("Space")=0
+Capslock::Enter
 Tab Up::Send {Tab}								
 Tab & 1:: Send, {=}																									
 Tab & 2:: Send, {_}
@@ -493,23 +497,13 @@ Space & W:: Send, {Up}
 Space & A:: Send, {Left}										
 Space & S:: Send, {Down}
 Space & D:: Send, {Right}
-
 Space & Z:: Send, {+}
 Space & X:: Send, {-}
 Space & C:: Send, {*}
 Space & V:: Send, {/}						
-
 Space & Tab:: return
 Space & Tab up:: Send, {WheelDown 3}
-Space & ` up:: Send, {WheelUp 3}
-
-
-Space & E:: Send, {(}
-Space & R:: Send, {)}
-
-Space & Q:: Send, ^/
-;Space & T:: Send, {}
-Space & 4:: Send, {^}
+Space & 1 up:: Send, {WheelUp 3}
 
 #If GetKeyState("Shift")=1
 Space & Tab:: Send, {0}
@@ -522,12 +516,10 @@ Space & D:: Send, {6}
 Space & Z:: Send, {1}
 Space & X:: Send, {2}
 Space & C:: Send, {3}
-Alt & Q:: Send, {!}
-Alt & W:: Send, {@}
-Alt & E:: Send, {#}
 Alt & A:: Send, {&}
 Alt & S:: Send, {|}
-Alt & D:: Send,  % "%"
+Alt & D:: Send, {^}
+Alt & F:: Send,  % "%"
 
 GetAllKeysPressed(mode = "L") {
 	
