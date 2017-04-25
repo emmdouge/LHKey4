@@ -3,8 +3,8 @@ R to E: I<br />
 E to R: O<br />
 E to W: U<br /><br />
 
-W to Q: Y<br />
-Q to W: P<br /><br />
+R to W: Y<br />
+W to R: P<br /><br />
 
 Q to R: End //go to end of line <br />
 R to Q: Home //go to beginning of line <br /><br />
@@ -25,7 +25,7 @@ X to C: N<br />
 C to X: M<br /><br />
 
 Z to V: .<br />
-V to Z: ,<br /><br />
+C to V: ,<br /><br />
 
 Capslock : Enter<br /><br />
 
@@ -77,8 +77,7 @@ Alt & Shift & E:: #<br />
 Alt & Shift & A:: &<br />
 Alt & Shift & S:: |<br />
 Alt & Shift & D:: %<br />
-Space & T:: ^<br />
-Space & 4:: $<br /><br />
+Space & 4:: ^<br /><br />
 
 
 
