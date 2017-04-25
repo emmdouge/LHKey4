@@ -466,7 +466,7 @@ return
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+Capslock::Enter
 
 Capslock & A:: Send, {[}
 Capslock & S:: Send, {]}
@@ -480,10 +480,9 @@ Space & R:: Send, {)}
 Space & Q:: Send, ^/
 
 Space Up:: Send {Space}																				
-Space & Capslock Up:: Send, {Backspace}
+Space & Capslock:: Send, {Backspace}
 
 #if GetKeyState("Space")=0
-Capslock::Enter
 Tab Up::Send {Tab}								
 Tab & 1:: Send, {=}																									
 Tab & 2:: Send, {_}
