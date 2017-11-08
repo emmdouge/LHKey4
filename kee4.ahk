@@ -7,8 +7,10 @@ SetBatchLines, -1                 ;makes the script run at max speed
 SetKeyDelay , -1, -1              ;faster response (might be better with -1, 0)
 ListLines, Off
 #KeyHistory 3
+
 SetCapsLockState, AlwaysOff
-cons = 70
+cons = 200
+combo = 20
 global skey
 
 roll := cons
@@ -19,210 +21,112 @@ MaxIndex := numP.MaxIndex()
   skey := 0
 return
 
-+r:: return
-r:: return
-$~*r up::
-pressed :=  (GetKeyState("q", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
-if (!pressed && (A_TimeSincePriorHotkey, "q") > roll) || (instr(A_PriorKey, "r") && !pressed) {
-	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {R}
-	}
-	else if GetKeyState("LAlt", "P")=0 {
-    	send {r}
-	}
-	roll := 0
-}
-if instr(A_PriorKey, "q") {
-	send {Home}
++h:: return
+h:: 
+;the moment you press a key, unlock the roll
 	roll := cons
-}
-pressed := 0 
-return 
-
-
-+q:: return
-q:: return
-$~*q up::
-pressed :=  (GetKeyState("r", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
-if (!pressed && (A_TimeSincePriorHotkey, "r") > roll) || (instr(A_PriorKey, "q") && !pressed) {
-	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {Q}
+	if(instr(A_PriorKey, "j") && ((A_TimeSincePriorHotkey, "j") < combo)) {
+		send {t}
 	}
-    else if GetKeyState("LAlt", "P")=0 {
-		send {q}
-	}
-	roll := 0
-}
-if instr(A_PriorKey, "r") {
-	send {End}
-	roll := cons
-}
-pressed := 0 
-return 
-
-+a:: return
-a:: return
-$~*a up::
-pressed :=  (GetKeyState("g", "P") || GetKeyState("f", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
-if (!pressed && (A_TimeSincePriorHotkey, "s") > roll && (A_TimeSincePriorHotkey, "g") > roll && (A_TimeSincePriorHotkey, "f") > roll) || (instr(A_PriorKey, "a") && !pressed) {
-	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {A}
-	}
-    else if GetKeyState("LAlt", "P")=0 && (A_TimeSincePriorKey, "LAlt") < 200 {
-		send {a}
-	}
-	roll := 0
-}
-if instr(A_PriorKey, "g") {
-	send {;}
-	roll := cons
-}
-if instr(A_PriorKey, "f") {
-	send {"}
-	roll := cons
-}
-pressed := 0 
 return
-
-+f:: return
-f:: return
-$~*f up::
-pressed :=  (GetKeyState("a", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
-if (!pressed && (A_TimeSincePriorHotkey, "a") > roll) || (instr(A_PriorKey, "f") && !pressed) {
+$~*h up::
+isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
+;if you overheld h or pressed h again
+if (!isModified && (A_TimeSincePriorHotkey, "h") >= roll)  || (instr(A_PriorKey, "h") && !isModified){
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {F}
+		send {h}
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send {f}
+		send {h}
 	}
 	roll := 0
 }
-if instr(A_PriorKey, "a") {
-	send {'}
-	roll := cons
-}
-pressed := 0 
+isModified := 0 
 return 
 
-+g:: return
-g:: return
-$~*g up::
-pressed :=  (GetKeyState("a", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
-if (!pressed && (A_TimeSincePriorHotkey, "a") > roll) || (instr(A_PriorKey, "g") && !pressed){
+
++j:: return
+j:: 
+;the moment you press a key, unlock the roll
+	roll := cons
+	if(instr(A_PriorKey, "k") && ((A_TimeSincePriorHotkey, "k") < combo)) {
+		send {y}
+	}
+	if(instr(A_PriorKey, "h") && ((A_TimeSincePriorHotkey, "h") < combo)) {
+		send {t}
+	}
+return
+$~*j up::
+isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
+;if you overheld j or pressed j again
+if (!isModified && (A_TimeSincePriorHotkey, "j") >= roll)  || (instr(A_PriorKey, "j") && !isModified){
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {G}
+		send {J}
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send {g}
+		send {j}
 	}
 	roll := 0
 }
-if instr(A_PriorKey, "a") {
-	send {:}
-	roll := cons
+;if you pressed j -> k
+if (instr(A_PriorKey, "k") && (A_TimeSincePriorHotkey, "k") < roll) {
+	send {i}
 }
-pressed := 0 
+isModified := 0 
 return 
 
-+v:: return
-v:: return
-$~*v up::
-pressed :=  (GetKeyState("z", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
-if (!pressed && (A_TimeSincePriorHotkey, "z") > roll)  || (instr(A_PriorKey, "v") && !pressed){
++k:: return
+k:: 
+;the moment you press a key, unlock the roll
+	roll := cons
+	if(instr(A_PriorKey, "j") && ((A_TimeSincePriorHotkey, "j") < combo)) {
+		send {y}
+	}
+	if(instr(A_PriorKey, "l") && ((A_TimeSincePriorHotkey, "l") < combo)) {
+		send {m}
+	}
+return
+$~*k up::
+isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
+;if you overheld k or pressed k again
+if (!isModified && (A_TimeSincePriorHotkey, "k") >= roll)  || (instr(A_PriorKey, "k") && !isModified){
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {V}
+		send {K}
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send {v}
+		send {k}
 	}
 	roll := 0
 }
-if instr(A_PriorKey, "z") {
-	send {,}
-	roll := cons
+;if you pressed k -> j
+if (instr(A_PriorKey, "j") && (A_TimeSincePriorHotkey, "j") < roll) {
+	send {u}
 }
-pressed := 0 
+isModified := 0 
 return 
 
-+z:: return
-z:: return
-$~*z up::
-pressed :=  (GetKeyState("v", "P") || GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
-if (!pressed && (A_TimeSincePriorHotkey, "v") > roll)  || (instr(A_PriorKey, "z") && !pressed){
++l:: return
+l:: 
+;the moment you press a key, unlock the roll
+	roll := cons
+	if(instr(A_PriorKey, "k") && ((A_TimeSincePriorHotkey, "k") < combo)) {
+		send {m}
+	}
+return
+$~*l up::
+isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
+;if you overheld l or pressed l again
+if (!isModified && (A_TimeSincePriorHotkey, "l") >= roll)  || (instr(A_PriorKey, "l") && !isModified){
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {Z}
+		send {L}
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send {z}
+		send {l}
 	}
 	roll := 0
 }
-if instr(A_PriorKey, "v") {
-	send {.}
-	roll := cons
-}
-pressed := 0 
+isModified := 0 
 return 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-Capslock::Enter
-
-Capslock & A:: Send, {[}
-Capslock & S:: Send, {]}
-
-Capslock & Q:: Send, {{}
-Capslock & W:: Send, {}}
-
-Space & E:: Send, {(}
-Space & R:: Send, {)}
-
-Space & Q:: Send, ^/
-
-Space Up:: Send {Space}																				
-Space & Capslock:: Send, {Backspace}
-
-#if GetKeyState("Space")=0
-Tab Up::Send {Tab}								
-Tab & 1:: Send, {=}																									
-Tab & 2:: Send, {_}
-Tab & 3:: Send, {?}
-Tab & 4:: Send, {\}																				
-Tab & Q:: Send, {>}
-Tab & W:: Send, {<}
-
-#If GetKeyState("Shift")=0
-Space & W:: Send, {Up}
-Space & A:: Send, {Left}										
-Space & S:: Send, {Down}
-Space & D:: Send, {Right}
-Space & Z:: Send, {+}
-Space & X:: Send, {-}
-Space & C:: Send, {*}
-Space & V:: Send, {/}						
-Space & Tab:: return
-Space & Tab up:: Send, {WheelDown 3}
-Space & 1 up:: Send, {WheelUp 3}
-
-#If GetKeyState("Shift")=1
-Space & Tab:: Send, {0}
-Space & Q:: Send, {7}
-Space & W:: Send, {8}
-Space & E:: Send, {9}
-Space & A:: Send, {4}
-Space & S:: Send, {5}
-Space & D:: Send, {6}
-Space & Z:: Send, {1}
-Space & X:: Send, {2}
-Space & C:: Send, {3}
-Alt & A:: Send, {&}
-Alt & S:: Send, {|}
-Alt & D:: Send, {^}
-Alt & F:: Send,  % "%"
 
 GetAllKeysPressed(mode = "L") {
 	
