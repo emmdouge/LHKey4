@@ -115,6 +115,9 @@ if (!isModified && (A_TimeSincePriorHotkey, "l") >= roll)  || (instr(A_PriorKey,
 if (instr(A_PriorKey, "k") && (A_TimeSincePriorHotkey, "k") < roll) {
 	send {u}
 }
+if (instr(A_PriorKey, ";") && (A_TimeSincePriorHotkey, ";") < roll) {
+	send {o}
+}
 isModified := 0 
 return 
 
@@ -143,6 +146,9 @@ if (!isModified && (A_TimeSincePriorHotkey, ";") >= roll)  || (instr(A_PriorKey,
 }
 if (instr(A_PriorKey, "j") && (A_TimeSincePriorHotkey, "j") < roll) {
 	send {q}
+}
+if (instr(A_PriorKey, "l") && (A_TimeSincePriorHotkey, "l") < roll) {
+	send {o}
 }
 isModified := 0 
 return 
