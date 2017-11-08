@@ -42,10 +42,10 @@ return
 ONEDOWN: 
 ;the moment you press a key, unlock the roll
 	roll := cons
-	if(instr(A_PriorKey, "k") && ((A_TimeSincePriorHotkey, "k") < combo)) {
+	if(instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
 		send {t}
 	}
-	if(instr(A_PriorKey, ";") && ((A_TimeSincePriorHotkey, ";") < combo)) {
+	if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
 		send {r}
 	}
 return
@@ -53,10 +53,10 @@ return
 TWODOWN:
 ;the moment you press a key, unlock the roll
 	roll := cons
-	if(instr(A_PriorKey, "l") && ((A_TimeSincePriorHotkey, "l") < combo)) {
+	if(instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
 		send {y}
 	}
-	if(instr(A_PriorKey, "j") && ((A_TimeSincePriorHotkey, "j") < combo)) {
+	if(instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) {
 		send {t}
 	}
 return
@@ -64,10 +64,10 @@ return
 THREEDOWN: 
 ;the moment you press a key, unlock the roll
 	roll := cons
-	if(instr(A_PriorKey, "k") && ((A_TimeSincePriorHotkey, "k") < combo)) {
+	if(instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
 		send {y}
 	}
-	if(instr(A_PriorKey, ";") && ((A_TimeSincePriorHotkey, ";") < combo)) {
+	if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
 		send {m}
 	}
 return
@@ -75,10 +75,10 @@ return
 FOURDOWN:
 ;the moment you press a key, unlock the roll
 	roll := cons
-	if(instr(A_PriorKey, "l") && ((A_TimeSincePriorHotkey, "l") < combo)) {
+	if(instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
 		send {m}
 	}
-	if(instr(A_PriorKey, "j") && ((A_TimeSincePriorHotkey, "j") < combo)) {
+	if(instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) {
 		send {r}
 	}
 return
@@ -86,20 +86,20 @@ return
 ONEUP:
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld h or pressed h again
-if (!isModified && (A_TimeSincePriorHotkey, "j") >= roll)  || (instr(A_PriorKey, "j") && !isModified){
+if (!isModified && (A_TimeSincePriorHotkey, oneString) >= roll)  || (instr(A_PriorKey, oneString) && !isModified){
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {j}
+		send %oneString%
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send {j}
+		send %oneString%
 	}
 	roll := 0
 }
 ;if you pressed j -> k
-if (instr(A_PriorKey, "k") && (A_TimeSincePriorHotkey, "k") < roll) {
+if (instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) {
 	send {i}
 }
-if (instr(A_PriorKey, ";") && (A_TimeSincePriorHotkey, ";") < roll) {
+if (instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll) {
 	send {e}
 }
 isModified := 0 
@@ -109,20 +109,20 @@ return
 TWOUP:
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld j or pressed j again
-if (!isModified && (A_TimeSincePriorHotkey, "k") >= roll)  || (instr(A_PriorKey, "k") && !isModified){
+if (!isModified && (A_TimeSincePriorHotkey, twoString) >= roll)  || (instr(A_PriorKey, twoString) && !isModified){
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {K}
+		send {%twoString%}
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send {k}
+		send {%twoString%}
 	}
 	roll := 0
 }
 ;if you pressed j -> k
-if (instr(A_PriorKey, "l") && (A_TimeSincePriorHotkey, "l") < roll) {
+if (instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
 	send {u}
 }
-if (instr(A_PriorKey, "j") && (A_TimeSincePriorHotkey, "j") < roll) {
+if (instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) {
 	send {i}
 }
 isModified := 0 
@@ -132,12 +132,12 @@ return
 THREEUP:
 isModified :=  (GetKeyState("Spaceh", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld k or pressed k again
-if (!isModified && (A_TimeSincePriorHotkey, "l") >= roll)  || (instr(A_PriorKey, "l") && !isModified){
+if (!isModified && (A_TimeSincePriorHotkey, threeString) >= roll)  || (instr(A_PriorKey, threeString) && !isModified){
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {L}
+		send {%threeString%}
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send {l}
+		send {%threeString%}
 	}
 	roll := 0
 }
@@ -145,7 +145,7 @@ if (!isModified && (A_TimeSincePriorHotkey, "l") >= roll)  || (instr(A_PriorKey,
 if (instr(A_PriorKey, "k") && (A_TimeSincePriorHotkey, "k") < roll) {
 	send {u}
 }
-if (instr(A_PriorKey, ";") && (A_TimeSincePriorHotkey, ";") < roll) {
+if (instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll) {
 	send {o}
 }
 isModified := 0 
@@ -154,19 +154,19 @@ return
 FOURUP:
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld l or pressed l again
-if (!isModified && (A_TimeSincePriorHotkey, ";") >= roll)  || (instr(A_PriorKey, ";") && !isModified){
+if (!isModified && (A_TimeSincePriorHotkey, fourString) >= roll)  || (instr(A_PriorKey, fourString) && !isModified){
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {;}
+		send {%fourString%}
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send {;}
+		send {%fourString%}
 	}
 	roll := 0
 }
-if (instr(A_PriorKey, "j") && (A_TimeSincePriorHotkey, "j") < roll) {
+if (instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) {
 	send {q}
 }
-if (instr(A_PriorKey, "l") && (A_TimeSincePriorHotkey, "l") < roll) {
+if (instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
 	send {o}
 }
 isModified := 0
