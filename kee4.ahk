@@ -10,7 +10,7 @@ ListLines, Off
 
 SetCapsLockState, AlwaysOff
 cons = 200
-combo = 40
+combo = 25
 global skey
 
 roll := cons
@@ -28,6 +28,9 @@ j::
 	if(instr(A_PriorKey, "k") && ((A_TimeSincePriorHotkey, "k") < combo)) {
 		send {t}
 	}
+	if(instr(A_PriorKey, ";") && ((A_TimeSincePriorHotkey, ";") < combo)) {
+		send {r}
+	}
 return
 $~*j up::
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
@@ -44,6 +47,9 @@ if (!isModified && (A_TimeSincePriorHotkey, "j") >= roll)  || (instr(A_PriorKey,
 ;if you pressed j -> k
 if (instr(A_PriorKey, "k") && (A_TimeSincePriorHotkey, "k") < roll) {
 	send {i}
+}
+if (instr(A_PriorKey, ";") && (A_TimeSincePriorHotkey, ";") < roll) {
+	send {e}
 }
 isModified := 0 
 return 
@@ -94,7 +100,7 @@ l::
 	}
 return
 $~*l up::
-isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
+isModified :=  (GetKeyState("Spaceh", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld k or pressed k again
 if (!isModified && (A_TimeSincePriorHotkey, "l") >= roll)  || (instr(A_PriorKey, "l") && !isModified){
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
@@ -119,6 +125,9 @@ return
 	if(instr(A_PriorKey, "l") && ((A_TimeSincePriorHotkey, "l") < combo)) {
 		send {m}
 	}
+	if(instr(A_PriorKey, "j") && ((A_TimeSincePriorHotkey, "j") < combo)) {
+		send {r}
+	}
 return
 $~*`; up::
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
@@ -131,6 +140,9 @@ if (!isModified && (A_TimeSincePriorHotkey, ";") >= roll)  || (instr(A_PriorKey,
 		send {;}
 	}
 	roll := 0
+}
+if (instr(A_PriorKey, "j") && (A_TimeSincePriorHotkey, "j") < roll) {
+	send {q}
 }
 isModified := 0 
 return 
