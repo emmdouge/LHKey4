@@ -41,6 +41,10 @@ if (!isModified && (A_TimeSincePriorHotkey, "h") >= roll)  || (instr(A_PriorKey,
 	}
 	roll := 0
 }
+;if you pressed j -> k
+if (instr(A_PriorKey, "j") && (A_TimeSincePriorHotkey, "j") < roll) {
+	send {i}
+}
 isModified := 0 
 return 
 
@@ -70,6 +74,9 @@ if (!isModified && (A_TimeSincePriorHotkey, "j") >= roll)  || (instr(A_PriorKey,
 }
 ;if you pressed j -> k
 if (instr(A_PriorKey, "k") && (A_TimeSincePriorHotkey, "k") < roll) {
+	send {u}
+}
+if (instr(A_PriorKey, "h") && (A_TimeSincePriorHotkey, "h") < roll) {
 	send {i}
 }
 isModified := 0 
