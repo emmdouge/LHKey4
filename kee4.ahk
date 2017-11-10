@@ -8,22 +8,33 @@ SetKeyDelay , -1, -1              ;faster response (might be better with -1, 0)
 ListLines, Off
 #KeyHistory 3
 
-oneString := "j"
-twoString := "k"
-threeString := "l"
-fourString := ";"
+oneBiTwo := "i"
+oneToFour := "e"
+twoBiThree := "u"
+threeBiFour := "o"
+onePlusTwo := "t"
+twoPlusThree := "y"
+threePlusFour := "m" 
+onePlusFour := "r"
+fourToOne := "q"
 
-Hotkey, j, ONEDOWN
-Hotkey, $~*j up, ONEUP
 
-Hotkey, k, TWODOWN
-Hotkey, $~*k up, TWOUP
+oneString := "h"
+twoString := "j"
+threeString := "k"
+fourString := "l"
 
-Hotkey, l, THREEDOWN
-Hotkey, $~*l up, THREEUP
+Hotkey, h, ONEDOWN
+Hotkey, $~*h up, ONEUP
 
-Hotkey, `;, FOURDOWN
-Hotkey, $~*`; up, FOURUP
+Hotkey, j, TWODOWN
+Hotkey, $~*j up, TWOUP
+
+Hotkey, k, THREEDOWN
+Hotkey, $~*k up, THREEUP
+
+Hotkey, l, FOURDOWN
+Hotkey, $~*l up, FOURUP
 
 
 SetCapsLockState, AlwaysOff
@@ -43,10 +54,10 @@ ONEDOWN:
 ;the moment you press a key, unlock the roll
 	roll := cons
 	if(instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
-		send {t}
+		send {%onePlusTwo%}
 	}
 	if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
-		send {r}
+		send {%onePlusFour%}
 	}
 return
 
@@ -54,10 +65,10 @@ TWODOWN:
 ;the moment you press a key, unlock the roll
 	roll := cons
 	if(instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
-		send {y}
+		send {%twoPlusThree%}
 	}
 	if(instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) {
-		send {t}
+		send {%onePlusTwo%}
 	}
 return
 
@@ -65,10 +76,10 @@ THREEDOWN:
 ;the moment you press a key, unlock the roll
 	roll := cons
 	if(instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
-		send {y}
+		send {%twoPlusThree%}
 	}
 	if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
-		send {m}
+		send {%threePlusFour%}
 	}
 return
 
@@ -76,10 +87,10 @@ FOURDOWN:
 ;the moment you press a key, unlock the roll
 	roll := cons
 	if(instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
-		send {m}
+		send {%threePlusFour%}
 	}
 	if(instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) {
-		send {r}
+		send {%onePlusFour%}
 	}
 return
 
@@ -88,19 +99,19 @@ isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetK
 ;if you overheld h or pressed h again
 if (!isModified && (A_TimeSincePriorHotkey, oneString) >= roll)  || (instr(A_PriorKey, oneString) && !isModified){
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send %oneString%
+		send {%oneString%}
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send %oneString%
+		send {%oneString%}
 	}
 	roll := 0
 }
 ;if you pressed j -> k
 if (instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) {
-	send {i}
+	send {%oneBiTwo%}
 }
 if (instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll) {
-	send {e}
+	send {%oneToFour%}
 }
 isModified := 0 
 return 
@@ -120,10 +131,10 @@ if (!isModified && (A_TimeSincePriorHotkey, twoString) >= roll)  || (instr(A_Pri
 }
 ;if you pressed j -> k
 if (instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
-	send {u}
+	send {%twoBiThree%}
 }
 if (instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) {
-	send {i}
+	send {%oneBiTwo%}
 }
 isModified := 0 
 return 
@@ -142,11 +153,11 @@ if (!isModified && (A_TimeSincePriorHotkey, threeString) >= roll)  || (instr(A_P
 	roll := 0
 }
 ;if you pressed k -> j
-if (instr(A_PriorKey, "k") && (A_TimeSincePriorHotkey, "k") < roll) {
-	send {u}
+if (instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) {
+	send {%twoBiThree%}
 }
 if (instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll) {
-	send {o}
+	send {%threeBiFour%}
 }
 isModified := 0 
 return 
@@ -164,10 +175,10 @@ if (!isModified && (A_TimeSincePriorHotkey, fourString) >= roll)  || (instr(A_Pr
 	roll := 0
 }
 if (instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) {
-	send {q}
+	send {%fourToOne%}
 }
 if (instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
-	send {o}
+	send {%threeBiFour%}
 }
 isModified := 0
 return 
