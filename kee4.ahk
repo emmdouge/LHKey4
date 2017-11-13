@@ -1,12 +1,18 @@
-﻿#SingleInstance force
-;#Persistent
-;#NoEnv
+﻿; Always run as admin
+;if not A_IsAdmin
+;{
+;   Run *RunAs "%A_ScriptFullPath%"  ; Requires v1.0.92.01+
+;   ExitApp
+;}
+#SingleInstance force
+#Persistent
+#NoEnv
 #InstallKeybdHook
 #UseHook On
-;SetBatchLines, -1                 ;makes the script run at max speed
-;SetKeyDelay , -1, -1              ;faster response (might be better with -1, 0)
+SetBatchLines, -1                 ;makes the script run at max speed
+SetKeyDelay , -1, -1              ;faster response (might be better with -1, 0)
 ListLines, Off
-#KeyHistory 5
+#KeyHistory 6
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #MaxThreadsPerHotkey 255
@@ -44,16 +50,39 @@ Hotkey, $~*l up, FOURUP
 
 cons = 200
 combo = 50
-lag = 1
+lag = 25
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;	LOGIC
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+GetAllKeysPressed(mode = "L") {
+	
+	pressed := Array()
+	i := 1 
+		
+	;removed wasd and arrow keys from keys to check	to perform command normals
+	keys = ``|1|2|3|4|5|6|7|8|9|0|-|=|[|]\|;|'|,|.|/|b|c|e|f|g|h|i|j|k|l|m|n|o|p|q|r|t|u|v|x|y|z|Esc|Tab|CapsLock|LShift|RShift|LCtrl|RCtrl|LWin|RWin|LAlt|RAlt|Space|AppsKey|Enter|BackSpace|Delete|Home|End|PGUP|PGDN|PrintScreen|ScrollLock|Pause|Insert|NumLock|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12|F13|F14|F15|F16|F17|F18|F19|F20 
+  	; '|' isn't a key itself (with '\' being the "actual" key), so okay to use is as a delimiter
+	Loop Parse, keys, |
+	{		
+		key = %A_LoopField%				
+		isDown :=  GetKeyState(key, mode)
+		if(isDown)
+		{
+			pressed[i] := key ; using 'i' instead of array.insert() for efficiency
+			i++
+		}
+	}   
+	
+	return pressed
+}
+
 roll := cons
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
-#if MaxIndex < 1 || GetKeyState("Shift", "P")=1
+if MaxIndex < 1 || GetKeyState("Shift", "P")=1
   roll := 0
 
 ONEDOWN: 
@@ -69,7 +98,7 @@ ONEDOWN:
 		sleep %lag%
 		send {%onePlusFour% up}
 	}
-return
+exit
 
 TWODOWN:
 ;the moment you press a key, unlock the roll
@@ -84,7 +113,7 @@ TWODOWN:
 		sleep %lag%
 		send {%onePlusTwo% up}
 	}
-return
+exit
 
 THREEDOWN: 
 ;the moment you press a key, unlock the roll
@@ -99,7 +128,7 @@ THREEDOWN:
 		sleep %lag%
 		send {%threePlusFour% up}
 	}
-return
+exit
 
 FOURDOWN:
 ;the moment you press a key, unlock the roll
@@ -114,7 +143,7 @@ FOURDOWN:
 		sleep %lag%
 		send {%onePlusFour% up}
 	}
-return
+exit
 
 ONEUP:
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
@@ -144,7 +173,7 @@ if (instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll
 	send {%oneToFour% up}
 }
 isModified := 0 
-return 
+exit 
 
 
 TWOUP:
@@ -175,7 +204,7 @@ if (instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) 
 	send {%oneBiTwo% up}
 }
 isModified := 0 
-return 
+exit 
 
 
 THREEUP:
@@ -206,7 +235,7 @@ if (instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll
 	send {%threeBiFour% up}
 }
 isModified := 0 
-return 
+exit 
 
 FOURUP:
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
@@ -235,27 +264,4 @@ if (instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < ro
 	send {%threeBiFour% up}
 }
 isModified := 0
-return 
-
-
-GetAllKeysPressed(mode = "L") {
-	
-	pressed := Array()
-	i := 1 
-		
-	;removed wasd and arrow keys from keys to check	to perform command normals
-	keys = ``|1|2|3|4|5|6|7|8|9|0|-|=|[|]\|;|'|,|.|/|b|c|e|f|g|h|i|j|k|l|m|n|o|p|q|r|t|u|v|x|y|z|Esc|Tab|CapsLock|LShift|RShift|LCtrl|RCtrl|LWin|RWin|LAlt|RAlt|Space|AppsKey|Enter|BackSpace|Delete|Home|End|PGUP|PGDN|PrintScreen|ScrollLock|Pause|Insert|NumLock|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12|F13|F14|F15|F16|F17|F18|F19|F20 
-  	; '|' isn't a key itself (with '\' being the "actual" key), so okay to use is as a delimiter
-	Loop Parse, keys, |
-	{		
-		key = %A_LoopField%				
-		isDown :=  GetKeyState(key, mode)
-		if(isDown)
-		{
-			pressed[i] := key ; using 'i' instead of array.insert() for efficiency
-			i++
-		}
-	}   
-	
-	return pressed
-}
+exit 
