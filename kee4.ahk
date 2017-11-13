@@ -19,10 +19,10 @@ ListLines, Off
 SendMode Input
 SetCapsLockState, AlwaysOff
 
-oneBiTwo := "i"
+oneBiTwo := "8"
 oneToFour := "e"
-twoBiThree := "u"
-threeBiFour := "o"
+twoBiThree := "7"
+threeBiFour := "8"
 onePlusTwo := "t"
 twoPlusThree := "y"
 threePlusFour := "m" 
@@ -30,22 +30,22 @@ onePlusFour := "r"
 fourToOne := "q"
 
 
-oneString := "h"
-twoString := "j"
-threeString := "k"
-fourString := "l"
+oneString := "u"
+twoString := "i"
+threeString := "o"
+fourString := "p"
 
-Hotkey, h, ONEDOWN
-Hotkey, $~*h up, ONEUP
+Hotkey, u, ONEDOWN
+Hotkey, $~*u up, ONEUP
 
-Hotkey, j, TWODOWN
-Hotkey, $~*j up, TWOUP
+Hotkey, i, TWODOWN
+Hotkey, $~*i up, TWOUP
 
-Hotkey, k, THREEDOWN
-Hotkey, $~*k up, THREEUP
+Hotkey, o, THREEDOWN
+Hotkey, $~*o up, THREEUP
 
-Hotkey, l, FOURDOWN
-Hotkey, $~*l up, FOURUP
+Hotkey, p, FOURDOWN
+Hotkey, $~*p up, FOURUP
 
 
 cons = 200
@@ -82,7 +82,7 @@ GetAllKeysPressed(mode = "L") {
 roll := cons
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
-if MaxIndex < 1 || GetKeyState("Shift", "P")=1
+if MaxIndex < 1 || GetKeyState("Shift", "P")==1
   roll := 0
 
 ONEDOWN: 
