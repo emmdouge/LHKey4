@@ -35,17 +35,17 @@ twoString := "i"
 threeString := "o"
 fourString := "p"
 
-Hotkey, u, ONEDOWN
-Hotkey, $~*u up, ONEUP
+Hotkey, %oneString%, ONEDOWN
+Hotkey, $~*%oneString% up, ONEUP
 
-Hotkey, i, TWODOWN
-Hotkey, $~*i up, TWOUP
+Hotkey, %twoString%, TWODOWN
+Hotkey, $~*%twoString% up, TWOUP
 
-Hotkey, o, THREEDOWN
-Hotkey, $~*o up, THREEUP
+Hotkey, %threeString%, THREEDOWN
+Hotkey, $~*%threeString% up, THREEUP
 
-Hotkey, p, FOURDOWN
-Hotkey, $~*p up, FOURUP
+Hotkey, %fourString%, FOURDOWN
+Hotkey, $~*%fourString% up, FOURUP
 
 
 cons = 200
@@ -94,9 +94,11 @@ ONEDOWN:
 		send {%onePlusTwo% up}
 	}
 	if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
-		send {%onePlusFour% down}
+		send {%oneString% down}
+		send {%fourString% down}
 		sleep %lag%
-		send {%onePlusFour% up}
+		send {%oneString% up}
+		send {%fourString% up}
 	}
 exit
 
@@ -139,9 +141,11 @@ FOURDOWN:
 		send {%threePlusFour% up}
 	}
 	if(instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) {
-		send {%onePlusFour% down}
+		send {%oneString% down}
+		send {%fourString% down}
 		sleep %lag%
-		send {%onePlusFour% up}
+		send {%oneString% up}
+		send {%fourString% up}
 	}
 exit
 
@@ -163,14 +167,20 @@ if (!isModified && (A_TimeSincePriorHotkey, oneString) >= roll)  || (instr(A_Pri
 }
 ;if you pressed j -> k
 if (instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) {
-	send {%oneBiTwo% down}
-	sleep %lag%
-	send {%oneBiTwo% up}
+		send {%oneString% down}
+		send {%twoString% down}
+		sleep %lag%
+		send {%oneString% up}
+		send {%twoString% up}
 }
 if (instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll) {
-	send {%oneToFour% down}
-	sleep %lag%
-	send {%oneToFour% up}
+		send {%threeString% down}
+		send {%fourString% down}
+		send {%threePlusFour% down}
+		sleep %lag%
+		send {%threeString% up}
+		send {%fourString% up}
+		send {%threePlusFour% up}
 }
 isModified := 0 
 exit 
@@ -199,9 +209,11 @@ if (instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < ro
 	send {%twoBiThree% up}
 }
 if (instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) {
-	send {%oneBiTwo% down}
-	sleep %lag%
-	send {%oneBiTwo% up}
+		send {%oneString% down}
+		send {%twoString% down}
+		sleep %lag%
+		send {%oneString% up}
+		send {%twoString% up}
 }
 isModified := 0 
 exit 
@@ -230,9 +242,11 @@ if (instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) 
 	send {%twoBiThree% up}
 }
 if (instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll) {
-	send {%threeBiFour% down}
-	sleep %lag%
-	send {%threeBiFour% up}
+		send {%threeString% down}
+		send {%fourString% down}
+		sleep %lag%
+		send {%threeString% up}
+		send {%fourString% up}
 }
 isModified := 0 
 exit 
@@ -254,14 +268,20 @@ if (!isModified && (A_TimeSincePriorHotkey, fourString) >= roll)  || (instr(A_Pr
 	roll := 0
 }
 if (instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) {
-	send {%fourToOne% down}
-	sleep %lag%
-	send {%fourToOne% up}
+		send {%oneString% down}
+		send {%twoString% down}
+		send {%onePlusTwo% down}
+		sleep %lag%
+		send {%oneString% up}
+		send {%twoString% up}
+		send {%onePlusTwo% up}
 }
 if (instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
-	send {%threeBiFour% down}
-	sleep %lag%
-	send {%threeBiFour% up}
+		send {%threeString% down}
+		send {%fourString% down}
+		sleep %lag%
+		send {%threeString% up}
+		send {%fourString% up}
 }
 isModified := 0
 exit 
