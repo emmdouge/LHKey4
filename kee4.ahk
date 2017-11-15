@@ -194,7 +194,6 @@ if (instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll
 		send {%fourString% up}
 		send {%threePlusFour% up}
 }
-isModified := 0 
 exit 
 
 
@@ -228,7 +227,6 @@ if (instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) 
 		send {%oneString% up}
 		send {%twoString% up}
 }
-isModified := 0 
 exit 
 
 
@@ -262,7 +260,6 @@ if (instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll
 		send {%threeString% up}
 		send {%fourString% up}
 }
-isModified := 0 
 exit 
 
 FOURUP:
@@ -299,5 +296,4 @@ if (instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < ro
 		send {%threeString% up}
 		send {%fourString% up}
 }
-isModified := 0
 exit 
