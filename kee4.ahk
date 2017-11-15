@@ -36,16 +36,16 @@ threeString := "o"
 fourString := "p"
 
 Hotkey, %oneString%, ONEDOWN
-Hotkey, $~*%oneString% up, ONEUP
+Hotkey, %oneString% up, ONEUP
 
 Hotkey, %twoString%, TWODOWN
-Hotkey, $~*%twoString% up, TWOUP
+Hotkey, %twoString% up, TWOUP
 
 Hotkey, %threeString%, THREEDOWN
-Hotkey, $~*%threeString% up, THREEUP
+Hotkey, %threeString% up, THREEUP
 
 Hotkey, %fourString%, FOURDOWN
-Hotkey, $~*%fourString% up, FOURUP
+Hotkey, %fourString% up, FOURUP
 
 
 cons = 200
@@ -106,9 +106,11 @@ TWODOWN:
 ;the moment you press a key, unlock the roll
 	roll := cons
 	if(instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
-		send {%twoPlusThree% down}
+		send {%twoString% down}
+		send {%threeString% down}
 		sleep %lag%
-		send {%twoPlusThree% up}
+		send {%twoString% up}
+		send {%threeString% up}
 	}
 	if(instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) {
 		send {%onePlusTwo% down}
@@ -121,9 +123,11 @@ THREEDOWN:
 ;the moment you press a key, unlock the roll
 	roll := cons
 	if(instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
-		send {%twoPlusThree% down}
+		send {%twoString% down}
+		send {%threeString% down}
 		sleep %lag%
-		send {%twoPlusThree% up}
+		send {%twoString% up}
+		send {%threeString% up}
 	}
 	if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
 		send {%threePlusFour% down}
