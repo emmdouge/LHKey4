@@ -27,6 +27,7 @@ onePlusTwo := "t"
 twoPlusThree := "y"
 threePlusFour := "m" 
 onePlusFour := "r"
+onePlusTwoPlusThree := "+"
 fourToOne := "q"
 
 
@@ -89,9 +90,17 @@ ONEDOWN:
 	roll := cons
 	;1 + 2
 	if(instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
-		send {%onePlusTwo% down}
-		sleep %lag%
-		send {%onePlusTwo% up}
+		KeyWait, %threeString%, d t0.025           ; Making sure  you pressed home twice
+		if ErrorLevel {                           ; If it was only pressed one send the default action
+			send {%onePlusTwo% down}
+			sleep %lag%
+			send {%onePlusTwo% up}
+		}
+		else {
+			send {%onePlusTwoPlusThree% down}
+			sleep %lag%
+			send {%onePlusTwoPlusThree% up}
+		}
 	}
 	;1 + 4
 	if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
@@ -108,17 +117,33 @@ TWODOWN:
 	roll := cons
 	;2 + 3
 	if(instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
-		send {%twoString% down}
-		send {%threeString% down}
-		sleep %lag%
-		send {%twoString% up}
-		send {%threeString% up}
+		KeyWait, %oneString%, d t0.025           ; Making sure  you pressed home twice
+		if ErrorLevel {             
+			send {%twoString% down}
+			send {%threeString% down}
+			sleep %lag%
+			send {%twoString% up}
+			send {%threeString% up}
+		}
+		else {
+			send {%onePlusTwoPlusThree% down}
+			sleep %lag%
+			send {%onePlusTwoPlusThree% up}
+		}
 	}
 	;2 + 1
 	if(instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) {
-		send {%onePlusTwo% down}
-		sleep %lag%
-		send {%onePlusTwo% up}
+		KeyWait, %threeString%, d t0.025           ; Making sure  you pressed home twice
+		if ErrorLevel {             
+			send {%onePlusTwo% down}
+			sleep %lag%
+			send {%onePlusTwo% up}
+		}
+		else {
+			send {%onePlusTwoPlusThree% down}
+			sleep %lag%
+			send {%onePlusTwoPlusThree% up}
+		}
 	}
 exit
 
@@ -127,11 +152,19 @@ THREEDOWN:
 	roll := cons
 	;3 + 2
 	if(instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
-		send {%twoString% down}
-		send {%threeString% down}
-		sleep %lag%
-		send {%twoString% up}
-		send {%threeString% up}
+		KeyWait, %oneString%, d t0.025           ; Making sure  you pressed home twice
+		if ErrorLevel {             
+			send {%twoString% down}
+			send {%threeString% down}
+			sleep %lag%
+			send {%twoString% up}
+			send {%threeString% up}
+		}
+		else {
+			send {%onePlusTwoPlusThree% down}
+			sleep %lag%
+			send {%onePlusTwoPlusThree% up}
+		}
 	}
 	;3 + 4
 	if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
