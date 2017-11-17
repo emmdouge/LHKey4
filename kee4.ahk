@@ -106,16 +106,22 @@ ONEDOWN:
 		else {
 			KeyWait, %fourString%, d t0.025
 			;1+2+3     
-			if ErrorLevel {      
-				send {%onePlusTwoPlusThree% down}
+			if ErrorLevel {
+				send {%oneString% down}
+				send {%twoString% down}
+				send {%onePlusTwo% down}
 				sleep %lag%
-				send {%onePlusTwoPlusThree% up}
+				send {%oneString% up}
+				send {%twoString% up}
+				send {%onePlusTwo% up}
 			}
 			;1+2+3+4
 			else {
-				send {%allButtons% down}
+				send {%onePlusTwo% down}
+				send {%threePlusFour% down}
 				sleep %lag%
-				send {%allButtons% up}
+				send {%onePlusTwo% up}
+				send {%threePlusFour% up}
 			}
 		}
 	}
@@ -142,15 +148,21 @@ TWODOWN:
 				KeyWait, %oneString%, d t0.025
 				;2+3+4       
 				if ErrorLevel {      
-					send {%twoPlusThreePlusFour% down}
+					send {%threeString% down}
+					send {%fourString% down}
+					send {%threePlusFour% down}
 					sleep %lag%
-					send {%twoPlusThreePlusFour% up}
+					send {%threeString% up}
+					send {%fourString% up}
+					send {%threePlusFour% up}
 				}
 				;2+3+4+1
 				else {
-					send {%allButtons% down}
+					send {%onePlusTwo% down}
+					send {%threePlusFour% down}
 					sleep %lag%
-					send {%allButtons% up}
+					send {%onePlusTwo% up}
+					send {%threePlusFour% up}
 				}
 			}
 		}
@@ -159,15 +171,21 @@ TWODOWN:
 			KeyWait, %fourString%, d t0.025
 			;2+3+1     
 			if ErrorLevel {      
-				send {%onePlusTwoPlusThree% down}
+				send {%oneString% down}
+				send {%twoString% down}
+				send {%onePlusTwo% down}
 				sleep %lag%
-				send {%onePlusTwoPlusThree% up}
+				send {%oneString% up}
+				send {%twoString% up}
+				send {%onePlusTwo% up}
 			}
 			;2+3+1+4
 			else {
-				send {%allButtons% down}
+				send {%onePlusTwo% down}
+				send {%threePlusFour% down}
 				sleep %lag%
-				send {%allButtons% up}
+				send {%onePlusTwo% up}
+				send {%threePlusFour% up}
 			}
 		}
 	}
@@ -185,15 +203,21 @@ TWODOWN:
 			KeyWait, %fourString%, d t0.025
 			;2+1+3     
 			if ErrorLevel {      
-				send {%onePlusTwoPlusThree% down}
+				send {%oneString% down}
+				send {%twoString% down}
+				send {%onePlusTwo% down}
 				sleep %lag%
-				send {%onePlusTwoPlusThree% up}
+				send {%oneString% up}
+				send {%twoString% up}
+				send {%onePlusTwo% up}
 			}
 			;2+1+3+4
 			else {
-				send {%allButtons% down}
+				send {%onePlusTwo% down}
+				send {%threePlusFour% down}
 				sleep %lag%
-				send {%allButtons% up}
+				send {%onePlusTwo% up}
+				send {%threePlusFour% up}
 			}
 		}
 	}
@@ -220,9 +244,13 @@ THREEDOWN:
 				KeyWait, %oneString%, d t0.025
 				;3+2+4     
 				if ErrorLevel {      
-					send {%twoPlusThreePlusFour% down}
+					send {%threeString% down}
+					send {%fourString% down}
+					send {%threePlusFour% down}
 					sleep %lag%
-					send {%twoPlusThreePlusFour% up}
+					send {%threeString% up}
+					send {%fourString% up}
+					send {%threePlusFour% up}
 				}
 				;3+2+4+1
 				else {
@@ -237,15 +265,21 @@ THREEDOWN:
 			KeyWait, %fourString%, d t0.025
 			;3+2+1
 			if ErrorLevel {      
-				send {%onePlusTwoPlusThree% down}
+				send {%oneString% down}
+				send {%twoString% down}
+				send {%onePlusTwo% down}
 				sleep %lag%
-				send {%onePlusTwoPlusThree% up}
+				send {%oneString% up}
+				send {%twoString% up}
+				send {%onePlusTwo% up}
 			}
 			;3+2+1+4
 			else {
-				send {%allButtons% down}
+				send {%onePlusTwo% down}
+				send {%threePlusFour% down}
 				sleep %lag%
-				send {%allButtons% up}
+				send {%onePlusTwo% up}
+				send {%threePlusFour% up}
 			}
 		}
 	}
@@ -269,9 +303,11 @@ THREEDOWN:
 			}
 			;3+4+2+1
 			else {
-				send {%allButtons% down}
+				send {%onePlusTwo% down}
+				send {%threePlusFour% down}
 				sleep %lag%
-				send {%allButtons% up}
+				send {%onePlusTwo% up}
+				send {%threePlusFour% up}
 			}
 		}
 	}
@@ -294,15 +330,21 @@ FOURDOWN:
 			KeyWait, %oneString%, d t0.025
 			;4+3+2;
 			if ErrorLevel {      
-				send {%twoPlusThreePlusFour% down}
+				send {%threeString% down}
+				send {%fourString% down}
+				send {%threePlusFour% down}
 				sleep %lag%
-				send {%twoPlusThreePlusFour% up}
+				send {%threeString% up}
+				send {%fourString% up}
+				send {%threePlusFour% up}
 			}
 			;4+3+2+1
 			else {
-				send {%allButtons% down}
+				send {%onePlusTwo% down}
+				send {%threePlusFour% down}
 				sleep %lag%
-				send {%allButtons% up}
+				send {%onePlusTwo% up}
+				send {%threePlusFour% up}
 			}
 		}
 	}
@@ -332,16 +374,6 @@ if (instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) 
 		send {%oneString% up}
 		send {%twoString% up}
 }
-;if you rolled 1 -> 4 
-;if (instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll) {
-;		send {%threeString% down}
-;		send {%fourString% down}
-;		send {%threePlusFour% down}
-;		sleep %lag%
-;		send {%threeString% up}
-;		send {%fourString% up}
-;		send {%threePlusFour% up}
-;}
 exit 
 
 
@@ -426,16 +458,6 @@ if (!isModified && (A_TimeSincePriorHotkey, fourString) >= roll)  || (instr(A_Pr
 	}
 	roll := 0
 }
-;if you rolled 4 -> 1
-;if (instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) {
-;		send {%oneString% down}
-;		send {%twoString% down}
-;		send {%onePlusTwo% down}
-;		sleep %lag%
-;		send {%oneString% up}
-;		send {%twoString% up}
-;		send {%onePlusTwo% up}
-;}
 ;if you rolled 4 -> 3
 if (instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
 		send {%threeString% down}
