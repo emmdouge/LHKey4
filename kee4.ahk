@@ -29,6 +29,7 @@ threePlusFour := "m"
 onePlusFour := "r"
 onePlusTwoPlusThree := "+"
 twoPlusThreePlusFour := "-"
+allButtons := "*"
 fourToOne := "q"
 
 
@@ -36,6 +37,7 @@ oneString := "u"
 twoString := "i"
 threeString := "o"
 fourString := "p"
+grab := "Space"
 
 Hotkey, %oneString%, ONEDOWN
 Hotkey, %oneString% up, ONEUP
@@ -48,6 +50,8 @@ Hotkey, %threeString% up, THREEUP
 
 Hotkey, %fourString%, FOURDOWN
 Hotkey, %fourString% up, FOURUP
+
+Hotkey, %grab%, GRAB
 
 
 cons = 200
@@ -100,18 +104,20 @@ ONEDOWN:
 		}
 		;1+2+3
 		else {
-			send {%onePlusTwoPlusThree% down}
-			sleep %lag%
-			send {%onePlusTwoPlusThree% up}
+			KeyWait, %fourString%, d t0.025
+			;1+2+3     
+			if ErrorLevel {      
+				send {%onePlusTwoPlusThree% down}
+				sleep %lag%
+				send {%onePlusTwoPlusThree% up}
+			}
+			;1+2+3+4
+			else {
+				send {%allButtons% down}
+				sleep %lag%
+				send {%allButtons% up}
+			}
 		}
-	}
-	;1 + 4
-	if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
-		send {%oneString% down}
-		send {%fourString% down}
-		sleep %lag%
-		send {%oneString% up}
-		send {%fourString% up}
 	}
 exit
 
@@ -133,16 +139,36 @@ TWODOWN:
 			}
 			;2+3+4
 			else {
-				send {%twoPlusThreePlusFour% down}
-				sleep %lag%
-				send {%twoPlusThreePlusFour% up}
+				KeyWait, %oneString%, d t0.025
+				;2+3+4       
+				if ErrorLevel {      
+					send {%twoPlusThreePlusFour% down}
+					sleep %lag%
+					send {%twoPlusThreePlusFour% up}
+				}
+				;2+3+4+1
+				else {
+					send {%allButtons% down}
+					sleep %lag%
+					send {%allButtons% up}
+				}
 			}
 		}
 		;2+3+1
 		else {
-			send {%onePlusTwoPlusThree% down}
-			sleep %lag%
-			send {%onePlusTwoPlusThree% up}
+			KeyWait, %fourString%, d t0.025
+			;2+3+1     
+			if ErrorLevel {      
+				send {%onePlusTwoPlusThree% down}
+				sleep %lag%
+				send {%onePlusTwoPlusThree% up}
+			}
+			;2+3+1+4
+			else {
+				send {%allButtons% down}
+				sleep %lag%
+				send {%allButtons% up}
+			}
 		}
 	}
 	;2 + 1
@@ -156,9 +182,19 @@ TWODOWN:
 		}
 		;2+1+3
 		else {
-			send {%onePlusTwoPlusThree% down}
-			sleep %lag%
-			send {%onePlusTwoPlusThree% up}
+			KeyWait, %fourString%, d t0.025
+			;2+1+3     
+			if ErrorLevel {      
+				send {%onePlusTwoPlusThree% down}
+				sleep %lag%
+				send {%onePlusTwoPlusThree% up}
+			}
+			;2+1+3+4
+			else {
+				send {%allButtons% down}
+				sleep %lag%
+				send {%allButtons% up}
+			}
 		}
 	}
 exit
@@ -181,16 +217,36 @@ THREEDOWN:
 			}
 			;3+2+4
 			else {
-				send {%twoPlusThreePlusFour% down}
-				sleep %lag%
-				send {%twoPlusThreePlusFour% up}
+				KeyWait, %oneString%, d t0.025
+				;3+2+4     
+				if ErrorLevel {      
+					send {%twoPlusThreePlusFour% down}
+					sleep %lag%
+					send {%twoPlusThreePlusFour% up}
+				}
+				;3+2+4+1
+				else {
+					send {%allButtons% down}
+					sleep %lag%
+					send {%allButtons% up}
+				}
 			}
 		}
 		;3+2+1
 		else {
-			send {%onePlusTwoPlusThree% down}
-			sleep %lag%
-			send {%onePlusTwoPlusThree% up}
+			KeyWait, %fourString%, d t0.025
+			;3+2+1
+			if ErrorLevel {      
+				send {%onePlusTwoPlusThree% down}
+				sleep %lag%
+				send {%onePlusTwoPlusThree% up}
+			}
+			;3+2+1+4
+			else {
+				send {%allButtons% down}
+				sleep %lag%
+				send {%allButtons% up}
+			}
 		}
 	}
 	;3 + 4
@@ -204,9 +260,19 @@ THREEDOWN:
 		}
 		;3+4+2
 		else {
-			send {%twoPlusThreePlusFour% down}
-			sleep %lag%
-			send {%twoPlusThreePlusFour% up}
+			KeyWait, %oneString%, d t0.025
+			;3+4+2
+			if ErrorLevel {      
+				send {%twoPlusThreePlusFour% down}
+				sleep %lag%
+				send {%twoPlusThreePlusFour% up}
+			}
+			;3+4+2+1
+			else {
+				send {%allButtons% down}
+				sleep %lag%
+				send {%allButtons% up}
+			}
 		}
 	}
 exit
@@ -225,18 +291,20 @@ FOURDOWN:
 		}
 		;4+3+2
 		else {
-			send {%twoPlusThreePlusFour% down}
-			sleep %lag%
-			send {%twoPlusThreePlusFour% up}
+			KeyWait, %oneString%, d t0.025
+			;4+3+2;
+			if ErrorLevel {      
+				send {%twoPlusThreePlusFour% down}
+				sleep %lag%
+				send {%twoPlusThreePlusFour% up}
+			}
+			;4+3+2+1
+			else {
+				send {%allButtons% down}
+				sleep %lag%
+				send {%allButtons% up}
+			}
 		}
-	}
-	;4 + 1
-	if(instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) {
-		send {%oneString% down}
-		send {%fourString% down}
-		sleep %lag%
-		send {%oneString% up}
-		send {%fourString% up}
 	}
 exit
 
@@ -265,15 +333,15 @@ if (instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) 
 		send {%twoString% up}
 }
 ;if you rolled 1 -> 4 
-if (instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll) {
-		send {%threeString% down}
-		send {%fourString% down}
-		send {%threePlusFour% down}
-		sleep %lag%
-		send {%threeString% up}
-		send {%fourString% up}
-		send {%threePlusFour% up}
-}
+;if (instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll) {
+;		send {%threeString% down}
+;		send {%fourString% down}
+;		send {%threePlusFour% down}
+;		sleep %lag%
+;		send {%threeString% up}
+;		send {%fourString% up}
+;		send {%threePlusFour% up}
+;}
 exit 
 
 
@@ -359,15 +427,15 @@ if (!isModified && (A_TimeSincePriorHotkey, fourString) >= roll)  || (instr(A_Pr
 	roll := 0
 }
 ;if you rolled 4 -> 1
-if (instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) {
-		send {%oneString% down}
-		send {%twoString% down}
-		send {%onePlusTwo% down}
-		sleep %lag%
-		send {%oneString% up}
-		send {%twoString% up}
-		send {%onePlusTwo% up}
-}
+;if (instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) {
+;		send {%oneString% down}
+;		send {%twoString% down}
+;		send {%onePlusTwo% down}
+;		sleep %lag%
+;		send {%oneString% up}
+;		send {%twoString% up}
+;		send {%onePlusTwo% up}
+;}
 ;if you rolled 4 -> 3
 if (instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
 		send {%threeString% down}
@@ -377,3 +445,12 @@ if (instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < ro
 		send {%fourString% up}
 }
 exit 
+
+GRAB:
+	;1+4
+    send {%oneString% down} 
+    send {%fourString% down} 
+    sleep %lag% 
+    send {%oneString% up} 
+    send {%fourString% up} 
+exit
