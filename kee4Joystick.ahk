@@ -20,7 +20,56 @@ ListLines, Off
 SendMode Input
 SetCapsLockState, AlwaysOff
 
-oneBiTwo := "8"
+oneToTwo() {
+	send {%oneString% down}
+	send {%twoString% down}
+	sleep %lag%
+	send {%oneString% up}
+	send {%twoString% up}
+	roll := lock
+}
+
+twoToOne() {
+	send {%oneString% down}
+	send {%twoString% down}
+	sleep %lag%
+	send {%oneString% up}
+	send {%twoString% up}
+	roll := lock
+}
+
+twoToThree(){
+	send {%twoBiThree% down}
+	sleep %lag%
+	send {%twoBiThree% up}
+	roll := lock
+}
+
+threeToTwo(){
+	send {%twoBiThree% down}
+	sleep %lag%
+	send {%twoBiThree% up}
+	roll := lock
+}
+
+threeToFour(){
+	send {%threeString% down}
+	send {%fourString% down}
+	sleep %lag%
+	send {%threeString% up}
+	send {%fourString% up}
+	roll := lock
+}
+
+fourToThree(){
+	send {%threeString% down}
+	send {%fourString% down}
+	sleep %lag%
+	send {%threeString% up}
+	send {%fourString% up}
+	roll := lock
+}
+
 oneToFour := "e"
 twoBiThree := "7"
 threeBiFour := "8"
@@ -518,12 +567,7 @@ if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, oneString) >= roll
 }
 ;if you rolled 1 -> 2
 else if (roll != lock && instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) {
-		send {%oneString% down}
-		send {%twoString% down}
-		sleep %lag%
-		send {%oneString% up}
-		send {%twoString% up}
-		roll := lock
+	oneToTwo()
 }
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
@@ -552,19 +596,11 @@ if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, twoString) >= roll
 }
 ;if you rolled 2 -> 3
 else if (roll != lock && instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
-	send {%twoBiThree% down}
-	sleep %lag%
-	send {%twoBiThree% up}
-	roll := lock
+	twoToThree()
 }
 ;if you rolled 2 -> 1
 else if (roll != lock && instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) {
-	send {%oneString% down}
-	send {%twoString% down}
-	sleep %lag%
-	send {%oneString% up}
-	send {%twoString% up}
-	roll := lock
+	twoToOne()
 }
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
@@ -593,19 +629,11 @@ if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, threeString) >= ro
 }
 ;if you rolled 3 -> 2
 else if (roll != lock && instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) {
-	send {%twoBiThree% down}
-	sleep %lag%
-	send {%twoBiThree% up}
-	roll := lock
+	threeToTwo()
 }
 ;if you rolled 3 -> 4
 else if (roll != lock && instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll) {
-	send {%threeString% down}
-	send {%fourString% down}
-	sleep %lag%
-	send {%threeString% up}
-	send {%fourString% up}
-	roll := lock
+	threeToFour()
 }
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
@@ -633,12 +661,7 @@ if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, fourString) >= rol
 }
 ;if you rolled 4 -> 3
 else if (roll != lock && instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
-	send {%threeString% down}
-	send {%fourString% down}
-	sleep %lag%
-	send {%threeString% up}
-	send {%fourString% up}
-	roll := lock
+	fourToThree()
 }
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
