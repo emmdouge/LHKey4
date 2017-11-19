@@ -53,6 +53,7 @@ lag = 25
 off = 0		;key immediately pressed on up
 on = 200	;key must be overheld to press original key, or rolled to another key within time specified
 lock = -1	;input will not be registered until no keys are being pressed on the keyboard
+comboInProgress = 0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;	LOGIC
@@ -396,8 +397,10 @@ else if (roll != lock && instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey
 }
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
-if (MaxIndex < 1 || GetKeyState("Shift", "P")==1) 
+if (MaxIndex < 1 || GetKeyState("Shift", "P")==1)  {
   roll := off	;roll will be unlocked when no keys on the keyboard are pressed
+  comboInProgress := 0
+}
 exit 
 
 
@@ -429,8 +432,10 @@ else if (roll != lock && instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey
 }
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
-if (MaxIndex < 1 || GetKeyState("Shift", "P")==1) 
+if (MaxIndex < 1 || GetKeyState("Shift", "P")==1)  {
   roll := off	;roll will be unlocked when no keys on the keyboard are pressed
+  comboInProgress := 0
+}
 exit 
 
 
@@ -462,8 +467,10 @@ else if (roll != lock && instr(A_PriorKey, fourString) && (A_TimeSincePriorHotke
 }
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
-if (MaxIndex < 1 || GetKeyState("Shift", "P")==1) 
+if (MaxIndex < 1 || GetKeyState("Shift", "P")==1) {
   roll := off	;roll will be unlocked when no keys on the keyboard are pressed
+  comboInProgress := 0
+}
 exit 
 
 FOURUP:
@@ -490,8 +497,10 @@ else if (roll != lock && instr(A_PriorKey, threeString) && (A_TimeSincePriorHotk
 }
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
-if (MaxIndex < 1 || GetKeyState("Shift", "P")==1) 
+if (MaxIndex < 1 || GetKeyState("Shift", "P")==1)  {
   roll := off	;roll will be unlocked when no keys on the keyboard are pressed
+  comboInProgress := 0
+}
 exit 
 
 oneToTwo:
@@ -545,57 +554,78 @@ fourToThree:
 return
 
 onePlusTwo:
-	send {%onePlusTwo% down}
-	sleep %lag%
-	send {%onePlusTwo% up}
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%onePlusTwo% down}
+		sleep %lag%
+		send {%onePlusTwo% up}
+	}
 return
 
 onePlusFour:
-	send {%oneString% down} 
-	send {%fourString% down} 
-	sleep %lag% 
-	send {%oneString% up} 
-	send {%fourString% up}
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%oneString% down} 
+		send {%fourString% down} 
+		sleep %lag% 
+		send {%oneString% up} 
+		send {%fourString% up}
+	}
 return
 
 twoPlusThree:
-	send {%twoString% down}
-	send {%threeString% down}
-	sleep %lag%
-	send {%twoString% up}
-	send {%threeString% up}
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%twoString% down}
+		send {%threeString% down}
+		sleep %lag%
+		send {%twoString% up}
+		send {%threeString% up}
+	}
 return
 
 threePlusFour:
-	send {%threePlusFour% down}
-	sleep %lag%
-	send {%threePlusFour% up}
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%threePlusFour% down}
+		sleep %lag%
+		send {%threePlusFour% up}
+	}
 return
 
 onePlusTwoPlusThree:
-	send {%oneString% down}
-	send {%twoString% down}
-	send {%onePlusTwo% down}
-	sleep %lag%
-	send {%oneString% up}
-	send {%twoString% up}
-	send {%onePlusTwo% up}
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%oneString% down}
+		send {%twoString% down}
+		send {%onePlusTwo% down}
+		sleep %lag%
+		send {%oneString% up}
+		send {%twoString% up}
+		send {%onePlusTwo% up}
+	}
 return
 
 twoPlusThreePlusFour:
-	send {%threeString% down}
-	send {%fourString% down}
-	send {%threePlusFour% down}
-	sleep %lag%
-	send {%threeString% up}
-	send {%fourString% up}
-	send {%threePlusFour% up}
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%threeString% down}
+		send {%fourString% down}
+		send {%threePlusFour% down}
+		sleep %lag%
+		send {%threeString% up}
+		send {%fourString% up}
+		send {%threePlusFour% up}
+	}
 return
 
 allFour:
-	send {%onePlusTwo% down}
-	send {%threePlusFour% down}
-	sleep %lag%
-	send {%onePlusTwo% up}
-	send {%threePlusFour% up}
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%onePlusTwo% down}
+		send {%threePlusFour% down}
+		sleep %lag%
+		send {%onePlusTwo% up}
+		send {%threePlusFour% up}
+	}
 return
