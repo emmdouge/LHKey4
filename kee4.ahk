@@ -90,11 +90,11 @@ roll := on
 
 ONEDOWN:
 	;1 + 2
-	if(roll != lock && instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
+	if(instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
 		roll := lock
-		KeyWait, %threeString%, d t0.025           ; Making sure  you pressed home twice
+		KeyWait, %threeString%, d t0.025           
 		;1+2
-		if ErrorLevel {                           ; If it was only pressed one send the default action
+		if ErrorLevel {                          
 			send {%onePlusTwo% down}
 			sleep %lag%
 			send {%onePlusTwo% up}
@@ -124,6 +124,7 @@ ONEDOWN:
 	}
 	;1 + 4 
 	else if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) { 
+		roll := lock
 		KeyWait, %threeString%, d t0.025
 		if ErrorLevel {
 			send {%oneString% down} 
@@ -148,7 +149,7 @@ exit
 
 TWODOWN:
 	;2 + 3
-	if(roll != lock && instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
+	if(instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
 		roll := lock
 		KeyWait, %oneString%, d t0.025
 		if ErrorLevel {        
@@ -208,7 +209,7 @@ TWODOWN:
 		}
 	}
 	;2 + 1
-	else if(roll != lock && instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) {
+	else if(instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) {
 		roll := lock
 		KeyWait, %threeString%, d t0.025           
 		;2+1
@@ -253,7 +254,7 @@ TWODOWN:
 		}
 	}
 	;2 + 4
-	else if(roll != lock && instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
+	else if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
 		roll := lock
 		KeyWait, %threeString%, d t0.025           
 		;2+4
@@ -320,7 +321,7 @@ exit
 
 THREEDOWN: 
 	;3 + 2
-	if(roll != lock && instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
+	if(instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
 		roll := lock
 		KeyWait, %oneString%, d t0.025       
 		if ErrorLevel {  
@@ -378,7 +379,7 @@ THREEDOWN:
 		}
 	}
 	;3 + 4
-	else if(roll != lock && instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
+	else if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
 		roll := lock
 		KeyWait, %twoString%, d t0.025           
 		;3+4
@@ -428,7 +429,7 @@ exit
 
 FOURDOWN:
 	;4 + 3
-	if(instr(roll != lock && A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
+	if(instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
 		roll := lock
 		KeyWait, %twoString%, d t0.025           
 		;4+3
