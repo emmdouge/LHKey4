@@ -12,7 +12,7 @@
 SetBatchLines, -1                 ;makes the script run at max speed
 SetKeyDelay , -1, -1              ;faster response (might be better with -1, 0)
 ListLines, Off
-#KeyHistory 8
+#KeyHistory 12
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #MaxThreadsPerHotkey 255
@@ -122,7 +122,26 @@ ONEDOWN:
 			}
 		}
 	}
-	if(roll != lock) {
+	;1 + 4 
+	else if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) { 
+		KeyWait, %threeString%, d t0.025
+		if ErrorLevel {
+			send {%oneString% down} 
+			send {%fourString% down} 
+			sleep %lag% 
+			send {%oneString% up} 
+			send {%fourString% up} 
+		}
+		;1+4+3
+		else {
+			send {%onePlusTwo% down}
+			send {%threePlusFour% down}
+			sleep %lag%
+			send {%onePlusTwo% up}
+			send {%threePlusFour% up}
+		}
+	} 
+	if (roll != lock) {
 		roll := on
 	}
 exit
@@ -193,10 +212,22 @@ TWODOWN:
 		roll := lock
 		KeyWait, %threeString%, d t0.025           
 		;2+1
-		if ErrorLevel {             
-			send {%onePlusTwo% down}
-			sleep %lag%
-			send {%onePlusTwo% up}
+		if ErrorLevel {        
+			KeyWait, %fourString%, d t0.025
+			;2+1
+			if ErrorLevel { 
+				send {%onePlusTwo% down}
+				sleep %lag%
+				send {%onePlusTwo% up}
+			}
+			;2+1+4 might as well be all four lol
+			else {
+				send {%onePlusTwo% down}
+				send {%threePlusFour% down}
+				sleep %lag%
+				send {%onePlusTwo% up}
+				send {%threePlusFour% up}
+			}
 		}
 		;2+1+3
 		else {
@@ -212,6 +243,67 @@ TWODOWN:
 				send {%onePlusTwo% up}
 			}
 			;2+1+3+4
+			else {
+				send {%onePlusTwo% down}
+				send {%threePlusFour% down}
+				sleep %lag%
+				send {%onePlusTwo% up}
+				send {%threePlusFour% up}
+			}
+		}
+	}
+	;2 + 4
+	else if(roll != lock && instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
+		roll := lock
+		KeyWait, %threeString%, d t0.025           
+		;2+4
+		if ErrorLevel {        
+			KeyWait, %oneString%, d t0.025
+			;2+4
+			if ErrorLevel { 
+					send {%threeString% down}
+					send {%fourString% down}
+					send {%threePlusFour% down}
+					sleep %lag%
+					send {%threeString% up}
+					send {%fourString% up}
+					send {%threePlusFour% up}
+			}
+			;2+4+1
+			else {
+				KeyWait, %threeString%, d t0.025
+				;2+4+1
+				if ErrorLevel { 
+					send {%onePlusTwo% down}
+					send {%threePlusFour% down}
+					sleep %lag%
+					send {%onePlusTwo% up}
+					send {%threePlusFour% up}
+				}
+				;2+4+1+3
+				else {
+					send {%onePlusTwo% down}
+					send {%threePlusFour% down}
+					sleep %lag%
+					send {%onePlusTwo% up}
+					send {%threePlusFour% up}
+				}
+			}
+		}
+		;2+4+3
+		else {
+			KeyWait, %oneString%, d t0.025
+			;2+4+3     
+			if ErrorLevel {      
+					send {%threeString% down}
+					send {%fourString% down}
+					send {%threePlusFour% down}
+					sleep %lag%
+					send {%threeString% up}
+					send {%fourString% up}
+					send {%threePlusFour% up}
+			}
+			;2+4+3+1
 			else {
 				send {%onePlusTwo% down}
 				send {%threePlusFour% down}
@@ -290,10 +382,21 @@ THREEDOWN:
 		roll := lock
 		KeyWait, %twoString%, d t0.025           
 		;3+4
-		if ErrorLevel {                           
-			send {%threePlusFour% down}
-			sleep %lag%
-			send {%threePlusFour% up}
+		if ErrorLevel {   	
+			KeyWait, %oneString%, d t0.025 
+			if ErrorLevel { 
+				send {%threePlusFour% down}
+				sleep %lag%
+				send {%threePlusFour% up}
+			}   
+			;3+4+1 might as well be all four lol
+			else {
+				send {%onePlusTwo% down}
+				send {%threePlusFour% down}
+				sleep %lag%
+				send {%onePlusTwo% up}
+				send {%threePlusFour% up}
+			}                 
 		}
 		;3+4+2
 		else {
@@ -357,7 +460,28 @@ FOURDOWN:
 			}
 		}
 	}
-	if(roll != lock) {
+	;4 + 1 
+	else if(instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) { 
+		roll := lock
+		KeyWait, %threeString%, d t0.025
+		;4+1
+		if ErrorLevel {
+			send {%oneString% down} 
+			send {%fourString% down} 
+			sleep %lag% 
+			send {%oneString% up} 
+			send {%fourString% up} 
+		}
+		;4+1+3
+		else {
+			send {%onePlusTwo% down}
+			send {%threePlusFour% down}
+			sleep %lag%
+			send {%onePlusTwo% up}
+			send {%threePlusFour% up}
+		}
+	} 
+	if (roll != lock) {
 		roll := on
 	}
 exit
