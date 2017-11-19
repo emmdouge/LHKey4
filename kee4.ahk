@@ -19,8 +19,12 @@ ListLines, Off
 SendMode Input
 SetCapsLockState, AlwaysOff
 
-oneBiTwo := "8"
-oneToFour := "e"
+oneString := "u"
+twoString := "i"
+threeString := "o"
+fourString := "p"
+grab := "Space"
+
 twoBiThree := "7"
 threeBiFour := "8"
 onePlusTwo := "t"
@@ -31,13 +35,6 @@ onePlusTwoPlusThree := "+"
 twoPlusThreePlusFour := "-"
 allButtons := "*"
 fourToOne := "q"
-
-
-oneString := "u"
-twoString := "i"
-threeString := "o"
-fourString := "p"
-grab := "Space"
 
 Hotkey, %oneString%, ONEDOWN
 Hotkey, %oneString% up, ONEUP
@@ -50,8 +47,6 @@ Hotkey, %threeString% up, THREEUP
 
 Hotkey, %fourString%, FOURDOWN
 Hotkey, %fourString% up, FOURUP
-
-Hotkey, %grab%, GRAB
 
 combo = 50
 lag = 25
@@ -94,31 +89,19 @@ ONEDOWN:
 		roll := lock
 		KeyWait, %threeString%, d t0.025           
 		;1+2
-		if ErrorLevel {                          
-			send {%onePlusTwo% down}
-			sleep %lag%
-			send {%onePlusTwo% up}
+		if ErrorLevel {         
+			gosub onePlusTwo
 		}
 		;1+2+3
 		else {
 			KeyWait, %fourString%, d t0.025
 			;1+2+3     
 			if ErrorLevel {
-				send {%oneString% down}
-				send {%twoString% down}
-				send {%onePlusTwo% down}
-				sleep %lag%
-				send {%oneString% up}
-				send {%twoString% up}
-				send {%onePlusTwo% up}
+				gosub onePlusTwoPlusThree
 			}
 			;1+2+3+4
 			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
+				gosub allFour
 			}
 		}
 	}
@@ -127,19 +110,11 @@ ONEDOWN:
 		roll := lock
 		KeyWait, %threeString%, d t0.025
 		if ErrorLevel {
-			send {%oneString% down} 
-			send {%fourString% down} 
-			sleep %lag% 
-			send {%oneString% up} 
-			send {%fourString% up} 
+			gosub onePlusFour
 		}
 		;1+4+3
 		else {
-			send {%onePlusTwo% down}
-			send {%threePlusFour% down}
-			sleep %lag%
-			send {%onePlusTwo% up}
-			send {%threePlusFour% up}
+			gosub twoPlusThreePlusFour
 		}
 	} 
 	if (roll != lock) {
@@ -155,33 +130,19 @@ TWODOWN:
 		if ErrorLevel {        
 			KeyWait, %fourString%, d t0.025
 			;2+3     
-			if ErrorLevel {             
-				send {%twoString% down}
-				send {%threeString% down}
-				sleep %lag%
-				send {%twoString% up}
-				send {%threeString% up}
+			if ErrorLevel {            
+				gosub twoPlusThree
 			}
 			;2+3+4
 			else {
 				KeyWait, %oneString%, d t0.025
 				;2+3+4       
 				if ErrorLevel {      
-					send {%threeString% down}
-					send {%fourString% down}
-					send {%threePlusFour% down}
-					sleep %lag%
-					send {%threeString% up}
-					send {%fourString% up}
-					send {%threePlusFour% up}
+					gosub twoPlusThreePlusFour
 				}
 				;2+3+4+1
 				else {
-					send {%onePlusTwo% down}
-					send {%threePlusFour% down}
-					sleep %lag%
-					send {%onePlusTwo% up}
-					send {%threePlusFour% up}
+					gosub allFour
 				}
 			}
 		}
@@ -190,21 +151,11 @@ TWODOWN:
 			KeyWait, %fourString%, d t0.025
 			;2+3+1     
 			if ErrorLevel {      
-				send {%oneString% down}
-				send {%twoString% down}
-				send {%onePlusTwo% down}
-				sleep %lag%
-				send {%oneString% up}
-				send {%twoString% up}
-				send {%onePlusTwo% up}
+				gosub onePlusTwoPlusThree
 			}
 			;2+3+1+4
 			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
+				gosub allFour
 			}
 		}
 	}
@@ -217,17 +168,11 @@ TWODOWN:
 			KeyWait, %fourString%, d t0.025
 			;2+1
 			if ErrorLevel { 
-				send {%onePlusTwo% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
+				gosub onePlusTwo
 			}
 			;2+1+4 might as well be all four lol
 			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
+				gosub allFour
 			}
 		}
 		;2+1+3
@@ -235,21 +180,11 @@ TWODOWN:
 			KeyWait, %fourString%, d t0.025
 			;2+1+3     
 			if ErrorLevel {      
-				send {%oneString% down}
-				send {%twoString% down}
-				send {%onePlusTwo% down}
-				sleep %lag%
-				send {%oneString% up}
-				send {%twoString% up}
-				send {%onePlusTwo% up}
+				gosub onePlusTwoPlusThree
 			}
 			;2+1+3+4
 			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
+				gosub allFour
 			}
 		}
 	}
@@ -262,32 +197,18 @@ TWODOWN:
 			KeyWait, %oneString%, d t0.025
 			;2+4
 			if ErrorLevel { 
-					send {%threeString% down}
-					send {%fourString% down}
-					send {%threePlusFour% down}
-					sleep %lag%
-					send {%threeString% up}
-					send {%fourString% up}
-					send {%threePlusFour% up}
+				gosub twoPlusThreePlusFour
 			}
 			;2+4+1
 			else {
 				KeyWait, %threeString%, d t0.025
 				;2+4+1
 				if ErrorLevel { 
-					send {%onePlusTwo% down}
-					send {%threePlusFour% down}
-					sleep %lag%
-					send {%onePlusTwo% up}
-					send {%threePlusFour% up}
+					gosub allFour
 				}
 				;2+4+1+3
 				else {
-					send {%onePlusTwo% down}
-					send {%threePlusFour% down}
-					sleep %lag%
-					send {%onePlusTwo% up}
-					send {%threePlusFour% up}
+					gosub allFour
 				}
 			}
 		}
@@ -295,22 +216,12 @@ TWODOWN:
 		else {
 			KeyWait, %oneString%, d t0.025
 			;2+4+3     
-			if ErrorLevel {      
-					send {%threeString% down}
-					send {%fourString% down}
-					send {%threePlusFour% down}
-					sleep %lag%
-					send {%threeString% up}
-					send {%fourString% up}
-					send {%threePlusFour% up}
+			if ErrorLevel {   
+				gosub twoPlusThreePlusFour
 			}
 			;2+4+3+1
 			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
+				gosub allFour
 			}
 		}
 	}
@@ -327,31 +238,19 @@ THREEDOWN:
 		if ErrorLevel {  
 			KeyWait, %fourString%, d t0.025
 			;3+2
-			if ErrorLevel {             
-				send {%twoString% down}
-				send {%threeString% down}
-				sleep %lag%
-				send {%twoString% up}
-				send {%threeString% up}
+			if ErrorLevel {       
+				gosub twoPlusThree
 			}
 			;3+2+4
 			else {
 				KeyWait, %oneString%, d t0.025
 				;3+2+4     
 				if ErrorLevel {      
-					send {%threeString% down}
-					send {%fourString% down}
-					send {%threePlusFour% down}
-					sleep %lag%
-					send {%threeString% up}
-					send {%fourString% up}
-					send {%threePlusFour% up}
+					gosub twoPlusThreePlusFour
 				}
 				;3+2+4+1
 				else {
-					send {%allButtons% down}
-					sleep %lag%
-					send {%allButtons% up}
+					gosub allFour
 				}
 			}
 		}
@@ -359,22 +258,12 @@ THREEDOWN:
 		else {
 			KeyWait, %fourString%, d t0.025
 			;3+2+1
-			if ErrorLevel {      
-				send {%oneString% down}
-				send {%twoString% down}
-				send {%onePlusTwo% down}
-				sleep %lag%
-				send {%oneString% up}
-				send {%twoString% up}
-				send {%onePlusTwo% up}
+			if ErrorLevel {     
+				gosub onePlusTwoPlusThree
 			}
 			;3+2+1+4
 			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
+				gosub allFour
 			}
 		}
 	}
@@ -386,39 +275,23 @@ THREEDOWN:
 		if ErrorLevel {   	
 			KeyWait, %oneString%, d t0.025 
 			if ErrorLevel { 
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%threePlusFour% up}
+				gosub threePlusFour
 			}   
 			;3+4+1 might as well be all four lol
 			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
+				gosub allFour
 			}                 
 		}
 		;3+4+2
 		else {
 			KeyWait, %oneString%, d t0.025
 			;3+4+2
-			if ErrorLevel {      
-				send {%threeString% down}
-				send {%fourString% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%threeString% up}
-				send {%fourString% up}
-				send {%threePlusFour% up}
+			if ErrorLevel {    
+				gosub twoPlusThreePlusFour
 			}
 			;3+4+2+1
 			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
+				gosub allFour
 			}
 		}
 	}
@@ -433,31 +306,19 @@ FOURDOWN:
 		roll := lock
 		KeyWait, %twoString%, d t0.025           
 		;4+3
-		if ErrorLevel {                          
-			send {%threePlusFour% down}
-			sleep %lag%
-			send {%threePlusFour% up}
+		if ErrorLevel {                
+			gosub threePlusFour
 		}
 		;4+3+2
 		else {
 			KeyWait, %oneString%, d t0.015
 			;4+3+2;
-			if ErrorLevel {      
-				send {%threeString% down}
-				send {%fourString% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%threeString% up}
-				send {%fourString% up}
-				send {%threePlusFour% up}
+			if ErrorLevel {  
+				gosub twoPlusThreePlusFour
 			}
 			;4+3+2+1
 			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
+				gosub allFour
 			}
 		}
 	}
@@ -467,19 +328,11 @@ FOURDOWN:
 		KeyWait, %threeString%, d t0.025
 		;4+1
 		if ErrorLevel {
-			send {%oneString% down} 
-			send {%fourString% down} 
-			sleep %lag% 
-			send {%oneString% up} 
-			send {%fourString% up} 
+			gosub onePlusFour
 		}
 		;4+1+3
 		else {
-			send {%onePlusTwo% down}
-			send {%threePlusFour% down}
-			sleep %lag%
-			send {%onePlusTwo% up}
-			send {%threePlusFour% up}
+			gosub twoPlusThreePlusFour
 		}
 	} 
 	if (roll != lock) {
@@ -507,12 +360,7 @@ if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, oneString) >= roll
 }
 ;if you rolled 1 -> 2
 else if (roll != lock && instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) {
-		send {%oneString% down}
-		send {%twoString% down}
-		sleep %lag%
-		send {%oneString% up}
-		send {%twoString% up}
-		roll := lock
+	gosub oneToTwo
 }
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
@@ -541,19 +389,11 @@ if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, twoString) >= roll
 }
 ;if you rolled 2 -> 3
 else if (roll != lock && instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
-	send {%twoBiThree% down}
-	sleep %lag%
-	send {%twoBiThree% up}
-	roll := lock
+	gosub twoToThree
 }
 ;if you rolled 2 -> 1
 else if (roll != lock && instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) {
-	send {%oneString% down}
-	send {%twoString% down}
-	sleep %lag%
-	send {%oneString% up}
-	send {%twoString% up}
-	roll := lock
+	gosub twoToOne
 }
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
@@ -582,19 +422,11 @@ if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, threeString) >= ro
 }
 ;if you rolled 3 -> 2
 else if (roll != lock && instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) {
-	send {%twoBiThree% down}
-	sleep %lag%
-	send {%twoBiThree% up}
-	roll := lock
+	gosub threeToTwo
 }
 ;if you rolled 3 -> 4
 else if (roll != lock && instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll) {
-	send {%threeString% down}
-	send {%fourString% down}
-	sleep %lag%
-	send {%threeString% up}
-	send {%fourString% up}
-	roll := lock
+	gosub threeToFour
 }
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
@@ -622,12 +454,7 @@ if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, fourString) >= rol
 }
 ;if you rolled 4 -> 3
 else if (roll != lock && instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
-	send {%threeString% down}
-	send {%fourString% down}
-	sleep %lag%
-	send {%threeString% up}
-	send {%fourString% up}
-	roll := lock
+	gosub fourToThree
 }
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
@@ -635,11 +462,108 @@ if (MaxIndex < 1 || GetKeyState("Shift", "P")==1)
   roll := off	;roll will be unlocked when no keys on the keyboard are pressed
 exit 
 
-GRAB:
-	;1+4
-    send {%oneString% down} 
-    send {%fourString% down} 
-    sleep %lag% 
-    send {%oneString% up} 
-    send {%fourString% up} 
-exit
+oneToTwo:
+	send {%oneString% down}
+	send {%twoString% down}
+	sleep %lag%
+	send {%oneString% up}
+	send {%twoString% up}
+	roll := lock
+return
+
+twoToOne:
+	send {%oneString% down}
+	send {%twoString% down}
+	sleep %lag%
+	send {%oneString% up}
+	send {%twoString% up}
+	roll := lock
+return
+
+twoToThree:
+	send {%twoBiThree% down}
+	sleep %lag%
+	send {%twoBiThree% up}
+	roll := lock
+return
+
+threeToTwo:
+	send {%twoBiThree% down}
+	sleep %lag%
+	send {%twoBiThree% up}
+	roll := lock
+return
+
+threeToFour:
+	send {%threeString% down}
+	send {%fourString% down}
+	sleep %lag%
+	send {%threeString% up}
+	send {%fourString% up}
+	roll := lock
+return
+
+fourToThree:
+	send {%threeString% down}
+	send {%fourString% down}
+	sleep %lag%
+	send {%threeString% up}
+	send {%fourString% up}
+	roll := lock
+return
+
+onePlusTwo:
+	send {%onePlusTwo% down}
+	sleep %lag%
+	send {%onePlusTwo% up}
+return
+
+onePlusFour:
+	send {%oneString% down} 
+	send {%fourString% down} 
+	sleep %lag% 
+	send {%oneString% up} 
+	send {%fourString% up}
+return
+
+twoPlusThree:
+	send {%twoString% down}
+	send {%threeString% down}
+	sleep %lag%
+	send {%twoString% up}
+	send {%threeString% up}
+return
+
+threePlusFour:
+	send {%threePlusFour% down}
+	sleep %lag%
+	send {%threePlusFour% up}
+return
+
+onePlusTwoPlusThree:
+	send {%oneString% down}
+	send {%twoString% down}
+	send {%onePlusTwo% down}
+	sleep %lag%
+	send {%oneString% up}
+	send {%twoString% up}
+	send {%onePlusTwo% up}
+return
+
+twoPlusThreePlusFour:
+	send {%threeString% down}
+	send {%fourString% down}
+	send {%threePlusFour% down}
+	sleep %lag%
+	send {%threeString% up}
+	send {%fourString% up}
+	send {%threePlusFour% up}
+return
+
+allFour:
+	send {%onePlusTwo% down}
+	send {%threePlusFour% down}
+	sleep %lag%
+	send {%onePlusTwo% up}
+	send {%threePlusFour% up}
+return
