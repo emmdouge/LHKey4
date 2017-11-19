@@ -12,7 +12,7 @@
 SetBatchLines, -1                 ;makes the script run at max speed
 SetKeyDelay , -1, -1              ;faster response (might be better with -1, 0)
 ListLines, Off
-#KeyHistory 6
+#KeyHistory 8
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #MaxThreadsPerHotkey 255
@@ -87,16 +87,11 @@ GetAllKeysPressed(mode = "L") {
 }
 
 roll := on
-numP := GetAllKeysPressed("P")
-MaxIndex := numP.MaxIndex()
-if (MaxIndex < 1 || GetKeyState("Shift", "P")==1) {
-  roll := off	;roll will be unlocked when no keys on the keyboard are pressed
-}
 
 ONEDOWN:
-	roll := on
 	;1 + 2
-	if(instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
+	if(roll != lock && instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
+		roll := lock
 		KeyWait, %threeString%, d t0.025           ; Making sure  you pressed home twice
 		;1+2
 		if ErrorLevel {                           ; If it was only pressed one send the default action
@@ -127,12 +122,15 @@ ONEDOWN:
 			}
 		}
 	}
+	if(roll != lock) {
+		roll := on
+	}
 exit
 
 TWODOWN:
-	roll := on
 	;2 + 3
-	if(instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
+	if(roll != lock && instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
+		roll := lock
 		KeyWait, %oneString%, d t0.025
 		if ErrorLevel {        
 			KeyWait, %fourString%, d t0.025
@@ -191,7 +189,8 @@ TWODOWN:
 		}
 	}
 	;2 + 1
-	if(instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) {
+	else if(roll != lock && instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) {
+		roll := lock
 		KeyWait, %threeString%, d t0.025           
 		;2+1
 		if ErrorLevel {             
@@ -222,11 +221,15 @@ TWODOWN:
 			}
 		}
 	}
+	if(roll != lock) {
+		roll := on
+	}
 exit
 
 THREEDOWN: 
 	;3 + 2
-	if(instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
+	if(roll != lock && instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
+		roll := lock
 		KeyWait, %oneString%, d t0.025       
 		if ErrorLevel {  
 			KeyWait, %fourString%, d t0.025
@@ -283,8 +286,7 @@ THREEDOWN:
 		}
 	}
 	;3 + 4
-	else if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
-		comboPressed := 1
+	else if(roll != lock && instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
 		roll := lock
 		KeyWait, %twoString%, d t0.025           
 		;3+4
@@ -298,9 +300,13 @@ THREEDOWN:
 			KeyWait, %oneString%, d t0.025
 			;3+4+2
 			if ErrorLevel {      
-				send {%twoPlusThreePlusFour% down}
+				send {%threeString% down}
+				send {%fourString% down}
+				send {%threePlusFour% down}
 				sleep %lag%
-				send {%twoPlusThreePlusFour% up}
+				send {%threeString% up}
+				send {%fourString% up}
+				send {%threePlusFour% up}
 			}
 			;3+4+2+1
 			else {
@@ -312,14 +318,14 @@ THREEDOWN:
 			}
 		}
 	}
-	else {
+	if(roll != lock) {
 		roll := on
 	}
 exit
 
 FOURDOWN:
 	;4 + 3
-	if(instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
+	if(instr(roll != lock && A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
 		roll := lock
 		KeyWait, %twoString%, d t0.025           
 		;4+3
@@ -330,7 +336,7 @@ FOURDOWN:
 		}
 		;4+3+2
 		else {
-			KeyWait, %oneString%, d t0.025
+			KeyWait, %oneString%, d t0.015
 			;4+3+2;
 			if ErrorLevel {      
 				send {%threeString% down}
@@ -351,7 +357,7 @@ FOURDOWN:
 			}
 		}
 	}
-	else {
+	if(roll != lock) {
 		roll := on
 	}
 exit
@@ -359,7 +365,7 @@ exit
 ONEUP:
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 1(or roll is off) or didn't roll
-if (!isModified && (A_TimeSincePriorHotkey, oneString) >= roll)  || (instr(A_PriorKey, oneString) && !isModified){
+if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, oneString) >= roll)  || (instr(A_PriorKey, oneString)))) {
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
 		send {%oneString% down}
 		sleep %lag%
@@ -370,23 +376,30 @@ if (!isModified && (A_TimeSincePriorHotkey, oneString) >= roll)  || (instr(A_Pri
 		sleep %lag%
 		send {%oneString% up}
 	}
-	roll := off
+	if (roll != lock) {
+		roll := off
+	}
 }
 ;if you rolled 1 -> 2
-if (instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) {
+else if (roll != lock && instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) {
 		send {%oneString% down}
 		send {%twoString% down}
 		sleep %lag%
 		send {%oneString% up}
 		send {%twoString% up}
+		roll := lock
 }
+numP := GetAllKeysPressed("P")
+MaxIndex := numP.MaxIndex()
+if (MaxIndex < 1 || GetKeyState("Shift", "P")==1) 
+  roll := off	;roll will be unlocked when no keys on the keyboard are pressed
 exit 
 
 
 TWOUP:
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 2(or roll is off) or didn't roll
-if (!isModified && (A_TimeSincePriorHotkey, twoString) >= roll)  || (instr(A_PriorKey, twoString) && !isModified){
+if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, twoString) >= roll)  || (instr(A_PriorKey, twoString)))) {
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
 		send {%twoString% down}
 		sleep %lag%
@@ -397,22 +410,30 @@ if (!isModified && (A_TimeSincePriorHotkey, twoString) >= roll)  || (instr(A_Pri
 		sleep %lag%
 		send {%twoString% up}
 	}
-	roll := off
+	if (roll != lock) {
+		roll := off
+	}
 }
 ;if you rolled 2 -> 3
-if (instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
+else if (roll != lock && instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
 	send {%twoBiThree% down}
 	sleep %lag%
 	send {%twoBiThree% up}
+	roll := lock
 }
 ;if you rolled 2 -> 1
-if (instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) {
-		send {%oneString% down}
-		send {%twoString% down}
-		sleep %lag%
-		send {%oneString% up}
-		send {%twoString% up}
+else if (roll != lock && instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) {
+	send {%oneString% down}
+	send {%twoString% down}
+	sleep %lag%
+	send {%oneString% up}
+	send {%twoString% up}
+	roll := lock
 }
+numP := GetAllKeysPressed("P")
+MaxIndex := numP.MaxIndex()
+if (MaxIndex < 1 || GetKeyState("Shift", "P")==1) 
+  roll := off	;roll will be unlocked when no keys on the keyboard are pressed
 exit 
 
 
@@ -435,19 +456,25 @@ if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, threeString) >= ro
 	}
 }
 ;if you rolled 3 -> 2
-if (instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) {
+else if (roll != lock && instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) {
 	send {%twoBiThree% down}
 	sleep %lag%
 	send {%twoBiThree% up}
+	roll := lock
 }
 ;if you rolled 3 -> 4
-if (instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll) {
-		send {%threeString% down}
-		send {%fourString% down}
-		sleep %lag%
-		send {%threeString% up}
-		send {%fourString% up}
+else if (roll != lock && instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll) {
+	send {%threeString% down}
+	send {%fourString% down}
+	sleep %lag%
+	send {%threeString% up}
+	send {%fourString% up}
+	roll := lock
 }
+numP := GetAllKeysPressed("P")
+MaxIndex := numP.MaxIndex()
+if (MaxIndex < 1 || GetKeyState("Shift", "P")==1) 
+  roll := off	;roll will be unlocked when no keys on the keyboard are pressed
 exit 
 
 FOURUP:
@@ -469,13 +496,18 @@ if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, fourString) >= rol
 	}
 }
 ;if you rolled 4 -> 3
-if (instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
-		send {%threeString% down}
-		send {%fourString% down}
-		sleep %lag%
-		send {%threeString% up}
-		send {%fourString% up}
+else if (roll != lock && instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
+	send {%threeString% down}
+	send {%fourString% down}
+	sleep %lag%
+	send {%threeString% up}
+	send {%fourString% up}
+	roll := lock
 }
+numP := GetAllKeysPressed("P")
+MaxIndex := numP.MaxIndex()
+if (MaxIndex < 1 || GetKeyState("Shift", "P")==1) 
+  roll := off	;roll will be unlocked when no keys on the keyboard are pressed
 exit 
 
 GRAB:
