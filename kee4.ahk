@@ -114,7 +114,15 @@ ONEDOWN:
 		}
 		;1+4+3
 		else {
-			gosub twoPlusThreePlusFour
+			KeyWait, %threeString%, d t0.025
+			;1+4+3
+			if ErrorLevel {
+				;do nothng
+			}
+			;1+4+3+2
+			else {
+				gosub allFour
+			}
 		}
 	} 
 	if (roll != lock) {
@@ -170,9 +178,17 @@ TWODOWN:
 			if ErrorLevel { 
 				gosub onePlusTwo
 			}
-			;2+1+4 might as well be all four lol
+			;2+1+4
 			else {
-				gosub allFour
+				KeyWait, %threeString%, d t0.025
+				;2+1+4
+				if ErrorLevel {
+					;do nothing
+				}
+				;2+1+4+3
+				else {
+					gosub allFour
+				}
 			}
 		}
 		;2+1+3
@@ -197,14 +213,14 @@ TWODOWN:
 			KeyWait, %oneString%, d t0.025
 			;2+4
 			if ErrorLevel { 
-				gosub twoPlusThreePlusFour
+				;do nothing
 			}
 			;2+4+1
 			else {
 				KeyWait, %threeString%, d t0.025
 				;2+4+1
 				if ErrorLevel { 
-					gosub allFour
+					;do nothing
 				}
 				;2+4+1+3
 				else {
@@ -277,9 +293,17 @@ THREEDOWN:
 			if ErrorLevel { 
 				gosub threePlusFour
 			}   
-			;3+4+1 might as well be all four lol
+			;3+4+1
 			else {
-				gosub allFour
+				KeyWait, %twoString%, d t0.025
+				;3+4+1
+				if ErrorLevel {
+					;do nothing
+				}
+				;3+4+1+2
+				else {
+					gosub allFour
+				}
 			}                 
 		}
 		;3+4+2
@@ -332,7 +356,15 @@ FOURDOWN:
 		}
 		;4+1+3
 		else {
-			gosub twoPlusThreePlusFour
+			KeyWait, %twoString%, d t0.025
+			;4+3+1
+			if ErrorLevel {
+				;do nothing
+			}
+			;4+3+1+2
+			else {
+				gosub allFour
+			}
 		}
 	} 
 	if (roll != lock) {
