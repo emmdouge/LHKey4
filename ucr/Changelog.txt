@@ -1,0 +1,427 @@
+Key:
+! : Warning
+* : Comment
+= : Change / Fix
++ : Added feature
+
+0.1.18 - 27th Oct 2017
+= Increased number of Titan One axes to 13
+  TouchX and TouchY are now selectable.
++ Axis Splitter now has invert options for output axes
++ Added second editbox to CodeRunner plugin for code to run on button release
+
+0.1.17 - 21st Aug 2017
+= You can now properly bind Mouse Wheel
+= "Profile Inherits from Parent" checkbox now correctly updates when switching profile
++ Scale added to AxisToMouse, as sensitivity is a curve
++ The PauseButton plugin now beeps when you pause / unpause
++ Titan One D-Pad now correctly set
++ Titan One PS3 controllers now support accelerometer
++ Titan One PS4 controllers now support gyros
+
+0.1.16 - 11th Jun 2017
+= Revert out: Changed Associative array empty detection technique to Lexikos' one
+  Seems to break vJoy bindings on reload.
+
+0.1.15 - 6th Jun 2017
++ Added AxisRangeToButtons plugin
+  This can be used to map an axis to up to 10 buttons.
+  eg for throttle operated by up to 10 keyboard keys
++ Added AxesToMouse plugin
+  Joystick to mouse
++ Added ButtonInitializer plugin
++ Adds Notes plugin
+  Useful if you send someone an INI - you can write instructions in here.
+= Fixed previews in AxisMerger plugin
+= Crash fix in InputDelta plugin
++ Adds Loading splash screen
++ Fixed warning in ProfileSwitcher plugin
+  When you first tried to select a target profile, you would get a warning
+  that the clear item already existed.
+= Added #NoEnv to all threads for performance
+= Changed Associative array empty detection technique to Lexikos' one
+
+0.1.14 - 12th Mar 2017
+= Massive changes to the MouseToButtons plugin
+  Is now a lot less "flickery"
+  There is now a "State Change" timeout value
+  This controls how long it takes to change state (reduce flicker)
+= The MouseToJoy relative mode timeout value now works for the y axis
+
+0.1.13 - 12th Mar 2017
++ Added Mouse Delta to Buttons plugin
++ Fixed suggested name for new plugins
++ Multiple InputAxis controls can now be bound to the same axis
++ Set default SetKeyDelay value to 0, 0
+  UCR does not send keypresses, it maps down events to down events etc
+  So this would likely only slow the code down
+
+0.1.12 - 7th Mar 2017
++ Added AxisRangeToButtons plugin
+  This allows you to map an axis to up to 10 buttons
+  Each button has a "Low" and "High" value. If the axis is in this range...
+  Then the button is pressed. Else it is released.
+  If you need more buttons, more can be added by editing the source code.
++ You can now duplicate profiles using the "Copy" button in the toolbox.
+  Code contributed by Snoothy - thankyou!
++ You can now rename plugins to the same name but with different case
++ IOControl menus are now initialized when first opened.
+  This will mainly benefit users with large numbers of profiles.
+  UCR should load quicker, and you should not get a "Too many menus" error.
+  Code contributed by Snoothy - thankyou!
++ MaxThreads setting cranked up to 255
+  This seems to alleviate issues with fast, simultaneous input.
++ The InputDelta now self-updates Seen Mice
+
+0.1.11 - 19th Feb 2017
++ You can now rename plugins
++ You can now re-order plugins
++ Plugin close button is now an icon
++ There are now preview GuiControls for Buttons and Axes
+  You no longer have to code your own in plugins
+  The Axis preview remains as a slider
+  The Button preview comes in two flavors:
+  A regular 25x25 icon with on/off states
+  A 3x34 icon that sits right next to an IOControl (To save horizontal space)
++ Added support for the following PS4 outputs on Titan One:
+  TouchPad X+Y
+  Aceelerometer X+Y
+  Touch Button
+= Renamed Playstation LS/RS to L3/R3 in Titan One
+= Fixed bad calculations in ButtonsToAxis plugin for Low/High options
++ Added support for Command-Line profile switching via CLI.ahk
+  Code contributed by Snoothy - thankyou!
++ You can now filter for individual mice in the MouseDelta
+  Thanks to David Baldwin for contributing the bulk of the code.
+
+0.1.10 - 4th Feb 2017
+= Ultrastik devices now work with UCR
+  Code contributed by Snoothy - thankyou!
+= If vJoy is not installed, on startup you no longer get the error
+  "Error. An item with the name vJoy already exists in this menu"
+
+0.1.9 - 26th Dec 2016
+= Fix for disconnected sticks causing massive CPU usage
+  When a profile loads, it checks which sticks are connected.
+  Bindings for disconnected sticks will not be activated.
+  If you plug in the stick, try forcing a profile reload.
+  An easy way is by switching to global profile and then back
+ 
+0.1.8 - 16th Dec 2016
+= Fix for "invalid Gui Name" error for BindModePrompt
+  Hotkeys for bindmode were being enabled breifly on creation
+= Fixed Joystick Hat/POV/D-Dpads in InputButtons
+= Harmonized callback method for all input types to pseudo-threads
+
+0.1.7 - 11th Dec 2016
+= Fixed vJoy not acquring sticks until you changed a binding
+* Merged Input-Output-Refactor into Master branch.
+
+0.1.6 - 3rd Dec 2016
++ The ButtonsToAxis plugin now has settings for Low / Mid / High
+  This enables remapping buttons to a "split axis" such as an XBox trigger.
+  This change breaks the deflection setting of all existing ButtonsToAxis plugins.
+  (Which is only an issue if you used non-standard settings)
+  To fix this you can do a search and replace in your ini file:
+  Find "Deflection" and replace with "DeflectionHigh"
+= Reverted back to synchronous communication from main thread -> InputThreads
+= When a profile's InputThread receives bindings upon loading, they are all passed in one call
+  This massively reduces the number of inter-thread calls.
+
+0.1.5 - 7th Nov 2016
+! UCR.exe changed in this version.
+  Some autopositioning bugs in AHK_H were found.
+= Removed automatic saving of changes.
+  This is suspected to be a trigger for some crashes or other undesirable behavior.
+  It also meant that if something went wrong, the user had way of backing out of a change.
+  So for now, it is gone. this may change in the future.
++ Added "Save Settings" button and readout to let you know if there are unsaved changes.
+  There is also a warning if you try to exit UCR with unsaved changes.
+= Fixed OutputButton getting stuck (Selecting options had no effect) if saved unbound.
+= Improved code that handles the overall layout of the UCR GUI.
+  Also added "Bottom Panel" to house the new save button.
+  Thanks to HotkeyIt for implementing some fixes to our autopositioning system in AHK_H.
+= Fixed Plugin ChangeValueCallbacks being fired multiple times with same value on start.
+= Fixed Profile InputThreads being stopped then restarted when changing to current profile.
+= Deleted profiles are now properly removed from UCR.ini
+
+0.1.4 - 31st Oct 2016
++ Added "Pause" mode for UCR
+  When UCR is Paused, all profiles (except the SuperGlobal profile) are DeActivated
+  Useful, eg if you blocked Left Mouse Button in a profile and you need to use it.
++ Added new SuperGlobal profile
+  Plugins in this profile will always be active, even when UCR is Paused
++ Added new "PauseButton" plugin
+  Put this in the SuperGlobal profile, and use it to Pause UCR
++ Added "Incremental Mode" to the ButtonsToAxis plugin
+  This adjusts the current axis position by the deflection setting on each press
+  of the buttons. The axis does not center when you release a button in this mode.
+= Titan Buttons now send a value of 100 to the Titan API, instead of 1.
+  This fixes Titan one L2/R2 button mappings only deflecting the analog button 1%
+= Fixed AxisInitializer plugin not working at all
+= Fixed Titan triggers not sending correct values
+= Fixed Titan PS3/4 triggers being absent from InputAxis
+= Fix for GameBind in OutputAxis and OutputButton IOControls
+= Changes to how settings are saved
+  UCR now saves 30s after a change, rather than 1s.
+  Profile's settings are now cached, so less work is done when we save.
+= Re-Work of profile changing code
+  Profile changes should now feel more responsive
+= Profiles linked to by the Global profile are now always PreLoaded
+  ie if you have a ProfileSwitcher plugin in the Global profile
+  then the profile that it points to will always be PreLoaded (in memory)
+= OutputAxis IOControls now clamp values to the 0..00 range
+
+0.1.3 - 16th Oct 2016
++ Added a new AxisSplitter plugin.
+  Useful eg for mapping a normal axis to two xbox triggers.
+= IOControls got a standard width and height.
+  Some plugins may look a little wonky until I can make a layout pass on them.
+= The ButtonToAxis plugin is now called the ButtonsToAxis plugin
+  It now remaps two InputButton controls to one OutputAxis control.
+  It now also has a "Deflection %" setting to control how much it moves the axis
+= The AxisToButton plugin is now called AxisToButtons
+= The AxisMerge plugin is now called AxisMerger
+= The menu entries in the main UCR menu for each IOClass now show properly on first start.
+  You no longer have to add a Plugin to load vJoy / Titan APIs etc.
+= Fixed checking of currently active output type in the Titan One API  
+= Fixed saving of Standard GuiControl (editboxes etc) values
+= XBox button / Playstation button now bindable as an output for Titan IOControls
+= The Invert option in the MouseToJoy plugin now works in Absolute and Relative modes
+
+0.1.2 - 11th Oct 2016
+! Warning! this version is still a little clunky.
+  IOClass options (eg to install SCPVBus) do not appear until you add a remapper plugin.
+= Fix: vXBox Buttons can now be selected in the OutputButton control.
++ ScpVBus (Required for vXBox) now packaged with UCR.
+  I will probably put in a download routine at some point
+  But this will do as a stop-gap
++ ScpVBus can be installed / uninstalled from within UCR via the IOClasses > vJoy menu.
+
+0.1.1 - 9th Oct 2016
++ Re-Added Titan One API
+
+0.1.0 - 2nd Oct 2016
+! WARNING! Lots of files changed, INI (Settings file) format changed!
+  YOU ARE ADVISED TO BACK UP YOUR OLD UCR FOLDER AND MAKE A NEW ONE
+! Major back-end changes. Things that worked before may well not work now.
+  Please report issues on the forums or on the issue tracker on GitHub.com/evilC/UCR
+! The Titan API has not been re-implemented in this release.
+  It will follow. Please continue to use 0.0.x if you need Titan.
++ The vGen API now replaces the old vJoy API and allows vXBox as well as vJoy devices.
+  vJoy 2.1.7 or greater is required, you can get it from here:
+  https://sourceforge.net/projects/vjoystick/files/Beta%202.x/
+! Also required for vGen is the SCPVBus driver, which can be found here:
+  http://evilc.com/files/tmp/ScpVBus-x64.zip
+  Download it, uncompress the ZIP, and open a command prompt as admin
+  Run install.bat to add the driver, remove.bat to remove it
+= Switch Absolute / Relative naming for MouseToJoy
+
+0.0.18 - 16th Sept 2016
++ Added Console output via Titan One GCDAPI
+  You can now output to consoles like you would output to vJoy.
+  Hardware device (Titan One) required!
+
+0.0.17 - 11th Sept 2016
++ There is now a "Main Menu" at the top of the UCR GUI.
+  It has limited functionality for now, namely:
+  * Minimize To Tray - Hides the Taskbar icon when UCR is minimized
+  * Start Minimized - Minimizes UCR when it starts up.
+  * Show Joystick Names - Attempts to get the names for your connected sticks.
+     Trying to get joystick names was causing a crash for some users...
+     ...so now it is optional and disabled by default.
+     This option requires restarting UCR to take effect.
+  * Show vJoy Log - Shows a log of the vJoy API loading process.
++ New menu system implemented for Bind Controls.
+  It is now much quicker to select Inputs / Outputs, and easier for me to add new options.
++ Added AxisInitializer plugin.
+  This can be used to initialize a virtual axis to a specified position.
+  Whenever the profile containing the plugin activates, it will set the axis position.
++ All Input / Output GuiControls now have a GUID at run-time
+  This GUID is currently not saved between runs, but it can be if needed.
+  This allows plugins that subscribe to InputActivity to detect how many buttons are held.
+= OneSwitch Pulse plugin fixes:
+  The "Choice" InputButton has been removed, as any UCR input coulds as a Choice...
+  ... so it served no useful purpose, and could cause problems...
+  ... if it and a ButtonToButton in the same profile were both mapped to the same thing.
+  Now correctly stops pulsing if a second button is pressed and released...
+  ...while one button is held.
+  Now correctly suspends pulsing for the <Choice Delay> time on joystick axis activity.
+
+0.0.16 - 14th Aug 2016
++ The ButtonToButton plugin now has a Toggle mode
++ MouseToJoy plugin enhancements:
+  Added Scale Factor to Absolute mode.
+  Plugin can now be configured to only take input from a specific mouse.
+  You can now use multiple MouseToJoy plugins if you have more than one pointing device.
++ Added "HoldButton" functionality to OneSwitch Pulse plugin.
+= InputActivity subscriptions no longer fire if the plugin is not active.
+  This only really affects OneSwitch Pulse or any custom plugins using InputActivity.
+= Fixed bug that occurred when changing an InputButton plugin from button to hat:
+  The old binding was remaining active, this is now fixed.
+= Fixed bug that occurred when changing an InputButton from keyboard to vJoy:
+  The vJoy selection UI would change selection of various elements in odd ways.
+= A bunch of behind-the-scenes changes and fixes.
+  Please let me know if stuff that used to work now doesn't.
+= MouseToJoy plugin fixes:
+  Fixed numerous bugs which made Absolute mode center the stick way too much.
+  The Timeout value for Absolute mode now works.
+
+0.0.15 - 24th July 2016
+! All ProfileSwitcher plugins will no longer be bound to a profile.
+  You are advised to delete and re-add the plugin.
++ Dialogs to choose name of new Profile / Plugin now appear in the center of the UCR GUI.
++ A new custom GuiControl - the ProfileSelect is now available for Plugin Authors to use.
+  This allows you to provide a guicontrol for users to choose a profile.
++ There is now a Text-To-Speech library provided in UCR.Libraries.TTS
++ Added Profile Speaker plugin.
+  This can be used to speak something when a profile becomes active.
++ The OneSwitch Pulse plugin now makes a beep on toggle on/off.
++ The OneSwitch Pulse plugin now has a "Timeout Warning" setting.
+= The recommended development environment for UCR is now AHK Studio
+  Debugging of UCR and it's plugins is now much simpler.
+  See the UCR wiki for info on debugging plugins.
+  The code is now also split out into one file per class, so should be easier to work with.
+= When you enter Bind Mode, the OnInActive() method is now called on all active plugins.
+  All plugins should cease all activity on OnInActive() and resume on OnActive()
+= The code of the ProfileSwitcher plugin is now vastly simplified.
+  Most of it's code was moved into the ProfileSelect GuiControl.
+
+0.0.14 - 19th June 2016
+! INI (Settings) file format changed to 0.0.5. UCR will attempt to upgrade for you.
+  YOU ARE ADVISED TO BACK UP YOUR UCR.INI BEFORE RUNNING THIS VERSION.
++ Adds new "Profile Inherits Plugins from parent" option to profiles.
+  There is a new checkbox in the Profile Toolbox to turn this on or off for the current profile.
+  If this option is on for a given profile, then when the profile is active...
+  ... the profile's parent profile (if it has one) will also be active.
+  This is useful when doing "Shift States", as it removes the need to duplicate plugins...
+  ...in the "normal" and "shifted" profiles for things that don't change when shift is held.
+= The Profile Switcher plugin now allows you to pick a profile for press and release.
+  This was needed because two plugins in the same profile cannot be bound to the same button...
+  ... so two profile pickers (one for press, one for release) bound tot he same button didn't work.
+= Bindings to Mouse Wheel now properly simulate the up (release) event.
+  Without this, if you remap mouse wheel to a key, that key is never released
+= You can now control multiple vJoy sticks properly.
+  Previously, UCR would only control one stick at a time, resulting in weird behaviour.
++ All pop-up windows / dialogs now appear in the center of the GUI.
+= Numpad Enter is now bindable
+
+0.0.13 - 21st May 2016
+! INI (Settings) file format changed to 0.0.4. UCR will attempt to upgrade for you.
+  YOU ARE ADVISED TO BACK UP YOUR UCR.INI BEFORE RUNNING THIS VERSION.
+  If you have problems, please post on the forums.
+= Plugins are now uniquely identified by IDs.
+  This does not affect anything now, but it is an enabler for future features.
+  eg: Renaming of plugins, moving plugins between profiles, inter-plugin communication.
+= All IDs (Profile and Plugin) are now GUIDs generated via windows APIs
++ Status of Input Threads is now show in the Profile Toolbox.
+  Blue = current profile, Green = active (eg global), Amber = Loaded but paused
+= Fixes to logic for loading / unloading of Input Threads
+= Up event for joystick buttons should now properly trigger...
+  ... when entering a profile with the button already held.
++ UCR should now wait until done saving if you close the GUI mid-save.
++ Profile Toolbox now has a title in the GUI
+
+0.0.12 - 17th May 2016
++ The Profile Toolbox is now integrated into the rest of the UI
+  The UI is now resizable horizontally, so you can resize the profile toolbox.
+
+0.0.11 - 10th May 2016
+= The following keyboard keys are now bindable as inputs / outputs:
+  PgUp, PgDn, End, Home, Left, Up, Right, Down, Insert, Delete
+  Please note that some of your existingly configured bindings may change.
+  eg Any binding set to NumpadLeft will now be Left arrow.
+  This can be fixed by simply re-binding.
+
+0.0.10 - 4th May 2016
++ The ProfileSwitcher plugin now has a "Press/Release" option.
+  This controls whether the profile switch happens on press or release of the button.
+  You can use this to switch to another profile when you press a button...
+  ... then switch back to the original profile when you release the button.
+
+0.0.9 - 3rd May 2016
+= Fixed Issue #83
+  The up event for a joystick button did not fire while a subsequently held button...
+  ... was down, until you released the button.
+  eg Hold button A, then B. Up event for A would not fire until B was released.
+= Fixed Issue #84
+  Output buttons were registering as Input buttons.
+
+0.0.8 - 1st May 2016
++ Added memory management for profile Input Threads
+  The "Input Threads" which handle detection of input (one for each profile)...
+  ... now start and stop dynamically as profiles change.
+  This is to limit the amount of memory UCR uses to a reasonable level.
+  A Profile's Input Thread will now be unloaded on profile change if they are a ...
+  ... "Linked Profile" of the new profile or the global profile.
+  Profile A is considered a "Linked Profile" of Profile B if eg...
+  ... a Profile Switcher plugin in Profile B is configured to point to Profile A.
+  Plugins can call UpdateLinkedProfiles() on the parent Profile...
+  ... to set their relationship to other Profiles (Add or remove a link).
+= All debug output now prefixed with UCR|
+  So if using DebugView, you can just filter for only UCR stuff using the string:
+  DBGVIEWCLEAR;UCR|*
+
+0.0.7 - 13th Mar 2016
+! Warning! Settings version has changed.
+  BACK UP your INI file before using it with this version, if you value it.
++ Profiles are now organized in a Tree instead of a flat list.
++ Added a "Profile Toolbox" to allow navigation of the profile tree.
+  Add / Add Child / Delete / Rename of profiles are all functional.
+  Dragging and dropping of items in the Profile Tree to change parenting or order is supported.
++ Profile Switcher plugin now has a "picker" that can be used to choose a profile from the tree.
+  If you later change the structure of the tree, it will still point to the same profile.
+! Both the "Profile Toolbox" and the "Profile Picker" are experimental / placeholder.
+  The Profile Picker does not close unless you pick an item or close it.
+  Neither remember position or size.
+= Multiple AxisMerge plugins can now be used together.
+
+0.0.6 - 21st Feb 2016
+= Fixed errors while switching profile at the same time as input was happening.
+  The ProfileSwitcher plugin should no longer crash UCR.
+
+0.0.5 - 25th Jan 2016
+= On change of profile, all held buttons are released.
+= AxisToButton plugins now correctly manipulate the outputs.
+= Multiple AxisToButton plugins now work together.
+
+0.0.4 - 24th Jan 2016
++ Profile Switcher plugin added to allow changing profile using a hotkey.
+  This can be placed in the global profile to always be in effect.
++ Basic Joystick Axis to Button remapper plugin added.
++ Settings file is now written after one second's inactivity, rather than on every change.
++ Fix for Gui getting "Lost" when you minimized it.
+  If this happened to you, edit your INI file and reset the x and y coordinates at the top to 0.
++ vJoy API calls optimized.
+= State property added to Output GuiControls, to match input GuiControls.
+= AHK_H version updated
+= Objects which are used in multiple threads are shared via COM using new AHK_H function ObjShare().
+
+
+0.0.3 - 3rd Jan 2016
+! WARNING: The Mouse To Joystick plugin is DANGEROUS in this version.
+  Adding one can be tricky (You will have to use keyboard to manipulate the Output Axis Combos)...
+  ... But once you have added one, it will effectively break UCR - crashes all over the place :(
+  You will also not be able to remove the plugin via the GUI.
+= AHK_H version updated
+= Mouse Delta input now fires InputEvent like the other inputs
+= InputEvent callbacks are now "Critical Objects".
+  Input from the global profile at the same time as the active profile should no longer crash UCR.
+= Spamming button inputs quickly should no longer result in a "MaxHotkeysPerInterval" warning.
+= Fix for current profile being forgotten on exit.
+= Fix for multiple AxisToAxis plugins all using same output.
+
+0.0.2 - 31st Dec 2015
+= AHK_H version updated
++ Button To Axis remapper plugin added. Allows mapping of WSAD to vJoy
++ MouseDelta library added for reading of Delta Move information from mice.
++ Mouse to Joystick remapper plugin added for controlling a vJoy stick using mouse.
+= Fix for: Leak of memory on each input event (eg button down/up, axis move).
+= When in Bind Mode, only joystick buttons and hats that actually exist are polled.
+  This is better practice, and also seems to solve crashes on some systems.
+= Split plugins folder into Core and User folders.
+  This should allow easier upgrading if you have your own plugins.
+* If upgrading, it is advised that you back up your INI file and delete the old folder.
+
+0.0.1 - 25th Dec 2015
++ First versioned release
