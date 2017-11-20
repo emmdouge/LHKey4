@@ -43,6 +43,8 @@ Hotkey, %threeString% up, THREEUP
 Hotkey, %fourString%, FOURDOWN
 Hotkey, %fourString% up, FOURUP
 
+Hotkey, %charge%, CHARGE
+
 combo = 50
 lag = 25
 off = 0		;key immediately pressed on up aka roll can be in progress
@@ -363,51 +365,12 @@ THREEDOWN:
 exit
 
 FOURDOWN:
-	;4 + 3
-	if(instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
-		roll := lock
-		KeyWait, %twoString%, d t0.025           
-		;4+3
-		if ErrorLevel {                
-			gosub threePlusFour
-		}
-		;4+3+2
-		else {
-			KeyWait, %oneString%, d t0.015
-			;4+3+2;
-			if ErrorLevel {  
-				gosub twoPlusThreePlusFour
-			}
-			;4+3+2+1
-			else {
-				gosub allFour
-			}
-		}
-	}
-	;4 + 1 
-	else if(instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) { 
-		roll := lock
-		KeyWait, %threeString%, d t0.025
-		;4+1
-		if ErrorLevel {
-			;do nothing
-		}
-		;4+1+3
-		else {
-			KeyWait, %twoString%, d t0.025
-			;4+3+1
-			if ErrorLevel {
-				;do nothing
-			}
-			;4+3+1+2
-			else {
-				gosub allFour
-			}
-		}
-	} 
-	if (roll != lock) {
-		roll := on
-	}
+	send {%threeString% down}
+	send {%twoPlusThree% down}
+	sleep %lag%
+	send {%threeString% up}
+	send {%twoPlusThree% up}
+	roll := lock
 exit
 
 ONEUP:
@@ -527,14 +490,10 @@ isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetK
 ;if you overheld 4(or roll is off) or didn't roll
 if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, fourString) >= roll)  || (instr(A_PriorKey, fourString)))) {
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {%fourString% down}
-		sleep %lag%
-		send {%fourString% up}
+		;do nothing
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send {%fourString% down}
-		sleep %lag%
-		send {%fourString% up}
+		;do nothing
 	}
 	if (roll != lock) {
 		roll := off
@@ -551,6 +510,14 @@ if (MaxIndex < 1 || GetKeyState("Shift", "P")==1)  {
   comboInProgress := 0
 }
 exit 
+
+CHARGE:
+	send {%oneString% down}
+	send {%onePlusTwo% down}
+	sleep %lag%
+	send {%oneString% up}
+	send {%onePlusTwo% up}
+exit
 
 oneToTwo:
 	send {%oneString% down}
