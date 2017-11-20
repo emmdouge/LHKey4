@@ -12,7 +12,7 @@
 SetBatchLines, -1                 ;makes the script run at max speed
 SetKeyDelay , -1, -1              ;faster response (might be better with -1, 0)
 ListLines, Off
-#KeyHistory 12
+#KeyHistory 6
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #MaxThreadsPerHotkey 255
@@ -20,21 +20,16 @@ SendMode Input
 SetCapsLockState, AlwaysOff
 
 oneString := "u"
-twoString := "i"
-threeString := "o"
-fourString := "p"
-grab := "Space"
-
-twoBiThree := "7"
-threeBiFour := "8"
-onePlusTwo := "t"
-twoPlusThree := "y"
-threePlusFour := "m" 
-onePlusFour := "r"
-onePlusTwoPlusThree := "+"
-twoPlusThreePlusFour := "-"
-allButtons := "*"
-fourToOne := "q"
+, twoString := "i"
+, threeString := "o"
+, fourString := "p"
+, charge := "Space"
+, onePlusTwo := "t"
+, twoPlusThree := "y"
+, threePlusFour := "m"
+, onePlusTwoPlusThree := "4"
+, threePlusTwoPlusOne := "3"
+, twoPlusThreePlusFour := "1" 
 
 Hotkey, %oneString%, ONEDOWN
 Hotkey, %oneString% up, ONEUP
@@ -106,12 +101,33 @@ ONEDOWN:
 			}
 		}
 	}
+	;1 + 3
+	else if(instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) { 
+		roll := lock
+		KeyWait, %twoString%, d t0.025
+		;1+3
+		if ErrorLevel {
+			gosub onePlusThree
+		}
+		;1+3+2
+		else {
+			KeyWait, %fourString%, d t0.025
+			;1+3+2
+			if ErrorLevel {
+				gosub onePlusTwoPlusThree
+			}
+			;1+3+2+4
+			else {
+				gosub allFour
+			}
+		}
+	}
 	;1 + 4 
 	else if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) { 
 		roll := lock
 		KeyWait, %threeString%, d t0.025
 		if ErrorLevel {
-			gosub onePlusFour
+			;do nothing
 		}
 		;1+4+3
 		else {
@@ -248,8 +264,29 @@ TWODOWN:
 exit
 
 THREEDOWN: 
+	;3 + 1
+	if(instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) { 
+		roll := lock
+		KeyWait, %twoString%, d t0.025
+		;3+1
+		if ErrorLevel {
+			gosub onePlusThree
+		}
+		;3+1+2
+		else {
+			KeyWait, %fourString%, d t0.025
+			;3+1+2
+			if ErrorLevel {
+				gosub threePlusTwoPlusOne
+			}
+			;3+1+2+4
+			else {
+				gosub allFour
+			}
+		}
+	} 
 	;3 + 2
-	if(instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
+	else if(instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
 		roll := lock
 		KeyWait, %oneString%, d t0.025       
 		if ErrorLevel {  
@@ -276,7 +313,7 @@ THREEDOWN:
 			KeyWait, %fourString%, d t0.025
 			;3+2+1
 			if ErrorLevel {     
-				gosub onePlusTwoPlusThree
+				gosub threePlusTwoPlusOne
 			}
 			;3+2+1+4
 			else {
@@ -353,7 +390,7 @@ FOURDOWN:
 		KeyWait, %threeString%, d t0.025
 		;4+1
 		if ErrorLevel {
-			gosub onePlusFour
+			;do nothing
 		}
 		;4+1+3
 		else {
@@ -395,6 +432,10 @@ if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, oneString) >= roll
 else if (roll != lock && instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) {
 	gosub oneToTwo
 }
+;if you rolled 1 -> 3
+else if (roll != lock && instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
+	gosub oneToThree
+}
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
 if (MaxIndex < 1 || GetKeyState("Shift", "P")==1)  {
@@ -409,14 +450,18 @@ isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetK
 ;if you overheld 2(or roll is off) or didn't roll
 if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, twoString) >= roll)  || (instr(A_PriorKey, twoString)))) {
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {%twoString% down}
+		send {%onePlusTwo% down}
+		send {%twoPlusThree% down}
 		sleep %lag%
-		send {%twoString% up}
+		send {%onePlusTwo% up}
+		send {%twoPlusThree% up}
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send {%twoString% down}
+		send {%onePlusTwo% down}
+		send {%twoPlusThree% down}
 		sleep %lag%
-		send {%twoString% up}
+		send {%onePlusTwo% up}
+		send {%twoPlusThree% up}
 	}
 	if (roll != lock) {
 		roll := off
@@ -465,6 +510,10 @@ else if (roll != lock && instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey
 else if (roll != lock && instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll) {
 	gosub threeToFour
 }
+;if you rolled 3 -> 1
+else if (roll != lock && instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) {
+	gosub threeToOne
+}
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
 if (MaxIndex < 1 || GetKeyState("Shift", "P")==1) {
@@ -505,33 +554,59 @@ exit
 
 oneToTwo:
 	send {%oneString% down}
-	send {%twoString% down}
+	send {%onePlusTwo% down}
 	sleep %lag%
 	send {%oneString% up}
-	send {%twoString% up}
+	send {%onePlusTwo% up}
+	roll := lock
+return
+
+oneToThree:
+	send {%oneString% down}
+	send {%onePlusTwo% down}
+	send {%threePlusTwoPlusOne% down}
+	sleep %lag%
+	send {%oneString% up}
+	send {%onePlusTwo% up}
+	send {%threePlusTwoPlusOne% up}
+	roll := lock
+return
+
+threeToOne:
+	send {%threeString% down}
+	send {%twoPlusThree% down}
+	send {%onePlusTwoPlusThree% down}
+	sleep %lag%
+	send {%threeString% up}
+	send {%twoPlusThree% up}
+	send {%onePlusTwoPlusThree% up}
 	roll := lock
 return
 
 twoToOne:
-	send {%oneString% down}
-	send {%twoString% down}
+	send {%threeString% down}
+	send {%twoPlusThree% down}
 	sleep %lag%
 	send {%oneString% up}
-	send {%twoString% up}
+	send {%twoPlusThree% up}
 	roll := lock
 return
 
 twoToThree:
-	send {%twoBiThree% down}
+	send {%threeString% down}
+	send {%twoPlusThree% down}
 	sleep %lag%
-	send {%twoBiThree% up}
+	send {%threeString% up}
+	send {%twoPlusThree% up}
 	roll := lock
 return
 
 threeToTwo:
-	send {%twoBiThree% down}
+	send {%threeString% down}
+	send {%twoPlusThree% down}
 	sleep %lag%
-	send {%twoBiThree% up}
+	send {%threeString% up}
+	send {%twoPlusThree% up}
 	roll := lock
 return
 
@@ -562,25 +637,23 @@ onePlusTwo:
 	}
 return
 
-onePlusFour:
+onePlusThree:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
 		send {%oneString% down} 
-		send {%fourString% down} 
+		send {%threeString% down} 
 		sleep %lag% 
 		send {%oneString% up} 
-		send {%fourString% up}
+		send {%threeString% up}
 	}
 return
 
 twoPlusThree:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
-		send {%twoString% down}
-		send {%threeString% down}
+		send {%twoPlusThree% down}
 		sleep %lag%
-		send {%twoString% up}
-		send {%threeString% up}
+		send {%twoPlusThree% up}
 	}
 return
 
@@ -596,25 +669,29 @@ return
 onePlusTwoPlusThree:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
-		send {%oneString% down}
-		send {%twoString% down}
-		send {%onePlusTwo% down}
+		send {%onePlusTwoPlusThree% down}
 		sleep %lag%
-		send {%oneString% up}
-		send {%twoString% up}
-		send {%onePlusTwo% up}
+		send {%onePlusTwoPlusThree% up}
+	}
+return
+
+threePlusTwoPlusOne:
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%threePlusTwoPlusOne% down}
+		sleep %lag%
+		send {%threePlusTwoPlusOne% up}
 	}
 return
 
 twoPlusThreePlusFour:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
-		send {%threeString% down}
-		send {%fourString% down}
+		comboInProgress := 1
+		send {%onePlusTwo% down}
 		send {%threePlusFour% down}
 		sleep %lag%
-		send {%threeString% up}
-		send {%fourString% up}
+		send {%onePlusTwo% up}
 		send {%threePlusFour% up}
 	}
 return
