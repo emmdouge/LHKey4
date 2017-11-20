@@ -587,7 +587,7 @@ twoToOne:
 	send {%threeString% down}
 	send {%twoPlusThree% down}
 	sleep %lag%
-	send {%oneString% up}
+	send {%threeString% up}
 	send {%twoPlusThree% up}
 	roll := lock
 return
