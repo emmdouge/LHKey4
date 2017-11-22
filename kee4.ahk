@@ -19,7 +19,11 @@ ListLines, Off
 SendMode Input
 SetCapsLockState, AlwaysOff
 
-oneString := "u"
+up := "w"
+, down := "s"
+, left := "a"
+, right := "d"
+, oneString := "u"
 , twoString := "i"
 , threeString := "o"
 , fourString := "p"
@@ -417,7 +421,7 @@ exit
 ONEUP:
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 1(or roll is off) or didn't roll
-if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, oneString) >= roll)  || (instr(A_PriorKey, oneString)))) {
+if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, oneString) >= roll)  || (instr(A_PriorKey, oneString)) || (instr(A_PriorKey, up)) || (instr(A_PriorKey, down)) || (instr(A_PriorKey, left)) || (instr(A_PriorKey, right)))) {
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
 		send {%oneString% down}
 		sleep %lag%
@@ -489,7 +493,7 @@ exit
 THREEUP:
 isModified :=  (GetKeyState("Spaceh", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 3(or roll is off) or didn't roll
-if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, threeString) >= roll) || (instr(A_PriorKey, threeString)))) {
+if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, threeString) >= roll) || (instr(A_PriorKey, threeString)) || (instr(A_PriorKey, up)) || (instr(A_PriorKey, down)) || (instr(A_PriorKey, left)) || (instr(A_PriorKey, right)))) {
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
 		send {%threeString% down}
 		sleep %lag%
