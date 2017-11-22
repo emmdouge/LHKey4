@@ -100,7 +100,7 @@ ONEDOWN:
 	if (MaxIndex == 1)  {
 		roll := off	;roll will be unlocked when no keys on the keyboard are pressed
 	}
-	if (roll == lock) {
+	else if (roll == lock) {
 		exit
 	}
 	else {
@@ -182,7 +182,7 @@ TWODOWN:
 	if (MaxIndex == 1)  {
 		roll := off	;roll will be unlocked when no keys on the keyboard are pressed
 	}
-	if (roll == lock) {
+	else if (roll == lock) {
 		exit
 	}
 	else {
@@ -307,7 +307,7 @@ THREEDOWN:
 	if (MaxIndex == 1)  {
 		roll := off	;roll will be unlocked when no keys on the keyboard are pressed
 	}
-	if (roll == lock) {
+	else if (roll == lock) {
 		exit
 	}
 	else {
