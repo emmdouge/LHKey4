@@ -1,3 +1,4 @@
+
 ; Always run as admin
 ;if not A_IsAdmin
 ;{
@@ -23,6 +24,13 @@ up := "w"
 , down := "s"
 , left := "a"
 , right := "d"
+
+; IMPORTANT: USE joy button #s defined in joystick test
+, one = "2joy4"
+, two = "2joy5"
+, three = "2joy3"
+, four = "2joy2"
+
 , weakPunch := "u"
 , vSkill := "i"
 , weakKick := "o"
@@ -69,7 +77,7 @@ GetAllKeysPressed(mode = "P") {
 	}
 	pressed := StrSplit(buttons_down," ")
 	m := pressed.MaxIndex()
-	ToolTip, `nNum Buttons Down: %m%`nButtons Down: %buttons_down%`n`n(right-click the tray icon to exit)
+	;ToolTip, `nNum Buttons Down: %m%`nButtons Down: %buttons_down%`n`n(right-click the tray icon to exit)
 	return pressed
 }
 
@@ -112,14 +120,14 @@ ONEDOWN:
 		;2+1
 		if(instr(A_PriorKey, vSkill) && ((A_TimeSincePriorHotkey, vSkill) < combo)) {
 			roll := lock
-			KeyWait, %weakKick%, d t0.025           
-			;1+2
+			KeyWait, %three%, d t0.025           
+			;2+1
 			if ErrorLevel {         
 				gosub mediumPunch
 			}
 			;2+1+3
 			else {
-				KeyWait, %charge%, d t0.025
+				KeyWait, %four%, d t0.025
 				;2+1+3     
 				if ErrorLevel {
 					gosub hardPunch
@@ -133,14 +141,14 @@ ONEDOWN:
 		;3+1
 		else if(instr(A_PriorKey, weakKick) && ((A_TimeSincePriorHotkey, weakKick) < combo)) { 
 			roll := lock
-			KeyWait, %vSkill%, d t0.025
+			KeyWait, %two%, d t0.025
 			;3+1
 			if ErrorLevel {
 				gosub grab
 			}
 			;3+1+2
 			else {
-				KeyWait, %charge%, d t0.025
+				KeyWait, %four%, d t0.025
 				;3+1+2
 				if ErrorLevel {
 					gosub hardPunch
@@ -169,16 +177,16 @@ TWODOWN:
 		;3+2
 		if(instr(A_PriorKey, weakKick) && ((A_TimeSincePriorHotkey, weakKick) < combo)) {
 			roll := lock
-			KeyWait, %weakPunch%, d t0.025
+			KeyWait, %one%, d t0.025
 			if ErrorLevel {        
-				KeyWait, %charge%, d t0.025
+				KeyWait, %four%, d t0.025
 				;3+2     
 				if ErrorLevel {            
 					gosub mediumKick
 				}
 				;3+2+C
 				else {
-					KeyWait, %weakPunch%, d t0.025
+					KeyWait, %one%, d t0.025
 					;3+2+C       
 					if ErrorLevel {      
 						gosub vTrigger
@@ -191,7 +199,7 @@ TWODOWN:
 			}
 			;3+2+1
 			else {
-				KeyWait, %charge%, d t0.025
+				KeyWait, %four%, d t0.025
 				;3+2+1     
 				if ErrorLevel {      
 					gosub hardKick
@@ -205,17 +213,17 @@ TWODOWN:
 		;1+2
 		else if(instr(A_PriorKey, weakPunch) && ((A_TimeSincePriorHotkey, weakPunch) < combo)) {
 			roll := lock
-			KeyWait, %weakKick%, d t0.025           
+			KeyWait, %three%, d t0.025           
 			;1+2
 			if ErrorLevel {        
-				KeyWait, %charge%, d t0.025
+				KeyWait, %four%, d t0.025
 				;1+2
 				if ErrorLevel { 
 					gosub mediumPunch
 				}
 				;1+2+C
 				else {
-					KeyWait, %weakKick%, d t0.025
+					KeyWait, %three%, d t0.025
 					;1+2+C
 					if ErrorLevel {
 						gosub vTrigger
@@ -228,7 +236,7 @@ TWODOWN:
 			}
 			;1+2+3
 			else {
-				KeyWait, %charge%, d t0.025
+				KeyWait, %four%, d t0.025
 				;1+2+3     
 				if ErrorLevel {      
 					gosub hardPunch
@@ -257,14 +265,14 @@ THREEDOWN:
 		;1+3
 		if(instr(A_PriorKey, weakPunch) && ((A_TimeSincePriorHotkey, weakPunch) < combo)) { 
 			roll := lock
-			KeyWait, %vSkill%, d t0.025
+			KeyWait, %two%, d t0.025
 			;1+3
 			if ErrorLevel {
 				gosub grab
 			}
 			;1+3+2
 			else {
-				KeyWait, %charge%, d t0.025
+				KeyWait, %four%, d t0.025
 				;1+3+2
 				if ErrorLevel {
 					gosub hardKick
@@ -278,16 +286,16 @@ THREEDOWN:
 		;2+3
 		else if(instr(A_PriorKey, vSkill) && ((A_TimeSincePriorHotkey, vSkill) < combo)) {
 			roll := lock
-			KeyWait, %weakPunch%, d t0.025       
+			KeyWait, %one%, d t0.025       
 			if ErrorLevel {  
-				KeyWait, %charge%, d t0.025
+				KeyWait, %four%, d t0.025
 				;2+3
 				if ErrorLevel {       
 					gosub mediumKick
 				}
 				;2+3+C
 				else {
-					KeyWait, %weakPunch%, d t0.025
+					KeyWait, %one%, d t0.025
 					;2+3+C     
 					if ErrorLevel {      
 						gosub vSkill
@@ -300,7 +308,7 @@ THREEDOWN:
 			}
 			;2+3+1
 			else {
-				KeyWait, %charge%, d t0.025
+				KeyWait, %four%, d t0.025
 				;2+3+1
 				if ErrorLevel {     
 					gosub hardKick

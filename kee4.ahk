@@ -116,8 +116,8 @@ ONEDOWN:
 		;2+1
 		if(instr(A_PriorKey, vSkill) && ((A_TimeSincePriorHotkey, vSkill) < combo)) {
 			roll := lock
-			KeyWait, %weakKick%, d t0.025           
-			;1+2
+			KeyWait, %weakKick%, d t0.025                
+			;2+1
 			if ErrorLevel {         
 				gosub mediumPunch
 			}

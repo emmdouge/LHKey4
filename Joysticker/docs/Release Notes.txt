@@ -1,0 +1,39 @@
+============= Joysticker ================
+Copyright 2014 Pixelbyte Studios LLC
+
+Release Notes:
+4/19/2016   Version 2.13
+            -Various internal framework upgrades
+            -Upgraded to Lua 5.3.2
+5/20/2015   Version 2.12
+            -Joysticker now supports running a script via command line
+             ex: joysticker.exe ascript.lua
+             This allows one to configure Joysticker via a .bat file to automatically load
+             and run a specific script upon startup.
+2/26/2015   Version 2.11
+			-Upgraded internal library
+1/6/2015
+    		-Added mouse button click emulation (Keys.LeftMouseBtn​, Keys.RightMouseBtn, Keys.MiddleMouseBtn)
+12/10/2014
+    		-Internal library upgrades
+    		-Added a config script for RogueLight
+8/16/2014: Version 2.03
+    		-Fixed a bug with the MRU list that would try to load non-existent scripts
+8/16/2014: Version 2.02
+			-Added Most recently used scripts list to the file menu
+			-Upgraded GUI framework
+			-Keys.lua  had an error in the function key mappings
+4/01/2014: Version 2.0
+			-Big rewrite. Added a GUI
+			-Removed several Lua functions from user space
+3/12/2014: Version 1.13
+			-Changed the icon
+           Version 1.12
+            -Added Tab Key
+			-Added Guacamelee mapping
+2/21/2014: Version 1.1
+		 	-Multiple Joysticks can now be watched from one instance of Joysticker using one script
+			-Some changes that will break existing user scripts (see revised example scripts and readme.txt)
+			-Now requesting Admin Elevation on execution this fixes Joysticker not being
+			 able to send keystrokes to some programs
+1/13/2014: Version 1.0
