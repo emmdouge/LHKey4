@@ -5,7 +5,8 @@
 ;   ExitApp
 ;}
 #SingleInstance force
-#include CvJoyInterface.ahk
+#include CvJoyInterface.ahk 
+SetFormat, float, 03  ; Omit decimal point from axis position percentages.
 #Persistent
 #NoEnv
 #InstallKeybdHook
@@ -20,660 +21,604 @@ ListLines, Off
 SendMode Input
 SetCapsLockState, AlwaysOff
 
-oneToTwo() {
-	send {%oneString% down}
-	send {%twoString% down}
-	sleep %lag%
-	send {%oneString% up}
-	send {%twoString% up}
-	roll := lock
-}
-
-twoToOne() {
-	send {%oneString% down}
-	send {%twoString% down}
-	sleep %lag%
-	send {%oneString% up}
-	send {%twoString% up}
-	roll := lock
-}
-
-twoToThree(){
-	send {%twoBiThree% down}
-	sleep %lag%
-	send {%twoBiThree% up}
-	roll := lock
-}
-
-threeToTwo(){
-	send {%twoBiThree% down}
-	sleep %lag%
-	send {%twoBiThree% up}
-	roll := lock
-}
-
-threeToFour(){
-	send {%threeString% down}
-	send {%fourString% down}
-	sleep %lag%
-	send {%threeString% up}
-	send {%fourString% up}
-	roll := lock
-}
-
-fourToThree(){
-	send {%threeString% down}
-	send {%fourString% down}
-	sleep %lag%
-	send {%threeString% up}
-	send {%fourString% up}
-	roll := lock
-}
-
-oneToFour := "e"
-twoBiThree := "7"
-threeBiFour := "8"
-onePlusTwo := "t"
-twoPlusThree := "y"
-threePlusFour := "m" 
-onePlusFour := "r"
-onePlusTwoPlusThree := "+"
-twoPlusThreePlusFour := "-"
-allButtons := "*"
-fourToOne := "q"
+; Create an object from vJoy Interface Class. 
+vJoyInterface := new CvJoyInterface() 
+myStick := vJoyInterface.Devices[1] 
  
-; Create an object from vJoy Interface Class.
-vJoyInterface := new CvJoyInterface()
-myStick := vJoyInterface.Devices[1]
+; Was vJoy installed and the DLL Loaded? 
+if (!vJoyInterface.vJoyEnabled()){ 
+  ; Show log of what happened 
+  Msgbox % vJoyInterface.LoadLibraryLog 
+  ExitApp 
+} 
+up := "w"
+, down := "s"
+, left := "a"
+, right := "d"
+, weakPunch := "Joy4"
+, vSkill := "1joy5"
+, weakKick := "1joy3"
+, charge := "1joy2"
+, mediumPunch := "1joy13"
+, mediumKick := "1joy6"
+, hardPunch := "1joy8"
+, hardKick := "1joy7"
 
-; Was vJoy installed and the DLL Loaded?
-if (!vJoyInterface.vJoyEnabled()){
-	; Show log of what happened
-	Msgbox % vJoyInterface.LoadLibraryLog
-	ExitApp
-}
+Hotkey, %weakPunch%, ONEDOWN
+Hotkey, %weakPunch% up, ONEUP
 
-oneString := "u"
-twoString := "i"
-threeString := "o"
-fourString := "p"
-grab := "Space"
+Hotkey, %vSkill%, TWODOWN
+Hotkey, %vSkill% up, TWOUP
 
-Hotkey, %oneString%, ONEDOWN
-Hotkey, %oneString% up, ONEUP
+Hotkey, %weakKick%, THREEDOWN
+Hotkey, %weakKick% up, THREEUP
 
-Hotkey, %twoString%, TWODOWN
-Hotkey, %twoString% up, TWOUP
-
-Hotkey, %threeString%, THREEDOWN
-Hotkey, %threeString% up, THREEUP
-
-Hotkey, %fourString%, FOURDOWN
-Hotkey, %fourString% up, FOURUP
-
-Hotkey, %grab%, GRAB
+Hotkey, %charge%, CHARGE
+Hotkey, %charge% up, CHARGEUP
 
 combo = 50
 lag = 25
-off = 0		;key immediately pressed on up
-on = 200	;key must be overheld to press original key, or rolled to another key within time specified
-lock = -1	;input will not be registered until no keys are being pressed on the keyboard
+off = 0		;key immediately pressed on up aka roll can be in progress
+on = 200	;key must be overheld to press original key, or rolled to another key within time specified aka roll is currently in progress
+lock = -1	;input will not be registered until no keys are being pressed on the keyboard aka roll cannot be in progress
+comboInProgress := 0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;	LOGIC
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-GetAllKeysPressed(mode = "L") {
+GetAllKeysPressed(mode = "P") {
 	
 	pressed := Array()
 	i := 1 
-		
-	;removed wasd and arrow keys from keys to check	to perform command normals
-	keys = ``|1|2|3|4|5|6|7|8|9|0|-|=|[|]\|;|'|,|.|/|b|c|e|f|g|h|i|j|k|l|m|n|o|p|q|r|t|u|v|x|y|z|Esc|Tab|CapsLock|LShift|RShift|LCtrl|RCtrl|LWin|RWin|LAlt|RAlt|Space|AppsKey|Enter|BackSpace|Delete|Home|End|PGUP|PGDN|PrintScreen|ScrollLock|Pause|Insert|NumLock|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12|F13|F14|F15|F16|F17|F18|F19|F20 
-  	; '|' isn't a key itself (with '\' being the "actual" key), so okay to use is as a delimiter
-	Loop Parse, keys, |
-	{		
-		key = %A_LoopField%				
-		isDown :=  GetKeyState(key, mode)
-		if(isDown)
-		{
-			pressed[i] := key ; using 'i' instead of array.insert() for efficiency
-			i++
-		}
-	}   
-	
+	GetKeyState, joy_buttons, 1JoyButtons
+	Loop, %joy_buttons%
+	{
+		GetKeyState, joy%a_index%, 1joy%a_index%
+		if joy%a_index% = D
+			pressed[i] = %a_index%
+		i++
+	}
 	return pressed
 }
 
 roll := on
 
-ONEDOWN:
-	;1 + 2
-	if(instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
+CHARGE:
+	;1+C
+	if(instr(A_PriorKey, weakPunch) && ((A_TimeSincePriorHotkey, weakPunch) < combo)) {
 		roll := lock
-		KeyWait, %threeString%, d t0.025           
-		;1+2
-		if ErrorLevel {                          
-			send {%onePlusTwo% down}
-			sleep %lag%
-			send {%onePlusTwo% up}
-		}
-		;1+2+3
-		else {
-			KeyWait, %fourString%, d t0.025
-			;1+2+3     
-			if ErrorLevel {
-				send {%oneString% down}
-				send {%twoString% down}
-				send {%onePlusTwo% down}
-				sleep %lag%
-				send {%oneString% up}
-				send {%twoString% up}
-				send {%onePlusTwo% up}
-			}
-			;1+2+3+4
-			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
-			}
-		}
+		gosub exPunch
 	}
-	;1 + 4 
-	else if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) { 
+	;2+C
+	if(instr(A_PriorKey, vSkill) && ((A_TimeSincePriorHotkey, vSkill) < combo)) {
 		roll := lock
-		KeyWait, %threeString%, d t0.025
-		if ErrorLevel {
-			send {%oneString% down} 
-			send {%fourString% down} 
-			sleep %lag% 
-			send {%oneString% up} 
-			send {%fourString% up} 
-		}
-		;1+4+3
-		else {
-			send {%onePlusTwo% down}
-			send {%threePlusFour% down}
-			sleep %lag%
-			send {%onePlusTwo% up}
-			send {%threePlusFour% up}
-		}
-	} 
-	if (roll != lock) {
+		gosub vSkill
+	}
+	;3+C
+	if(instr(A_PriorKey, weakKick) && ((A_TimeSincePriorHotkey, weakKick) < combo)) {
+		roll := lock
+		gosub exKick
+	}
+	;C
+	if(roll != lock) {
 		roll := on
+		send {%charge% down}
+		gosub vTrigger
 	}
+exit
+
+ONEDOWN:
+	numP := GetAllKeysPressed("P")
+	MaxIndex := numP.MaxIndex()
+	if (MaxIndex == 1)  {
+		roll := off	;roll will be unlocked when no keys on the keyboard are pressed
+	}
+	else if (roll == lock) {
+		exit
+	}
+	else {
+		;2+1
+		if(instr(A_PriorKey, vSkill) && ((A_TimeSincePriorHotkey, vSkill) < combo)) {
+			roll := lock
+			KeyWait, %weakKick%, d t0.025           
+			;1+2
+			if ErrorLevel {         
+				gosub mediumPunch
+			}
+			;2+1+3
+			else {
+				KeyWait, %charge%, d t0.025
+				;2+1+3     
+				if ErrorLevel {
+					gosub hardPunch
+				}
+				;2+1+3+C
+				else {
+					gosub vTrigger
+				}
+			}
+		}
+		;3+1
+		else if(instr(A_PriorKey, weakKick) && ((A_TimeSincePriorHotkey, weakKick) < combo)) { 
+			roll := lock
+			KeyWait, %vSkill%, d t0.025
+			;3+1
+			if ErrorLevel {
+				gosub grab
+			}
+			;3+1+2
+			else {
+				KeyWait, %charge%, d t0.025
+				;3+1+2
+				if ErrorLevel {
+					gosub hardPunch
+				}
+				;3+1+2+C
+				else {
+					gosub vTrigger
+				}
+			}
+		}
+		exit
+	}
+	roll := on
 exit
 
 TWODOWN:
-	;2 + 3
-	if(instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
-		roll := lock
-		KeyWait, %oneString%, d t0.025
-		if ErrorLevel {        
-			KeyWait, %fourString%, d t0.025
-			;2+3     
-			if ErrorLevel {             
-				send {%twoString% down}
-				send {%threeString% down}
-				sleep %lag%
-				send {%twoString% up}
-				send {%threeString% up}
+	numP := GetAllKeysPressed("P")
+	MaxIndex := numP.MaxIndex()
+	if (MaxIndex == 1)  {
+		roll := off	;roll will be unlocked when no keys on the keyboard are pressed
+	}
+	else if (roll == lock) {
+		exit
+	}
+	else {
+		;3+2
+		if(instr(A_PriorKey, weakKick) && ((A_TimeSincePriorHotkey, weakKick) < combo)) {
+			roll := lock
+			KeyWait, %weakPunch%, d t0.025
+			if ErrorLevel {        
+				KeyWait, %charge%, d t0.025
+				;3+2     
+				if ErrorLevel {            
+					gosub mediumKick
+				}
+				;3+2+C
+				else {
+					KeyWait, %weakPunch%, d t0.025
+					;3+2+C       
+					if ErrorLevel {      
+						gosub vTrigger
+					}
+					;3+2+C+1
+					else {
+						gosub vTrigger
+					}
+				}
 			}
-			;2+3+4
+			;3+2+1
 			else {
-				KeyWait, %oneString%, d t0.025
-				;2+3+4       
+				KeyWait, %charge%, d t0.025
+				;3+2+1     
 				if ErrorLevel {      
-					send {%threeString% down}
-					send {%fourString% down}
-					send {%threePlusFour% down}
-					sleep %lag%
-					send {%threeString% up}
-					send {%fourString% up}
-					send {%threePlusFour% up}
+					gosub hardKick
 				}
-				;2+3+4+1
+				;3+2+1+C
 				else {
-					send {%onePlusTwo% down}
-					send {%threePlusFour% down}
-					sleep %lag%
-					send {%onePlusTwo% up}
-					send {%threePlusFour% up}
+					gosub vTrigger
 				}
 			}
 		}
-		;2+3+1
-		else {
-			KeyWait, %fourString%, d t0.025
-			;2+3+1     
-			if ErrorLevel {      
-				send {%oneString% down}
-				send {%twoString% down}
-				send {%onePlusTwo% down}
-				sleep %lag%
-				send {%oneString% up}
-				send {%twoString% up}
-				send {%onePlusTwo% up}
-			}
-			;2+3+1+4
-			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
-			}
-		}
-	}
-	;2 + 1
-	else if(instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) {
-		roll := lock
-		KeyWait, %threeString%, d t0.025           
-		;2+1
-		if ErrorLevel {        
-			KeyWait, %fourString%, d t0.025
-			;2+1
-			if ErrorLevel { 
-				send {%onePlusTwo% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-			}
-			;2+1+4 might as well be all four lol
-			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
-			}
-		}
-		;2+1+3
-		else {
-			KeyWait, %fourString%, d t0.025
-			;2+1+3     
-			if ErrorLevel {      
-				send {%oneString% down}
-				send {%twoString% down}
-				send {%onePlusTwo% down}
-				sleep %lag%
-				send {%oneString% up}
-				send {%twoString% up}
-				send {%onePlusTwo% up}
-			}
-			;2+1+3+4
-			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
-			}
-		}
-	}
-	;2 + 4
-	else if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
-		roll := lock
-		KeyWait, %threeString%, d t0.025           
-		;2+4
-		if ErrorLevel {        
-			KeyWait, %oneString%, d t0.025
-			;2+4
-			if ErrorLevel { 
-					send {%threeString% down}
-					send {%fourString% down}
-					send {%threePlusFour% down}
-					sleep %lag%
-					send {%threeString% up}
-					send {%fourString% up}
-					send {%threePlusFour% up}
-			}
-			;2+4+1
-			else {
-				KeyWait, %threeString%, d t0.025
-				;2+4+1
+		;1+2
+		else if(instr(A_PriorKey, weakPunch) && ((A_TimeSincePriorHotkey, weakPunch) < combo)) {
+			roll := lock
+			KeyWait, %weakKick%, d t0.025           
+			;1+2
+			if ErrorLevel {        
+				KeyWait, %charge%, d t0.025
+				;1+2
 				if ErrorLevel { 
-					send {%onePlusTwo% down}
-					send {%threePlusFour% down}
-					sleep %lag%
-					send {%onePlusTwo% up}
-					send {%threePlusFour% up}
+					gosub mediumPunch
 				}
-				;2+4+1+3
+				;1+2+C
 				else {
-					send {%onePlusTwo% down}
-					send {%threePlusFour% down}
-					sleep %lag%
-					send {%onePlusTwo% up}
-					send {%threePlusFour% up}
+					KeyWait, %weakKick%, d t0.025
+					;1+2+C
+					if ErrorLevel {
+						gosub vTrigger
+					}
+					;1+2+C+3
+					else {
+						gosub vTrigger
+					}
+				}
+			}
+			;1+2+3
+			else {
+				KeyWait, %charge%, d t0.025
+				;1+2+3     
+				if ErrorLevel {      
+					gosub hardPunch
+				}
+				;1+2+3+C
+				else {
+					gosub vTrigger
 				}
 			}
 		}
-		;2+4+3
-		else {
-			KeyWait, %oneString%, d t0.025
-			;2+4+3     
-			if ErrorLevel {      
-					send {%threeString% down}
-					send {%fourString% down}
-					send {%threePlusFour% down}
-					sleep %lag%
-					send {%threeString% up}
-					send {%fourString% up}
-					send {%threePlusFour% up}
-			}
-			;2+4+3+1
-			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
-			}
-		}
+		exit
 	}
-	if(roll != lock) {
-		roll := on
-	}
+	roll := on
 exit
 
 THREEDOWN: 
-	;3 + 2
-	if(instr(A_PriorKey, twoString) && ((A_TimeSincePriorHotkey, twoString) < combo)) {
-		roll := lock
-		KeyWait, %oneString%, d t0.025       
-		if ErrorLevel {  
-			KeyWait, %fourString%, d t0.025
-			;3+2
-			if ErrorLevel {             
-				send {%twoString% down}
-				send {%threeString% down}
-				sleep %lag%
-				send {%twoString% up}
-				send {%threeString% up}
+	numP := GetAllKeysPressed("P")
+	MaxIndex := numP.MaxIndex()
+	if (MaxIndex == 1)  {
+		roll := off	;roll will be unlocked when no keys on the keyboard are pressed
+	}
+	else if (roll == lock) {
+		exit
+	}
+	else {
+		;1+3
+		if(instr(A_PriorKey, weakPunch) && ((A_TimeSincePriorHotkey, weakPunch) < combo)) { 
+			roll := lock
+			KeyWait, %vSkill%, d t0.025
+			;1+3
+			if ErrorLevel {
+				gosub grab
 			}
-			;3+2+4
+			;1+3+2
 			else {
-				KeyWait, %oneString%, d t0.025
-				;3+2+4     
-				if ErrorLevel {      
-					send {%threeString% down}
-					send {%fourString% down}
-					send {%threePlusFour% down}
-					sleep %lag%
-					send {%threeString% up}
-					send {%fourString% up}
-					send {%threePlusFour% up}
+				KeyWait, %charge%, d t0.025
+				;1+3+2
+				if ErrorLevel {
+					gosub hardKick
 				}
-				;3+2+4+1
+				;1+3+2+C
 				else {
-					send {%allButtons% down}
-					sleep %lag%
-					send {%allButtons% up}
+					gosub vTrigger
+				}
+			}
+		} 
+		;2+3
+		else if(instr(A_PriorKey, vSkill) && ((A_TimeSincePriorHotkey, vSkill) < combo)) {
+			roll := lock
+			KeyWait, %weakPunch%, d t0.025       
+			if ErrorLevel {  
+				KeyWait, %charge%, d t0.025
+				;2+3
+				if ErrorLevel {       
+					gosub mediumKick
+				}
+				;2+3+C
+				else {
+					KeyWait, %weakPunch%, d t0.025
+					;2+3+C     
+					if ErrorLevel {      
+						gosub vSkill
+					}
+					;2+3+C+1
+					else {
+						gosub vTrigger
+					}
+				}
+			}
+			;2+3+1
+			else {
+				KeyWait, %charge%, d t0.025
+				;2+3+1
+				if ErrorLevel {     
+					gosub hardKick
+				}
+				;2+3+1+C
+				else {
+					gosub vTrigger
 				}
 			}
 		}
-		;3+2+1
-		else {
-			KeyWait, %fourString%, d t0.025
-			;3+2+1
-			if ErrorLevel {      
-				send {%oneString% down}
-				send {%twoString% down}
-				send {%onePlusTwo% down}
-				sleep %lag%
-				send {%oneString% up}
-				send {%twoString% up}
-				send {%onePlusTwo% up}
-			}
-			;3+2+1+4
-			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
-			}
-		}
+		exit
 	}
-	;3 + 4
-	else if(instr(A_PriorKey, fourString) && ((A_TimeSincePriorHotkey, fourString) < combo)) {
-		roll := lock
-		KeyWait, %twoString%, d t0.025           
-		;3+4
-		if ErrorLevel {   	
-			KeyWait, %oneString%, d t0.025 
-			if ErrorLevel { 
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%threePlusFour% up}
-			}   
-			;3+4+1 might as well be all four lol
-			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
-			}                 
-		}
-		;3+4+2
-		else {
-			KeyWait, %oneString%, d t0.025
-			;3+4+2
-			if ErrorLevel {      
-				send {%threeString% down}
-				send {%fourString% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%threeString% up}
-				send {%fourString% up}
-				send {%threePlusFour% up}
-			}
-			;3+4+2+1
-			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
-			}
-		}
-	}
-	if(roll != lock) {
-		roll := on
-	}
-exit
-
-FOURDOWN:
-	;4 + 3
-	if(instr(A_PriorKey, threeString) && ((A_TimeSincePriorHotkey, threeString) < combo)) {
-		roll := lock
-		KeyWait, %twoString%, d t0.025           
-		;4+3
-		if ErrorLevel {                          
-			send {%threePlusFour% down}
-			sleep %lag%
-			send {%threePlusFour% up}
-		}
-		;4+3+2
-		else {
-			KeyWait, %oneString%, d t0.015
-			;4+3+2;
-			if ErrorLevel {      
-				send {%threeString% down}
-				send {%fourString% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%threeString% up}
-				send {%fourString% up}
-				send {%threePlusFour% up}
-			}
-			;4+3+2+1
-			else {
-				send {%onePlusTwo% down}
-				send {%threePlusFour% down}
-				sleep %lag%
-				send {%onePlusTwo% up}
-				send {%threePlusFour% up}
-			}
-		}
-	}
-	;4 + 1 
-	else if(instr(A_PriorKey, oneString) && ((A_TimeSincePriorHotkey, oneString) < combo)) { 
-		roll := lock
-		KeyWait, %threeString%, d t0.025
-		;4+1
-		if ErrorLevel {
-			send {%oneString% down} 
-			send {%fourString% down} 
-			sleep %lag% 
-			send {%oneString% up} 
-			send {%fourString% up} 
-		}
-		;4+1+3
-		else {
-			send {%onePlusTwo% down}
-			send {%threePlusFour% down}
-			sleep %lag%
-			send {%onePlusTwo% up}
-			send {%threePlusFour% up}
-		}
-	} 
-	if (roll != lock) {
-		roll := on
-	}
+	roll := on
 exit
 
 ONEUP:
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 1(or roll is off) or didn't roll
-if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, oneString) >= roll)  || (instr(A_PriorKey, oneString)))) {
+if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, weakPunch) >= roll)  || (instr(A_PriorKey, weakPunch)) || (instr(A_PriorKey, up)) || (instr(A_PriorKey, down)) || (instr(A_PriorKey, left)) || (instr(A_PriorKey, right)))) {
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {%oneString% down}
-		sleep %lag%
-		send {%oneString% up}
+		gosub weakPunch
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send {%oneString% down}
-		sleep %lag%
-		send {%oneString% up}
+		gosub weakPunch
 	}
 	if (roll != lock) {
 		roll := off
 	}
 }
 ;if you rolled 1 -> 2
-else if (roll != lock && instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) {
-	oneToTwo()
+else if (roll != lock && instr(A_PriorKey, vSkill) && (A_TimeSincePriorHotkey, vSkill) < roll) {
+	gosub exPunch
+}
+;if you rolled 1 -> 3
+else if (roll != lock && instr(A_PriorKey, weakKick) && (A_TimeSincePriorHotkey, weakKick) < roll) {
+	gosub threePunch
 }
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
-if (MaxIndex < 1 || GetKeyState("Shift", "P")==1) 
+if (MaxIndex < 1)  {
   roll := off	;roll will be unlocked when no keys on the keyboard are pressed
+}
 exit 
 
 
 TWOUP:
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 2(or roll is off) or didn't roll
-if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, twoString) >= roll)  || (instr(A_PriorKey, twoString)))) {
+if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, vSkill) >= roll)  || (instr(A_PriorKey, vSkill)))) {
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {%twoString% down}
-		sleep %lag%
-		send {%twoString% up}
+		gosub vSkill
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send {%twoString% down}
-		sleep %lag%
-		send {%twoString% up}
+		gosub vSkill
 	}
 	if (roll != lock) {
 		roll := off
 	}
 }
 ;if you rolled 2 -> 3
-else if (roll != lock && instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
-	twoToThree()
+else if (roll != lock && instr(A_PriorKey, weakKick) && (A_TimeSincePriorHotkey, weakKick) < roll) {
+	gosub exKick
 }
 ;if you rolled 2 -> 1
-else if (roll != lock && instr(A_PriorKey, oneString) && (A_TimeSincePriorHotkey, oneString) < roll) {
-	twoToOne()
+else if (roll != lock && instr(A_PriorKey, weakPunch) && (A_TimeSincePriorHotkey, weakPunch) < roll) {
+	gosub exPunch
 }
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
-if (MaxIndex < 1 || GetKeyState("Shift", "P")==1) 
+if (MaxIndex < 1 && comboInProgress == 0)  {
   roll := off	;roll will be unlocked when no keys on the keyboard are pressed
+}
 exit 
 
 
 THREEUP:
 isModified :=  (GetKeyState("Spaceh", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 3(or roll is off) or didn't roll
-if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, threeString) >= roll) || (instr(A_PriorKey, threeString)))) {
+if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, weakKick) >= roll) || (instr(A_PriorKey, weakKick)) || (instr(A_PriorKey, up)) || (instr(A_PriorKey, down)) || (instr(A_PriorKey, left)) || (instr(A_PriorKey, right)))) {
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {%threeString% down}
-		sleep %lag%
-		send {%threeString% up}
+		gosub weakKick
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send {%threeString% down}
-		sleep %lag%
-		send {%threeString% up}
+		gosub weakKick
 	}
 	if (roll != lock) {
 		roll := off
 	}
 }
 ;if you rolled 3 -> 2
-else if (roll != lock && instr(A_PriorKey, twoString) && (A_TimeSincePriorHotkey, twoString) < roll) {
-	threeToTwo()
+else if (roll != lock && instr(A_PriorKey, vSkill) && (A_TimeSincePriorHotkey, vSkill) < roll) {
+	gosub exKick
 }
-;if you rolled 3 -> 4
-else if (roll != lock && instr(A_PriorKey, fourString) && (A_TimeSincePriorHotkey, fourString) < roll) {
-	threeToFour()
+;if you rolled 3 -> 1
+else if (roll != lock && instr(A_PriorKey, weakPunch) && (A_TimeSincePriorHotkey, weakPunch) < roll) {
+	gosub threeKick
 }
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
-if (MaxIndex < 1 || GetKeyState("Shift", "P")==1) 
+if (MaxIndex < 1) {
   roll := off	;roll will be unlocked when no keys on the keyboard are pressed
+}
 exit 
 
-FOURUP:
-isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
-;if you overheld 4(or roll is off) or didn't roll
-if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, fourString) >= roll)  || (instr(A_PriorKey, fourString)))) {
-	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {%fourString% down}
-		sleep %lag%
-		send {%fourString% up}
-	}
-    else if GetKeyState("LAlt", "P")=0 {
-		send {%fourString% down}
-		sleep %lag%
-		send {%fourString% up}
-	}
-	if (roll != lock) {
+CHARGEUP:
+numP := GetAllKeysPressed("P")
+MaxIndex := numP.MaxIndex()
+if (MaxIndex < 1)  {
+  roll := off	;roll will be unlocked when no keys on the keyboard are pressed
+}
+exit 
+
+
+threePunch:
+	send {%weakPunch% down}
+	send {%mediumPunch% down}
+	send {%hardPunch% down}
+	sleep %lag%
+	send {%weakPunch% up}
+	send {%mediumPunch% up}
+	send {%hardPunch% up}
+	roll := lock
+return
+
+threeKick:
+	send {%weakKick% down}
+	send {%mediumKick% down}
+	send {%hardKick% down}
+	sleep %lag%
+	send {%weakKick% up}
+	send {%mediumKick% up}
+	send {%hardKick% up}
+	roll := lock
+return
+
+exPunch:
+	send {%weakPunch% down}
+	send {%mediumPunch% down}
+	sleep %lag%
+	send {%weakPunch% up}
+	send {%mediumPunch% up}
+	roll := lock
+return
+
+exKick:
+	send {%weakKick% down}
+	send {%mediumKick% down}
+	sleep %lag%
+	send {%weakKick% up}
+	send {%mediumKick% up}
+	roll := lock
+return
+
+weakPunch:
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		myStick.setBtn(1, 1)
+		MaxIndex := 1
+		while (MaxIndex > 0) {
+			sleep %lag%
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
+		}
+		myStick.setBtn(0, 1)
+    	comboInProgress := 0 
 		roll := off
 	}
-}
-;if you rolled 4 -> 3
-else if (roll != lock && instr(A_PriorKey, threeString) && (A_TimeSincePriorHotkey, threeString) < roll) {
-	fourToThree()
-}
-numP := GetAllKeysPressed("P")
-MaxIndex := numP.MaxIndex()
-if (MaxIndex < 1 || GetKeyState("Shift", "P")==1) 
-  roll := off	;roll will be unlocked when no keys on the keyboard are pressed
-exit 
+return
 
-GRAB:
-	;1+4
-    send {%oneString% down} 
-    send {%fourString% down} 
-    sleep %lag% 
-    send {%oneString% up} 
-    send {%fourString% up} 
-exit
+
+weakKick:
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%weakKick% down}
+		MaxIndex := 1
+		while (MaxIndex > 0) {
+			sleep %lag%
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
+		}
+		send {%weakKick% up}
+    	comboInProgress := 0 
+		roll := off
+	}
+return
+
+mediumPunch:
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%mediumPunch% down}
+		MaxIndex := 2
+		while (MaxIndex > 0) {
+			sleep %lag%
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
+		}
+		send {%mediumPunch% up}
+    	comboInProgress := 0 
+		roll := off
+	}
+return
+
+
+mediumKick:
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%mediumKick% down}
+		MaxIndex := 3
+		while (MaxIndex > 0) {
+			sleep %lag%
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
+		}
+		send {%mediumKick% up}
+    	comboInProgress := 0 
+		roll := off
+	}
+return
+
+hardPunch:
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%hardPunch% down}
+		MaxIndex := 3
+		while (MaxIndex > 0) {
+			sleep %lag%
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
+		}
+		send {%hardPunch% up}
+		comboInProgress := 0
+		roll := off
+	}
+return
+
+hardKick:
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%hardKick% down}
+		MaxIndex := 3
+		while (MaxIndex > 0) {
+			sleep %lag%
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
+		}
+		send {%hardKick% up}
+		comboInProgress := 0
+		roll := off
+	}
+return
+
+grab:
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%weakPunch% down} 
+		send {%weakKick% down} 
+		MaxIndex := 2
+		while (MaxIndex > 0) {
+			sleep %lag%
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
+		}
+		send {%weakPunch% up} 
+		send {%weakKick% up}
+    	comboInProgress := 0 
+		roll := off
+	}
+return
+
+vSkill:
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%mediumPunch% down}
+		send {%mediumKick% down}
+		numP := GetAllKeysPressed("P")
+		oldMaxIndex := numP.MaxIndex()
+		MaxIndex := 2
+		while (MaxIndex > 0) {
+			sleep %lag%
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
+		}
+		send {%mediumPunch% up}
+		send {%mediumKick% up}
+    	comboInProgress := 0 
+		if(oldMaxIndex == 1) {
+			roll := off
+		}
+		else {
+			roll := lock
+		}
+	}
+return 
+
+vTrigger: 
+  if(comboInProgress == 0) { 
+		comboInProgress := 1 
+		send {%hardPunch% down}
+		send {%hardKick% down}
+		MaxIndex := 1
+		while (MaxIndex > 0) {
+			sleep %lag%
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
+		}
+		send {%hardPunch% up}
+		send {%hardKick% up}
+		comboInProgress := 0
+		roll := off 
+  } 
+return 
