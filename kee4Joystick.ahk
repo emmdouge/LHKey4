@@ -275,7 +275,7 @@ THREEDOWN:
 				KeyWait, %four%, d t0.025
 				;1+3+2
 				if ErrorLevel {
-					gosub hardKick
+					gosub hardPunch
 				}
 				;1+3+2+C
 				else {
@@ -311,7 +311,7 @@ THREEDOWN:
 				KeyWait, %four%, d t0.025
 				;2+3+1
 				if ErrorLevel {     
-					gosub hardKick
+					gosub hardPunch
 				}
 				;2+3+1+C
 				else {
