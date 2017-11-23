@@ -35,7 +35,7 @@ up := "w"
 , down := "s"
 , left := "a"
 , right := "d"
-, weakPunch := "Joy4"
+, weakPunch := "1joy4"
 , vSkill := "1joy5"
 , weakKick := "1joy3"
 , charge := "1joy2"
@@ -70,16 +70,18 @@ comboInProgress := 0
 
 GetAllKeysPressed(mode = "P") {
 	
-	pressed := Array()
 	i := 1 
 	GetKeyState, joy_buttons, 1JoyButtons
 	Loop, %joy_buttons%
 	{
 		GetKeyState, joy%a_index%, 1joy%a_index%
 		if joy%a_index% = D
-			pressed[i] = %a_index%
+			buttons_down = %buttons_down%%a_space%%a_index%
 		i++
 	}
+	pressed := StrSplit(buttons_down," ")
+	m := pressed.MaxIndex()
+	;ToolTip, `nNum Buttons Down: %m%`nButtons Down: %buttons_down%`n`n(right-click the tray icon to exit)
 	return pressed
 }
 
@@ -425,42 +427,42 @@ exit
 
 
 threePunch:
-	send {%weakPunch% down}
-	send {%mediumPunch% down}
-	send {%hardPunch% down}
+	myStick.setBtn(1, 1)
+	myStick.setBtn(1, 2)
+	myStick.setBtn(1, 3)
 	sleep %lag%
-	send {%weakPunch% up}
-	send {%mediumPunch% up}
-	send {%hardPunch% up}
+	myStick.setBtn(0, 1)
+	myStick.setBtn(0, 2)
+	myStick.setBtn(0, 3)
 	roll := lock
 return
 
 threeKick:
-	send {%weakKick% down}
-	send {%mediumKick% down}
-	send {%hardKick% down}
+	myStick.setBtn(1, 4)
+	myStick.setBtn(1, 5)
+	myStick.setBtn(1, 6)
 	sleep %lag%
-	send {%weakKick% up}
-	send {%mediumKick% up}
-	send {%hardKick% up}
+	myStick.setBtn(0, 4)
+	myStick.setBtn(0, 5)
+	myStick.setBtn(0, 6)
 	roll := lock
 return
 
 exPunch:
-	send {%weakPunch% down}
-	send {%mediumPunch% down}
+	myStick.setBtn(1, 1)
+	myStick.setBtn(1, 2)
 	sleep %lag%
-	send {%weakPunch% up}
-	send {%mediumPunch% up}
+	myStick.setBtn(1, 1)
+	myStick.setBtn(1, 2)
 	roll := lock
 return
 
 exKick:
-	send {%weakKick% down}
-	send {%mediumKick% down}
+	myStick.setBtn(1, 4)
+	myStick.setBtn(1, 5)
 	sleep %lag%
-	send {%weakKick% up}
-	send {%mediumKick% up}
+	myStick.setBtn(0, 4)
+	myStick.setBtn(0, 5)
 	roll := lock
 return
 
@@ -484,14 +486,14 @@ return
 weakKick:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
-		send {%weakKick% down}
+		myStick.setBtn(1, 4)
 		MaxIndex := 1
 		while (MaxIndex > 0) {
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
 		}
-		send {%weakKick% up}
+		myStick.setBtn(0, 4)
     	comboInProgress := 0 
 		roll := off
 	}
@@ -500,14 +502,14 @@ return
 mediumPunch:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
-		send {%mediumPunch% down}
+		myStick.setBtn(1, 2)
 		MaxIndex := 2
 		while (MaxIndex > 0) {
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
 		}
-		send {%mediumPunch% up}
+		myStick.setBtn(0, 2)
     	comboInProgress := 0 
 		roll := off
 	}
@@ -517,14 +519,14 @@ return
 mediumKick:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
-		send {%mediumKick% down}
+		myStick.setBtn(1, 5)
 		MaxIndex := 3
 		while (MaxIndex > 0) {
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
 		}
-		send {%mediumKick% up}
+		myStick.setBtn(0, 5)
     	comboInProgress := 0 
 		roll := off
 	}
@@ -533,14 +535,14 @@ return
 hardPunch:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
-		send {%hardPunch% down}
+		myStick.setBtn(1, 3)
 		MaxIndex := 3
 		while (MaxIndex > 0) {
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
 		}
-		send {%hardPunch% up}
+		myStick.setBtn(0, 3)
 		comboInProgress := 0
 		roll := off
 	}
@@ -549,14 +551,14 @@ return
 hardKick:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
-		send {%hardKick% down}
+		myStick.setBtn(1, 6)
 		MaxIndex := 3
 		while (MaxIndex > 0) {
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
 		}
-		send {%hardKick% up}
+		myStick.setBtn(0, 6)
 		comboInProgress := 0
 		roll := off
 	}
@@ -565,16 +567,16 @@ return
 grab:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
-		send {%weakPunch% down} 
-		send {%weakKick% down} 
+		myStick.setBtn(1, 1)
+		myStick.setBtn(1, 4)
 		MaxIndex := 2
 		while (MaxIndex > 0) {
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
 		}
-		send {%weakPunch% up} 
-		send {%weakKick% up}
+		myStick.setBtn(0, 1)
+		myStick.setBtn(0, 4)
     	comboInProgress := 0 
 		roll := off
 	}
@@ -583,8 +585,8 @@ return
 vSkill:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
-		send {%mediumPunch% down}
-		send {%mediumKick% down}
+		myStick.setBtn(1, 2)
+		myStick.setBtn(1, 5)
 		numP := GetAllKeysPressed("P")
 		oldMaxIndex := numP.MaxIndex()
 		MaxIndex := 2
@@ -593,8 +595,8 @@ vSkill:
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
 		}
-		send {%mediumPunch% up}
-		send {%mediumKick% up}
+		myStick.setBtn(0, 2)
+		myStick.setBtn(0, 5)
     	comboInProgress := 0 
 		if(oldMaxIndex == 1) {
 			roll := off
@@ -608,16 +610,16 @@ return
 vTrigger: 
   if(comboInProgress == 0) { 
 		comboInProgress := 1 
-		send {%hardPunch% down}
-		send {%hardKick% down}
+		myStick.setBtn(1, 3)
+		myStick.setBtn(1, 6)
 		MaxIndex := 1
 		while (MaxIndex > 0) {
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
 		}
-		send {%hardPunch% up}
-		send {%hardKick% up}
+		myStick.setBtn(0, 3)
+		myStick.setBtn(0, 6)
 		comboInProgress := 0
 		roll := off 
   } 
