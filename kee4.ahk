@@ -325,14 +325,10 @@ isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetK
 ;if you overheld 1(or roll is off) or didn't roll
 if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, weakPunch) >= roll)  || (instr(A_PriorKey, weakPunch)) || (instr(A_PriorKey, up)) || (instr(A_PriorKey, down)) || (instr(A_PriorKey, left)) || (instr(A_PriorKey, right)))) {
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {%weakPunch% down}
-		sleep %lag%
-		send {%weakPunch% up}
+		gosub weakPunch
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send {%weakPunch% down}
-		sleep %lag%
-		send {%weakPunch% up}
+		gosub weakPunch
 	}
 	if (roll != lock) {
 		roll := off
@@ -389,14 +385,10 @@ isModified :=  (GetKeyState("Spaceh", "P") || GetKeyState("Control", "P") || Get
 ;if you overheld 3(or roll is off) or didn't roll
 if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, weakKick) >= roll) || (instr(A_PriorKey, weakKick)) || (instr(A_PriorKey, up)) || (instr(A_PriorKey, down)) || (instr(A_PriorKey, left)) || (instr(A_PriorKey, right)))) {
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
-		send {%weakKick% down}
-		sleep %lag%
-		send {%weakKick% up}
+		gosub weakKick
 	}
     else if GetKeyState("LAlt", "P")=0 {
-		send {%weakKick% down}
-		sleep %lag%
-		send {%weakKick% up}
+		gosub weakKick
 	}
 	if (roll != lock) {
 		roll := off
@@ -464,6 +456,39 @@ exKick:
 	send {%weakKick% up}
 	send {%mediumKick% up}
 	roll := lock
+return
+
+weakPunch:
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%weakPunch% down}
+		MaxIndex := 1
+		while (MaxIndex > 0) {
+			sleep %lag%
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
+		}
+		send {%weakPunch% up}
+    	comboInProgress := 0 
+		roll := off
+	}
+return
+
+
+weakKick:
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%weakKick% down}
+		MaxIndex := 1
+		while (MaxIndex > 0) {
+			sleep %lag%
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
+		}
+		send {%weakKick% up}
+    	comboInProgress := 0 
+		roll := off
+	}
 return
 
 mediumPunch:
@@ -536,7 +561,7 @@ grab:
 		comboInProgress := 1
 		send {%weakPunch% down} 
 		send {%weakKick% down} 
-		MaxIndex := 3
+		MaxIndex := 2
 		while (MaxIndex > 0) {
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
@@ -579,7 +604,7 @@ vTrigger:
 		comboInProgress := 1 
 		send {%hardPunch% down}
 		send {%hardKick% down}
-		MaxIndex := 4
+		MaxIndex := 1
 		while (MaxIndex > 0) {
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
