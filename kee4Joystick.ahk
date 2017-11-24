@@ -10,26 +10,32 @@
 #NoEnv
 #InstallKeybdHook
 #UseHook On
-SetBatchLines, -1                 ;makes the script run at max speed
-SetKeyDelay , -1, -1              ;faster response (might be better with -1, 0)
-ListLines, Off
 #KeyHistory 12
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #MaxThreadsPerHotkey 255
+Process, Priority, , A
+SetBatchLines, -1                 ;makes the script run at max speed
+SetKeyDelay , -1, -1              ;faster response (might be better with -1, 0)
+ListLines, Off
 SendMode Input
 SetCapsLockState, AlwaysOff
 
-up := "w"
-, down := "s"
-, left := "a"
-, right := "d"
+joyup := "empty"
+, joydown := "empty"
+, joyleft := "empty"
+, joyright := "empty"
+
+up := "w" 
+, down := "s" 
+, left := "a" 
+, right := "d" 
 
 ; IMPORTANT: USE joy button #s defined in joystick test
-, one = "2joy4"
-, two = "2joy5"
-, three = "2joy3"
-, four = "2joy2"
+, one = "1joy3"
+, two = "1joy4"
+, three = "1joy5"
+, four = "1joy2"
 
 , weakPunch := "u"
 , vSkill := "i"
@@ -67,15 +73,21 @@ comboInProgress := 0
 GetAllKeysPressed(mode = "P") {
 	
 	i := 1 
-	GetKeyState, joy_buttons, 2JoyButtons
+	GetKeyState, joy_buttons, 1JoyButtons
 	Loop, %joy_buttons%
 	{
-		GetKeyState, joy%a_index%, 2joy%a_index%
+		GetKeyState, joy%a_index%, 1joy%a_index%
 		if joy%a_index% = D
-			buttons_down = %buttons_down%%a_space%%a_index%
+			buttons_down = %buttons_down%%a_space%1joy%a_index%
 		i++
 	}
 	pressed := StrSplit(buttons_down," ")
+	for index, element in pressed ; Recommended approach in most cases.
+	{
+		if(element == joyup || element == joydown || element == joyleft || element == joyright) {
+			pressed.remove(index)
+		}
+	}
 	m := pressed.MaxIndex()
 	;ToolTip, `nNum Buttons Down: %m%`nButtons Down: %buttons_down%`n`n(right-click the tray icon to exit)
 	return pressed
@@ -134,7 +146,7 @@ ONEDOWN:
 				}
 				;2+1+3+C
 				else {
-					gosub vTrigger
+					gosub hardPunch
 				}
 			}
 		}
@@ -155,7 +167,7 @@ ONEDOWN:
 				}
 				;3+1+2+C
 				else {
-					gosub vTrigger
+					gosub hardPunch
 				}
 			}
 		}
@@ -189,11 +201,11 @@ TWODOWN:
 					KeyWait, %one%, d t0.025
 					;3+2+C       
 					if ErrorLevel {      
-						gosub vTrigger
+						gosub hardPunch
 					}
 					;3+2+C+1
 					else {
-						gosub vTrigger
+						gosub hardPunch
 					}
 				}
 			}
@@ -206,7 +218,7 @@ TWODOWN:
 				}
 				;3+2+1+C
 				else {
-					gosub vTrigger
+					gosub hardPunch
 				}
 			}
 		}
@@ -226,11 +238,11 @@ TWODOWN:
 					KeyWait, %three%, d t0.025
 					;1+2+C
 					if ErrorLevel {
-						gosub vTrigger
+						gosub hardPunch
 					}
 					;1+2+C+3
 					else {
-						gosub vTrigger
+						gosub hardPunch
 					}
 				}
 			}
@@ -243,7 +255,7 @@ TWODOWN:
 				}
 				;1+2+3+C
 				else {
-					gosub vTrigger
+					gosub hardPunch
 				}
 			}
 		}
@@ -279,7 +291,7 @@ THREEDOWN:
 				}
 				;1+3+2+C
 				else {
-					gosub vTrigger
+					gosub hardPunch
 				}
 			}
 		} 
@@ -298,11 +310,11 @@ THREEDOWN:
 					KeyWait, %one%, d t0.025
 					;2+3+C     
 					if ErrorLevel {      
-						gosub vSkill
+						gosub hardPunch
 					}
 					;2+3+C+1
 					else {
-						gosub vTrigger
+						gosub hardPunch
 					}
 				}
 			}
@@ -315,7 +327,7 @@ THREEDOWN:
 				}
 				;2+3+1+C
 				else {
-					gosub vTrigger
+					gosub hardPunch
 				}
 			}
 		}
@@ -325,7 +337,7 @@ THREEDOWN:
 exit
 
 ONEUP:
-isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
+isModified :=  (GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 1(or roll is off) or didn't roll
 if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, weakPunch) >= roll)  || (instr(A_PriorKey, weakPunch)) || (instr(A_PriorKey, up)) || (instr(A_PriorKey, down)) || (instr(A_PriorKey, left)) || (instr(A_PriorKey, right)))) {
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
@@ -355,7 +367,7 @@ exit
 
 
 TWOUP:
-isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
+isModified :=  (GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 2(or roll is off) or didn't roll
 if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, vSkill) >= roll)  || (instr(A_PriorKey, vSkill)))) {
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
@@ -385,7 +397,7 @@ exit
 
 
 THREEUP:
-isModified :=  (GetKeyState("Spaceh", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
+isModified :=  (GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 3(or roll is off) or didn't roll
 if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, weakKick) >= roll) || (instr(A_PriorKey, weakKick)) || (instr(A_PriorKey, up)) || (instr(A_PriorKey, down)) || (instr(A_PriorKey, left)) || (instr(A_PriorKey, right)))) {
 	if(GetKeyState("Shift", "P") && GetKeyState("LAlt", "P")=0) {
@@ -420,7 +432,6 @@ if (MaxIndex < 1)  {
   roll := off	;roll will be unlocked when no keys on the keyboard are pressed
 }
 exit 
-
 
 threePunch:
 	send {%weakPunch% down}

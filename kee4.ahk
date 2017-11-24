@@ -9,13 +9,14 @@
 #NoEnv
 #InstallKeybdHook
 #UseHook On
-SetBatchLines, -1                 ;makes the script run at max speed
-SetKeyDelay , -1, -1              ;faster response (might be better with -1, 0)
-ListLines, Off
-#KeyHistory 12
+#KeyHistory 6
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #MaxThreadsPerHotkey 255
+Process, Priority, , A
+SetBatchLines, -1                 ;makes the script run at max speed
+SetKeyDelay , -1, -1              ;faster response (might be better with -1, 0)
+ListLines, Off
 SendMode Input
 SetCapsLockState, AlwaysOff
 

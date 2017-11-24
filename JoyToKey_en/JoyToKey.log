@@ -1,0 +1,28 @@
+2017/11/23 21:00:57.265 Info   Starting JoyToKey Ver5.9
+2017/11/23 21:00:57.265 Info   ExeFile=C:\Users\Herby\Downloads\JoyToKey_en\JoyToKey_en\JoyToKey.exe
+2017/11/23 21:00:57.265 Info   ConfigDir=C:\Users\Herby\Downloads\JoyToKey_en\JoyToKey_en\
+2017/11/23 21:00:57.265 Info   IniFile=C:\Users\Herby\Downloads\JoyToKey_en\JoyToKey_en\JoyToKey.ini
+2017/11/23 21:00:57.265 Info   Windows Version = 6.2
+2017/11/23 21:00:58.588 Info   Loaded VistaAPI.dll (Utils\Utils.cpp#226)
+2017/11/23 21:00:58.595 Info   LicenseKey "" is not valid
+2017/11/23 21:00:58.681 Info   Loading XInput1_3.dll (Joystick.cpp#128)
+2017/11/23 21:00:58.682 Info   Initialized XInput (Joystick.cpp#146)
+2017/11/23 21:00:58.694 Info   Detected a DI joystick: {ECFB23F0-CC93-11E7-8001-444553540000}, QanBa Arcade JoyStick 1008, QanBa Arcade JoyStick 1008
+2017/11/23 21:00:58.694 Info   Preferred index = -1
+2017/11/23 21:00:58.695 Info   numAxis = 4
+2017/11/23 21:00:58.695 Info   numPOVs = 1
+2017/11/23 21:00:58.695 Info   numButtons = 12
+2017/11/23 21:00:58.695 Info   EnumDeviceObject: Axis offset=4 type=502 name=Z Rotation
+2017/11/23 21:00:58.695 Info   EnumDeviceObject: Axis offset=8 type=202 name=Z Axis
+2017/11/23 21:00:58.695 Info   EnumDeviceObject: Axis offset=12 type=102 name=Y Axis
+2017/11/23 21:00:58.695 Info   EnumDeviceObject: Axis offset=16 type=2 name=X Axis
+2017/11/23 21:00:58.696 Info   DetectJoysticks: Detected 1 DI joystick(s)
+2017/11/23 21:00:58.697 Info   Joystick #1: QanBa Arcade JoyStick 1008
+2017/11/23 21:00:58.697 Info   1 joysticks are detected (Joystick.cpp#168)
+2017/11/23 21:00:58.697 Info   ConfigDir=C:\Users\Herby\Downloads\JoyToKey_en\JoyToKey_en\*.cfg (ConfigFileManager.cpp#43)
+2017/11/23 21:00:58.710 Info   Failed to find AppLink.dat (AppLink\AppLinkManager.cpp#32)
+2017/11/23 21:00:58.720 Info   TimerInit: Initializing timer with x1 speed mode (interval = 16 msec)
+2017/11/23 21:01:19.376 Error  Access is denied.
+ (Utils\Utils.cpp#473)
+11/23/2017 9:01:21 PM Error  Access is denied.
+ (Utils\Utils.cpp#473)
