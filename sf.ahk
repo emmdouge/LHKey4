@@ -563,6 +563,7 @@ hardPunch:
 		comboInProgress := 1
 		send {%hardPunch% down}
 		MaxIndex := 3
+		sleep %lag%
 		;do this as long as the last button held down is not instantButton
 		while ((MaxIndex > 1 && GetKeyState(instantButton, "P") == 0)) {
 			sleep %lag%
@@ -580,6 +581,7 @@ hardKick:
 		comboInProgress := 1
 		send {%hardKick% down}
 		MaxIndex := 3
+		sleep %lag%
 		;do this as long as the last button held down is not instantButton
 		while ((MaxIndex > 1 && GetKeyState(instantButton, "P") == 0)) {
 			sleep %lag%
