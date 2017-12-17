@@ -476,6 +476,24 @@ hardPunch:
 				buttonDown := 0 
 				send {%mediumPunch% up} 
 			}
+			if(GetKeyState(weakKick, "P") && buttonDown == 0 && hardKickRelease == 1) { 
+				numP := GetAllKeysPressed("P") 
+				MaxIndex := numP.MaxIndex() 
+				buttonDown := 1 
+				comboInProgress := 0 
+				send {%mediumKick% down} 
+				sleep %lag% 
+				while (MaxIndex > 1 && (GetKeyState(weakKick, "P"))) { 
+					sleep %lag% 
+					numP := GetAllKeysPressed("P") 
+					MaxIndex := numP.MaxIndex() 
+					Random, rand, 1, 10
+					Tooltip, %rand%
+				} 
+				comboInProgress := 1 
+				buttonDown := 0 
+				send {%mediumKick% up} 
+			} 	 
             if(GetKeyState(weakPunch, "P") == 0) {
                 hardPunchRelease := 1
             }
@@ -514,6 +532,24 @@ hardKick:
 				buttonDown := 0 
 				send {%mediumKick% up} 
 			} 	 
+			if(GetKeyState(weakPunch, "P") && buttonDown == 0 && hardPunchRelease == 1) { 
+				numP := GetAllKeysPressed("P") 
+				MaxIndex := numP.MaxIndex() 
+				buttonDown := 1 
+				comboInProgress := 0 
+				send {%mediumPunch% down} 
+				sleep %lag% 
+				while (MaxIndex > 1 && (GetKeyState(weakPunch, "P"))) { 
+					sleep %lag% 
+					numP := GetAllKeysPressed("P") 
+					MaxIndex := numP.MaxIndex() 
+					Random, rand, 1, 10
+					Tooltip, %rand%
+				} 
+				comboInProgress := 1 
+				buttonDown := 0 
+				send {%mediumPunch% up} 
+			}
             if(GetKeyState(weakKick, "P") == 0) {
                 hardKickRelease := 1
             }
