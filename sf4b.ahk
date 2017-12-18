@@ -124,12 +124,12 @@ ONEDOWN:
 				}
 				;2+1+3
 				else {      
-                    gosub threePunch
+                    gosub threeKick
 				}
 			}
 			;2+1+C
 			else {
-				gosub exPunch
+				gosub threePunch
 			}
 		}
 		else {          
@@ -182,7 +182,7 @@ THREEDOWN:
 				}
 				;2+3+C
 				else {      
-                    gosub exKick
+                    gosub threeKick
 				}
 			}
 			;2+3+1
@@ -217,7 +217,7 @@ exit
 ONEUP:
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 1(or roll is off) or didn't roll
-if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, weakPunch) >= roll)  || (instr(A_PriorKey, weakPunch)) || (instr(A_PriorKey, up)) || (instr(A_PriorKey, down)) || (instr(A_PriorKey, left)) || (instr(A_PriorKey, right)))) {
+if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, weakPunch) >= roll))) {
 	if(!GetKeyState(grab, "P")) {
 		gosub weakPunch
 	}
@@ -244,7 +244,7 @@ exit
 TWOUP:
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 2(or roll is off) or didn't roll
-if (!isModified && roll != lock && (instr(A_PriorKey, grab))) {
+if (!isModified && roll != lock && (instr(A_PriorKey, grab)) || (instr(A_PriorKey, up)) || (instr(A_PriorKey, down)) || (instr(A_PriorKey, left)) || (instr(A_PriorKey, right))) {
 	gosub grab
 	if (roll != lock) {
 		roll := off
@@ -261,7 +261,7 @@ exit
 THREEUP:
 isModified :=  (GetKeyState("Spaceh", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 3(or roll is off) or didn't roll
-if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, weakKick) >= roll) || (instr(A_PriorKey, weakKick)) || (instr(A_PriorKey, up)) || (instr(A_PriorKey, down)) || (instr(A_PriorKey, left)) || (instr(A_PriorKey, right)))) {
+if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, weakKick) >= roll))) {
 	if(!GetKeyState(grab, "P")) {
 		gosub weakKick
 	}
@@ -422,14 +422,12 @@ hardPunch:
 					sleep %lag% 
 					numP := GetAllKeysPressed("P") 
 					MaxIndex := numP.MaxIndex() 
-					Random, rand, 1, 10
-					Tooltip, %rand%
 				} 
 				comboInProgress := 1 
 				buttonDown := 0 
 				send {%mediumPunch% up} 
 			}
-			if(GetKeyState(weakKick, "P") && buttonDown == 0 && hardKickRelease == 1) { 
+			if(GetKeyState(weakKick, "P") && buttonDown == 0 && hardPunchRelease == 1) { 
 				numP := GetAllKeysPressed("P") 
 				MaxIndex := numP.MaxIndex() 
 				buttonDown := 1 
@@ -440,8 +438,6 @@ hardPunch:
 					sleep %lag% 
 					numP := GetAllKeysPressed("P") 
 					MaxIndex := numP.MaxIndex() 
-					Random, rand, 1, 10
-					Tooltip, %rand%
 				} 
 				comboInProgress := 1 
 				buttonDown := 0 
@@ -478,14 +474,12 @@ hardKick:
 					sleep %lag% 
 					numP := GetAllKeysPressed("P") 
 					MaxIndex := numP.MaxIndex() 
-					Random, rand, 1, 10
-					Tooltip, %rand%
 				} 
 				comboInProgress := 1 
 				buttonDown := 0 
 				send {%mediumKick% up} 
 			} 	 
-			if(GetKeyState(weakPunch, "P") && buttonDown == 0 && hardPunchRelease == 1) { 
+			if(GetKeyState(weakPunch, "P") && buttonDown == 0 && hardKickRelease == 1) { 
 				numP := GetAllKeysPressed("P") 
 				MaxIndex := numP.MaxIndex() 
 				buttonDown := 1 
@@ -496,8 +490,6 @@ hardKick:
 					sleep %lag% 
 					numP := GetAllKeysPressed("P") 
 					MaxIndex := numP.MaxIndex() 
-					Random, rand, 1, 10
-					Tooltip, %rand%
 				} 
 				comboInProgress := 1 
 				buttonDown := 0 
