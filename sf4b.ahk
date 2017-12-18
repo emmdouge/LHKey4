@@ -339,7 +339,7 @@ weakPunch:
 		send {%weakPunch% down}
         numP := GetAllKeysPressed("P")
         MaxIndex := numP.MaxIndex()
-		while (MaxIndex > 0 && GetKeyState(grab, "P")) {
+		while (MaxIndex > 0 && GetKeyState(grab, "P") == 0) {
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
@@ -357,7 +357,7 @@ weakKick:
 		send {%weakKick% down}
         numP := GetAllKeysPressed("P")
         MaxIndex := numP.MaxIndex()
-		while (MaxIndex > 0 && GetKeyState(grab, "P")) {
+		while (MaxIndex > 0 && GetKeyState(grab, "P") == 0) {
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
