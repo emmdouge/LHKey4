@@ -25,7 +25,7 @@ up := "w"
 , left := "a"
 , right := "d"
 , weakPunch := "u"
-, instantButton := "i"
+, grab := "i"
 , weakKick := "o"
 , charge := "Space"
 , mediumPunch := "t"
@@ -36,8 +36,8 @@ up := "w"
 Hotkey, %weakPunch%, ONEDOWN
 Hotkey, %weakPunch% up, ONEUP
 
-Hotkey, %instantButton%, TWODOWN
-Hotkey, %instantButton% up, TWOUP
+Hotkey, %grab%, TWODOWN
+Hotkey, %grab% up, TWOUP
 
 Hotkey, %weakKick%, THREEDOWN
 Hotkey, %weakKick% up, THREEUP
@@ -87,7 +87,7 @@ CHARGE:
 		gosub exPunch
 	}
 	;2+C
-	if(instr(A_PriorKey, instantButton) && ((A_TimeSincePriorHotkey, instantButton) < combo)) {
+	if(instr(A_PriorKey, grab) && ((A_TimeSincePriorHotkey, grab) < combo)) {
 		roll := lock
 		gosub vSkill
 	}
@@ -112,29 +112,29 @@ ONEDOWN:
 		exit
 	}
 	else {
-        if(instr(A_PriorKey, instantButton) && ((A_TimeSincePriorHotkey, instantButton) < combo)) {
+        if(instr(A_PriorKey, grab) && ((A_TimeSincePriorHotkey, grab) < combo)) {
 			roll := lock
-			KeyWait, %weakKick%, d t0.025                
+			KeyWait, %charge%, d t0.025                
 			;2+1
-			if ErrorLevel {         
-				gosub hardPunch
-			}
-			;2+1+3
-			else {
-				KeyWait, %charge%, d t0.025
-				;2+1+3     
-				if ErrorLevel {
+			if ErrorLevel {       
+				KeyWait, %weakKick%, d t0.025
+				;2+1
+				if ErrorLevel {       
 					gosub hardPunch
 				}
-				;2+1+3+C
-				else {
-					gosub vTrigger
+				;2+1+3
+				else {      
+                    gosub threePunch
 				}
+			}
+			;2+1+C
+			else {
+				gosub exPunch
 			}
 		}
 		else {          
             ;pressing weakpunch while middle button is held
-            if(MaxIndex == 2 && GetKeyState(instantButton, "P")) {
+            if(MaxIndex == 2 && GetKeyState(grab, "P")) {
                 roll := lock
                 gosub mediumPunch
             }
@@ -158,42 +158,6 @@ TWODOWN:
 		exit
 	}
 	else {
-		;3+2
-		if(instr(A_PriorKey, weakKick) && ((A_TimeSincePriorHotkey, weakKick) < combo)) {
-			roll := lock
-			KeyWait, %weakPunch%, d t0.025
-			if ErrorLevel {        
-				KeyWait, %charge%, d t0.025
-				;3+2     
-				if ErrorLevel {            
-					gosub mediumKick
-				}
-				;3+2+C
-				else {
-					KeyWait, %weakPunch%, d t0.025
-					;3+2+C       
-					if ErrorLevel {      
-						gosub threeKick
-					}
-					;3+2+C+1
-					else {
-						gosub vTrigger
-					}
-				}
-			}
-			;3+2+1
-			else {
-				KeyWait, %charge%, d t0.025
-				;3+2+1     
-				if ErrorLevel {      
-					gosub hardKick
-				}
-				;3+2+1+C
-				else {
-					gosub vTrigger
-				}
-			}
-		}
 		exit
 	}
 	roll := on
@@ -202,15 +166,12 @@ exit
 THREEDOWN: 
 	numP := GetAllKeysPressed("P")
 	MaxIndex := numP.MaxIndex()
-	if (MaxIndex == 1)  {
-		roll := off	;roll will be unlocked when no keys on the keyboard are pressed
-	}
-	else if (roll == lock) {
+	if (roll == lock) {
 		exit
 	}
 	else {
 		;2+3
-		if(instr(A_PriorKey, instantButton) && ((A_TimeSincePriorHotkey, instantButton) < combo)) {
+		if(instr(A_PriorKey, grab) && ((A_TimeSincePriorHotkey, grab) < combo)) {
 			roll := lock
 			KeyWait, %weakPunch%, d t0.025       
 			if ErrorLevel {  
@@ -220,16 +181,8 @@ THREEDOWN:
 					gosub hardKick
 				}
 				;2+3+C
-				else {
-					KeyWait, %weakPunch%, d t0.025
-					;2+3+C     
-					if ErrorLevel {      
-						gosub threeKick
-					}
-					;2+3+C+1
-					else {
-						gosub threeKick
-					}
+				else {      
+                    gosub exKick
 				}
 			}
 			;2+3+1
@@ -237,7 +190,7 @@ THREEDOWN:
 				KeyWait, %charge%, d t0.025
 				;2+3+1
 				if ErrorLevel {     
-					gosub hardPunch
+					gosub threeKick
 				}
 				;2+3+1+C
 				else {
@@ -247,7 +200,7 @@ THREEDOWN:
 		}
 		else {          
             ;pressing weakKick while middle button is held
-            if(MaxIndex == 2 && GetKeyState(instantButton, "P")) {
+            if(MaxIndex == 2 && GetKeyState(grab, "P")) {
                 roll := lock
                 gosub mediumKick
             }
@@ -265,7 +218,7 @@ ONEUP:
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 1(or roll is off) or didn't roll
 if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, weakPunch) >= roll)  || (instr(A_PriorKey, weakPunch)) || (instr(A_PriorKey, up)) || (instr(A_PriorKey, down)) || (instr(A_PriorKey, left)) || (instr(A_PriorKey, right)))) {
-	if(!GetKeyState(instantButton, "P")) {
+	if(!GetKeyState(grab, "P")) {
 		gosub weakPunch
 	}
 	if (roll != lock) {
@@ -273,7 +226,7 @@ if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, weakPunch) >= roll
 	}
 }
 ;if you rolled 1 -> 2
-else if (roll != lock && instr(A_PriorKey, instantButton) && (A_TimeSincePriorHotkey, instantButton) < roll) {
+else if (roll != lock && instr(A_PriorKey, grab) && (A_TimeSincePriorHotkey, grab) < roll) {
 	gosub exPunch
 }
 ;if you rolled 1 -> 3
@@ -291,7 +244,7 @@ exit
 TWOUP:
 isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 2(or roll is off) or didn't roll
-if (!isModified && roll != lock && (instr(A_PriorKey, instantButton))) {
+if (!isModified && roll != lock && (instr(A_PriorKey, grab))) {
 	gosub grab
 	if (roll != lock) {
 		roll := off
@@ -309,7 +262,7 @@ THREEUP:
 isModified :=  (GetKeyState("Spaceh", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
 ;if you overheld 3(or roll is off) or didn't roll
 if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, weakKick) >= roll) || (instr(A_PriorKey, weakKick)) || (instr(A_PriorKey, up)) || (instr(A_PriorKey, down)) || (instr(A_PriorKey, left)) || (instr(A_PriorKey, right)))) {
-	if(!GetKeyState(instantButton, "P")) {
+	if(!GetKeyState(grab, "P")) {
 		gosub weakKick
 	}
 	if (roll != lock) {
@@ -317,7 +270,7 @@ if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, weakKick) >= roll)
 	}
 }
 ;if you rolled 3 -> 2
-else if (roll != lock && instr(A_PriorKey, instantButton) && (A_TimeSincePriorHotkey, instantButton) < roll) {
+else if (roll != lock && instr(A_PriorKey, grab) && (A_TimeSincePriorHotkey, grab) < roll) {
 	gosub exKick
 }
 ;if you rolled 3 -> 1
@@ -386,7 +339,7 @@ weakPunch:
 		send {%weakPunch% down}
         numP := GetAllKeysPressed("P")
         MaxIndex := numP.MaxIndex()
-		while (MaxIndex > 0) {
+		while (MaxIndex > 0 && GetKeyState(grab, "P")) {
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
@@ -404,7 +357,7 @@ weakKick:
 		send {%weakKick% down}
         numP := GetAllKeysPressed("P")
         MaxIndex := numP.MaxIndex()
-		while (MaxIndex > 0) {
+		while (MaxIndex > 0 && GetKeyState(grab, "P")) {
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
