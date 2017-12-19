@@ -188,7 +188,7 @@ THREEDOWN:
 				}
 				;2+3+C
 				else {      
-                    gosub threeKick
+                    gosub exKick
 				}
 			}
 			;2+3+1
@@ -560,10 +560,40 @@ vTrigger:
 		send {%hardPunch% down}
 		send {%hardKick% down}
 		MaxIndex := 1
+		buttonDown := 0
 		while (MaxIndex > 0) {
-			sleep %lag%
-			numP := GetAllKeysPressed("P")
-			MaxIndex := numP.MaxIndex()
+			if(GetKeyState(weakPunch, "P") && buttonDown == 0) { 
+				numP := GetAllKeysPressed("P") 
+				MaxIndex := numP.MaxIndex() 
+				buttonDown := 1 
+				comboInProgress := 0 
+				send {%mediumPunch% down} 
+				sleep %lag% 
+				while (MaxIndex > 1 && (GetKeyState(weakPunch, "P"))) { 
+					sleep %lag% 
+					numP := GetAllKeysPressed("P") 
+					MaxIndex := numP.MaxIndex() 
+				} 
+				comboInProgress := 1 
+				buttonDown := 0 
+				send {%mediumPunch% up} 
+			}
+			if(GetKeyState(weakKick, "P") && buttonDown == 0) { 
+				numP := GetAllKeysPressed("P") 
+				MaxIndex := numP.MaxIndex() 
+				buttonDown := 1 
+				comboInProgress := 0 
+				send {%mediumKick% down} 
+				sleep %lag% 
+				while (MaxIndex > 1 && (GetKeyState(weakKick, "P"))) { 
+					sleep %lag% 
+					numP := GetAllKeysPressed("P") 
+					MaxIndex := numP.MaxIndex() 
+				} 
+				comboInProgress := 1 
+				buttonDown := 0 
+				send {%mediumKick% up} 
+			} 	 
 		}
 		send {%hardPunch% up}
 		send {%hardKick% up}
