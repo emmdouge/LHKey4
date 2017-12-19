@@ -101,7 +101,7 @@ CHARGE:
 	if(roll != lock) {
 		roll := on
 		send {%charge% down}
-		gosub vTrigger
+		gosub grab
 	}
 exit
 
@@ -155,7 +155,7 @@ TWODOWN:
     ;2+2
     if(instr(A_PriorKey, grab) && ((A_TimeSincePriorHotkey, grab) < 100) && ((A_TimeSincePriorHotkey, grab) > pollingRate)) {
         roll := lock
-        gosub grab
+        gosub vTrigger
     }
 	else if (MaxIndex == 1)  {
 		roll := off	;roll will be unlocked when no keys on the keyboard are pressed
