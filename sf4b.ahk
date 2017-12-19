@@ -101,7 +101,7 @@ CHARGE:
 	if(roll != lock) {
 		roll := on
 		send {%charge% down}
-		gosub grab
+		gosub vSkill
 	}
 exit
 
