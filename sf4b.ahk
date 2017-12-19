@@ -53,6 +53,7 @@ lock = -1	;input will not be registered until no keys are being pressed on the k
 comboInProgress := 0
 pollingRate := 35
 weakPunchHeld := 0
+weakKickHeld := 0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;	LOGIC
@@ -154,7 +155,7 @@ TWODOWN:
 	numP := GetAllKeysPressed("P")
 	MaxIndex := numP.MaxIndex()
     ;2+2
-    if(instr(A_PriorKey, grab) && ((A_TimeSincePriorHotkey, grab) < 100) && ((A_TimeSincePriorHotkey, grab) > pollingRate) && weakPunchHeld == 0) {
+    if(instr(A_PriorKey, grab) && ((A_TimeSincePriorHotkey, grab) < 100) && ((A_TimeSincePriorHotkey, grab) > pollingRate) && (weakPunchHeld == 0 && weakKickHeld == 0)) {
         roll := lock
         gosub vTrigger
     }
@@ -207,11 +208,11 @@ THREEDOWN:
 		}
 		else {          
             ;pressing weakKick while middle button is held
-            if(MaxIndex == 2 && GetKeyState(grab, "P")) {
+            if(MaxIndex == 2 && GetKeyState(grab, "P") && weakKickHeld == 0) {
                 roll := lock
                 gosub mediumKick
             }
-            else if (MaxIndex == 1) {
+            else if (MaxIndex == 1 && weakKickHeld == 0) {
                 roll := lock
 			    gosub weakKick
             }
@@ -239,14 +240,6 @@ exit
 
 
 TWOUP:
-isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
-;if you overheld 2(or roll is off) or didn't roll
-if (!isModified && roll != lock && (instr(A_PriorKey, grab)) || (instr(A_PriorKey, up)) || (instr(A_PriorKey, down)) || (instr(A_PriorKey, left)) || (instr(A_PriorKey, right))) {
-	;gosub grab
-	if (roll != lock) {
-		roll := off
-	}
-}
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
 if (MaxIndex < 1 && comboInProgress == 0)  {
@@ -336,7 +329,8 @@ weakPunch:
 		send {%weakPunch% down}
         numP := GetAllKeysPressed("P")
         MaxIndex := numP.MaxIndex()
-		while (MaxIndex > 0 && GetKeyState(grab, "P") == 0) {
+		sleep %lag%
+		while (MaxIndex == 1 && GetKeyState(grab, "P") == 0) {
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
@@ -354,7 +348,7 @@ weakKick:
 		send {%weakKick% down}
         numP := GetAllKeysPressed("P")
         MaxIndex := numP.MaxIndex()
-		while (MaxIndex > 0 && GetKeyState(grab, "P") == 0) {
+		while (MaxIndex == 1 && GetKeyState(grab, "P") == 0) {
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
@@ -424,6 +418,21 @@ hardPunch:
 				comboInProgress := 1 
 				send {%hardPunch% up} 
 			}
+			else if(GetKeyState(weakKick, "P") && buttonDown == 0 && weakPunchHeld == 1) { 
+				numP := GetAllKeysPressed("P") 
+				MaxIndex := numP.MaxIndex() 
+				buttonDown := 1 
+				comboInProgress := 0 
+				send {%mediumKick% down} 
+				sleep %lag% 
+				while (MaxIndex > 1 && (GetKeyState(weakKick, "P"))) { 
+					sleep %lag% 
+					numP := GetAllKeysPressed("P") 
+					MaxIndex := numP.MaxIndex() 
+				} 
+				comboInProgress := 1 
+				send {%mediumKick% up} 
+			}
 			else if(GetKeyState(weakPunch, "P") && buttonDown == 0 && grabHeld == 1) { 
 				numP := GetAllKeysPressed("P") 
 				MaxIndex := numP.MaxIndex() 
@@ -478,26 +487,26 @@ hardKick:
 		numP := GetAllKeysPressed("P") 
 		MaxIndex := numP.MaxIndex() 
 		buttonDown := 0
-        hardKickRelease := 0
+        weakKickHeld := 0
+        grabHeld := 0
 		sleep %lag% 
-		while (MaxIndex > 0) { 
-			if(GetKeyState(weakKick, "P") && buttonDown == 0 && hardKickRelease == 1) { 
+		while (MaxIndex > 0) { 	 
+			if(GetKeyState(grab, "P") && buttonDown == 0 && weakKickHeld == 1) { 
 				numP := GetAllKeysPressed("P") 
 				MaxIndex := numP.MaxIndex() 
 				buttonDown := 1 
 				comboInProgress := 0 
-				send {%mediumKick% down} 
+				send {%hardKick% down} 
 				sleep %lag% 
-				while (MaxIndex > 1 && (GetKeyState(weakKick, "P"))) { 
+				while (MaxIndex > 1 && (GetKeyState(grab, "P"))) { 
 					sleep %lag% 
 					numP := GetAllKeysPressed("P") 
 					MaxIndex := numP.MaxIndex() 
 				} 
 				comboInProgress := 1 
-				buttonDown := 0 
-				send {%mediumKick% up} 
-			} 	 
-			if(GetKeyState(weakPunch, "P") && buttonDown == 0 && hardKickRelease == 1) { 
+				send {%hardKick% up} 
+			}
+			else if(GetKeyState(weakPunch, "P") && buttonDown == 0 && weakKickHeld == 1) { 
 				numP := GetAllKeysPressed("P") 
 				MaxIndex := numP.MaxIndex() 
 				buttonDown := 1 
@@ -510,12 +519,47 @@ hardKick:
 					MaxIndex := numP.MaxIndex() 
 				} 
 				comboInProgress := 1 
-				buttonDown := 0 
 				send {%mediumPunch% up} 
 			}
+			else if(GetKeyState(weakPunch, "P") && buttonDown == 0 && grabHeld == 1) { 
+				numP := GetAllKeysPressed("P") 
+				MaxIndex := numP.MaxIndex() 
+				buttonDown := 1 
+				comboInProgress := 0 
+				send {%mediumPunch% down} 
+				sleep %lag% 
+				while (MaxIndex > 1 && (GetKeyState(weakPunch, "P"))) { 
+					sleep %lag% 
+					numP := GetAllKeysPressed("P") 
+					MaxIndex := numP.MaxIndex() 
+				} 
+				comboInProgress := 1 
+				send {%mediumPunch% up} 
+			}
+			else if(GetKeyState(weakKick, "P") && buttonDown == 0 && grabHeld == 1) { 
+				numP := GetAllKeysPressed("P") 
+				MaxIndex := numP.MaxIndex() 
+				buttonDown := 1 
+				comboInProgress := 0 
+				send {%mediumKick% down} 
+				sleep %lag% 
+				while (MaxIndex > 1 && (GetKeyState(weakKick, "P"))) { 
+					sleep %lag% 
+					numP := GetAllKeysPressed("P") 
+					MaxIndex := numP.MaxIndex() 
+				} 
+				comboInProgress := 1 
+				send {%mediumKick% up} 
+			} 
             if(GetKeyState(weakKick, "P") == 0) {
-                hardKickRelease := 1
+                grabHeld := 1
+                weakKickHeld := 0
+            } 
+            else if(GetKeyState(grab, "P") == 0) {
+                weakKickHeld := 1
+                grabHeld := 0
             }
+			buttonDown := 0 
 		}
 		send {%hardKick% up} 
 		comboInProgress := 0
@@ -572,9 +616,10 @@ vTrigger:
 		send {%hardPunch% down}
 		send {%hardKick% down}
 		MaxIndex := 1
+        grabHeld := 1
 		buttonDown := 0
-		while (MaxIndex > 0) {
-			if(GetKeyState(weakPunch, "P") && buttonDown == 0) { 
+		while (grabHeld == 1) {
+			if(GetKeyState(weakPunch, "P") && buttonDown == 0 && grabHeld == 1) { 
 				numP := GetAllKeysPressed("P") 
 				MaxIndex := numP.MaxIndex() 
 				buttonDown := 1 
@@ -587,25 +632,27 @@ vTrigger:
 					MaxIndex := numP.MaxIndex() 
 				} 
 				comboInProgress := 1 
-				buttonDown := 0 
 				send {%mediumPunch% up} 
 			}
-			if(GetKeyState(weakKick, "P") && buttonDown == 0) { 
+			else if(GetKeyState(weakKick, "P") && buttonDown == 0 && grabHeld == 1) { 
 				numP := GetAllKeysPressed("P") 
 				MaxIndex := numP.MaxIndex() 
 				buttonDown := 1 
 				comboInProgress := 0 
 				send {%mediumKick% down} 
 				sleep %lag% 
-				while (MaxIndex > 1 && (GetKeyState(weakKick, "P"))) { 
+				while (MaxIndex > 1 && (GetKeyState(grab, "P"))) { 
 					sleep %lag% 
 					numP := GetAllKeysPressed("P") 
 					MaxIndex := numP.MaxIndex() 
 				} 
 				comboInProgress := 1 
-				buttonDown := 0 
 				send {%mediumKick% up} 
-			} 	 
+			} 
+            if(GetKeyState(grab, "P") == 0) {
+                grabHeld := 0
+            }
+			buttonDown := 0 	 
 		}
 		send {%hardPunch% up}
 		send {%hardKick% up}
