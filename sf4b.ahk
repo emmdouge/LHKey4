@@ -408,6 +408,8 @@ hardPunch:
 				MaxIndex := numP.MaxIndex() 
 				buttonDown := 1 
 				comboInProgress := 0 
+				send {%hardPunch% up} 
+				sleep %lag% 
 				send {%hardPunch% down} 
 				sleep %lag% 
 				while (MaxIndex > 1 && (GetKeyState(weakPunch, "P"))) { 
@@ -496,6 +498,8 @@ hardKick:
 				MaxIndex := numP.MaxIndex() 
 				buttonDown := 1 
 				comboInProgress := 0 
+				send {%hardKick% up} 
+				sleep %lag% 
 				send {%hardKick% down} 
 				sleep %lag% 
 				while (MaxIndex > 1 && (GetKeyState(grab, "P"))) { 
