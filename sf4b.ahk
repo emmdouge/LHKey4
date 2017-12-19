@@ -52,6 +52,7 @@ on = 200	;key must be overheld to press original key, or rolled to another key w
 lock = -1	;input will not be registered until no keys are being pressed on the keyboard aka roll cannot be in progress
 comboInProgress := 0
 pollingRate := 35
+weakPunchHeld := 0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;	LOGIC
@@ -135,11 +136,11 @@ ONEDOWN:
 		}
 		else {          
             ;pressing weakpunch while middle button is held
-            if(MaxIndex == 2 && GetKeyState(grab, "P")) {
+            if(MaxIndex == 2 && GetKeyState(grab, "P") && weakPunchHeld == 0) {
                 roll := lock
                 gosub mediumPunch
             }
-            else if (MaxIndex == 1) {
+            else if (MaxIndex == 1 && weakPunchHeld == 0) {
                 roll := lock
 			    gosub weakPunch
             }
@@ -153,7 +154,7 @@ TWODOWN:
 	numP := GetAllKeysPressed("P")
 	MaxIndex := numP.MaxIndex()
     ;2+2
-    if(instr(A_PriorKey, grab) && ((A_TimeSincePriorHotkey, grab) < 100) && ((A_TimeSincePriorHotkey, grab) > pollingRate)) {
+    if(instr(A_PriorKey, grab) && ((A_TimeSincePriorHotkey, grab) < 100) && ((A_TimeSincePriorHotkey, grab) > pollingRate) && weakPunchHeld == 0) {
         roll := lock
         gosub vTrigger
     }
@@ -221,18 +222,8 @@ THREEDOWN:
 exit
 
 ONEUP:
-isModified :=  (GetKeyState("Space", "P") || GetKeyState("Control", "P") || GetKeyState("CapsLock", "P") || GetKeyState("Tab", "P"))
-;if you overheld 1(or roll is off) or didn't roll
-if (!isModified && roll != lock && (((A_TimeSincePriorHotkey, weakPunch) >= roll))) {
-	if(!GetKeyState(grab, "P")) {
-		gosub weakPunch
-	}
-	if (roll != lock) {
-		roll := off
-	}
-}
 ;if you rolled 1 -> 2
-else if (roll != lock && instr(A_PriorKey, grab) && (A_TimeSincePriorHotkey, grab) < roll) {
+if (roll != lock && instr(A_PriorKey, grab) && (A_TimeSincePriorHotkey, grab) < roll) {
 	gosub exPunch
 }
 ;if you rolled 1 -> 3
@@ -414,10 +405,26 @@ hardPunch:
 		numP := GetAllKeysPressed("P") 
 		MaxIndex := numP.MaxIndex() 
 		buttonDown := 0
-        hardPunchRelease := 0
+        weakPunchHeld := 0
+        grabHeld := 0
 		sleep %lag% 
-		while (MaxIndex > 0) { 
-			if(GetKeyState(weakPunch, "P") && buttonDown == 0 && hardPunchRelease == 1) { 
+		while (MaxIndex > 0) { 	 
+			if(GetKeyState(grab, "P") && buttonDown == 0 && weakPunchHeld == 1) { 
+				numP := GetAllKeysPressed("P") 
+				MaxIndex := numP.MaxIndex() 
+				buttonDown := 1 
+				comboInProgress := 0 
+				send {%hardPunch% down} 
+				sleep %lag% 
+				while (MaxIndex > 1 && (GetKeyState(weakPunch, "P"))) { 
+					sleep %lag% 
+					numP := GetAllKeysPressed("P") 
+					MaxIndex := numP.MaxIndex() 
+				} 
+				comboInProgress := 1 
+				send {%hardPunch% up} 
+			}
+			else if(GetKeyState(weakPunch, "P") && buttonDown == 0 && grabHeld == 1) { 
 				numP := GetAllKeysPressed("P") 
 				MaxIndex := numP.MaxIndex() 
 				buttonDown := 1 
@@ -430,10 +437,9 @@ hardPunch:
 					MaxIndex := numP.MaxIndex() 
 				} 
 				comboInProgress := 1 
-				buttonDown := 0 
 				send {%mediumPunch% up} 
 			}
-			if(GetKeyState(weakKick, "P") && buttonDown == 0 && hardPunchRelease == 1) { 
+			else if(GetKeyState(weakKick, "P") && buttonDown == 0 && grabHeld == 1) { 
 				numP := GetAllKeysPressed("P") 
 				MaxIndex := numP.MaxIndex() 
 				buttonDown := 1 
@@ -446,14 +452,20 @@ hardPunch:
 					MaxIndex := numP.MaxIndex() 
 				} 
 				comboInProgress := 1 
-				buttonDown := 0 
 				send {%mediumKick% up} 
-			} 	 
+			} 
             if(GetKeyState(weakPunch, "P") == 0) {
-                hardPunchRelease := 1
+                grabHeld := 1
+                weakPunchHeld := 0
+            } 
+            else if(GetKeyState(grab, "P") == 0) {
+                weakPunchHeld := 1
+                grabHeld := 0
             }
+			buttonDown := 0 
 		}
 		send {%hardPunch% up} 
+		weakPunchHeld := 0
 		comboInProgress := 0
 		roll := off
 	}
