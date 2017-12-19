@@ -51,7 +51,7 @@ off = 0		;key immediately pressed on up aka roll can be in progress
 on = 200	;key must be overheld to press original key, or rolled to another key within time specified aka roll is currently in progress
 lock = -1	;input will not be registered until no keys are being pressed on the keyboard aka roll cannot be in progress
 comboInProgress := 0
-pollingRate := 40
+pollingRate := 35
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;	LOGIC
