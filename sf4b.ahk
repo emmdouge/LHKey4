@@ -92,7 +92,7 @@ CHARGE:
 	;2+C
 	if(instr(A_PriorKey, grab) && ((A_TimeSincePriorHotkey, grab) < combo)) {
 		roll := lock
-		gosub vSkill
+		gosub threeKick
 	}
 	;3+C
 	if(instr(A_PriorKey, weakKick) && ((A_TimeSincePriorHotkey, weakKick) < combo)) {
