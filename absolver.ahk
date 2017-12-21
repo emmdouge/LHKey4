@@ -143,7 +143,7 @@ ONEDOWN:
 			}
 			;2+1+C
 			else {
-				gosub threePunch
+				gosub action
 			}
 		}
 		else {       
@@ -240,14 +240,6 @@ THREEDOWN:
 exit
 
 ONEUP:
-;if you rolled 1 -> 2
-if (roll != lock && instr(A_PriorKey, grab) && (A_TimeSincePriorHotkey, grab) < roll) {
-	gosub action
-}
-;if you rolled 1 -> 3
-else if (roll != lock && instr(A_PriorKey, weakKick) && (A_TimeSincePriorHotkey, weakKick) < roll) {
-	gosub threePunch
-}
 numP := GetAllKeysPressed("P")
 MaxIndex := numP.MaxIndex()
 if (MaxIndex < 1)  {
@@ -281,18 +273,6 @@ if (MaxIndex < 1)  {
 }
 exit 
 
-
-threePunch:
-	send {%weakPunch% down}
-	send {%mediumPunch% down}
-	send {%hardPunch% down}
-	sleep %lag%
-	send {%weakPunch% up}
-	send {%mediumPunch% up}
-	send {%hardPunch% up}
-	roll := lock
-return
-
 dodge:
 	send {RAlt down}
 	sleep %lag%
@@ -308,14 +288,19 @@ action:
 return
 
 special:
-	; Move the mouse slowly (speed 50 vs. 2) by 20 pixels to the right and 30 pixels down
-	; from its current location:
-	MouseMove, 500, 50, 0, R
-	sleep %lag%
 	numP := GetAllKeysPressed("P")
 	MaxIndex := numP.MaxIndex()
-	while(MaxIndex > 0) 
+	while(MaxIndex > 2) 
 	{
+		MouseMove, 0, 75,R
+		Sleep 25
+		MouseMove, 75, 0,R
+		Sleep 25
+		MouseMove, 0, -75,,R
+		Sleep 25
+		MouseMove, -75, 0,R
+		Sleep 25
+		MouseGetPos, NEA, NEB
 		numP := GetAllKeysPressed("P")
 		MaxIndex := numP.MaxIndex()
 	}
