@@ -323,7 +323,9 @@ special:
 return
 
 QAttack:
-    send {q down}
+	if(GetKeyState("LShift", "P") == 0) {
+    	send {q down}
+	}
 	sleep %lag%
 	sleep %lag%
 	numP := GetAllKeysPressed("P")
@@ -335,17 +337,16 @@ QAttack:
     	send {q up}
     }
     else if(GetKeyState("LShift", "P")) {
-    	send {q up}
-		send {Numpad1 down}
+		send {1 down}
 		sleep %lag%
 		numP := GetAllKeysPressed("P")
 		MaxIndex := numP.MaxIndex()
-        while(MaxIndex > 0)
+        while(MaxIndex > 1)
         {
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
 		}
-		send {Numpad1 up}
+		send {1 up}
     }
     else {
 		send {Click down}
@@ -357,33 +358,35 @@ return
 
 
 EAttack: 
-    send {e down}
+	if(GetKeyState("LShift", "P") == 0) {
+    	send {e down}
+	}
 	sleep %lag%
 	sleep %lag%
     if(GetKeyState(up, "P")) {
 		send {Click, down, right}
 		sleep %lag%
 		send {Click, up, right}
+    	send {e up}
     }
     else if(GetKeyState("LShift", "P")) {
-    	send {q up}
-		send {Numpad3 down}
+		send {3 down}
 		sleep %lag%
 		numP := GetAllKeysPressed("P")
 		MaxIndex := numP.MaxIndex()
-        while(MaxIndex > 0)
+        while(MaxIndex > 1)
         {
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
 		}
-		send {Numpad3 up}
+		send {3 up}
     }
     else {
 		send {Click down}
 		sleep %lag%
 		send {Click up}
+    	send {e up}
     }
-    send {e up}
 return
 
 ZAttack:
