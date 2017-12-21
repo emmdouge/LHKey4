@@ -29,6 +29,7 @@ up := "w"
 , two := "4joy9"
 , three := "4joy2"
 , four := "4joy8"
+, five := "4joy15"
 
 , weakPunch := "u"
 , upperQ := "U"
@@ -108,7 +109,7 @@ CHARGE:
 		gosub action
 	}
 	;2+C
-	if(instr(A_PriorKey, grab) && ((A_TimeSincePriorHotkey, grab) < combo)) {
+	if(instr(A_PriorKey, grab) && ((A_TimeSincePriorHotkey, grab) < combo*4)) {
 		roll := lock
 		gosub dodge
 	}
@@ -155,16 +156,16 @@ ONEDOWN:
 		}
 		else {       
             ;pressing weakpunch while middle button is held
-            if((MaxIndex == 2 && GetKeyState(grab, "P")) || (MaxIndex == 3 && GetKeyState(upperGrab, "P"))) {
+            if((MaxIndex == 2 && GetKeyState(two, "D")) || (MaxIndex == 3 && GetKeyState(two, "D"))) {
                 roll := lock
                 gosub switchL
             }
-            else if(MaxIndex == 2 && GetKeyState(grab, "P") && GetKeyState(charge, "P")) {
+            else if(MaxIndex == 2 && GetKeyState(two, "D") && GetKeyState(four, "D")) {
                 roll := lock
                 gosub guard
             }
-            else if ((MaxIndex == 1 || (MaxIndex == 2 && GetKeyState(upperQ, "P")) || (MaxIndex == 2 && GetKeyState(up, "P")) || (MaxIndex == 2 && GetKeyState(weakKick, "P")))) {
-			    gosub QAttack
+            else if ((MaxIndex == 1 || (MaxIndex == 2 && GetKeyState(one, "D")) || (MaxIndex == 2 && GetKeyState(up, "D")) || (MaxIndex == 2 && GetKeyState(three, "D")))) {
+				gosub QAttack
             }
 		}
 		exit
@@ -229,15 +230,15 @@ THREEDOWN:
 		}
 		else {          
             ;pressing weakKick while middle button is held
-            if(MaxIndex == 2 && GetKeyState(grab, "P") || (MaxIndex == 3 && GetKeyState(upperGrab, "P"))) {
+            if(MaxIndex == 2 && GetKeyState(two, "D") || (MaxIndex == 3 && GetKeyState(two, "D"))) {
                 roll := lock
                 gosub switchR
             }
-            else if(MaxIndex == 2 && GetKeyState(grab, "P") && GetKeyState(charge, "P")) {
+            else if(MaxIndex == 2 && GetKeyState(two, "D") && GetKeyState(four, "D")) {
                 roll := lock
                 gosub guard
             }
-            else if ((MaxIndex == 1 || (MaxIndex == 2 && GetKeyState(upperE, "P")) || (MaxIndex == 2 && GetKeyState(up, "P")) || (MaxIndex == 2 && GetKeyState(weakPunch, "P")))) {
+            else if ((MaxIndex == 1 || (MaxIndex == 2 && GetKeyState(three, "D")) || (MaxIndex == 2 && GetKeyState(up, "D")) || (MaxIndex == 2 && GetKeyState(one, "D")))) {
 			    gosub EAttack
             }
 		}
@@ -315,20 +316,20 @@ special:
 return
 
 QAttack:
-	if(GetKeyState("LShift", "P") == 0) {
+	if(GetKeyState(five, "D") == 0) {
     	send {q down}
 	}
 	sleep %lag%
 	sleep %lag%
 	numP := GetAllKeysPressed("P")
 	MaxIndex := numP.MaxIndex()
-    if(GetKeyState(up, "P")) {
+    if(GetKeyState(up, "D")) {
 		send {Click, down, right}
 		sleep %lag%
 		send {Click, up, right}
     	send {q up}
     }
-    else if(GetKeyState("LShift", "P")) {
+    else if(GetKeyState(five, "D")) {
 		send {1 down}
 		sleep %lag%
 		numP := GetAllKeysPressed("P")
@@ -350,18 +351,18 @@ return
 
 
 EAttack: 
-	if(GetKeyState("LShift", "P") == 0) {
+	if(GetKeyState(five, "D") == 0) {
     	send {e down}
 	}
 	sleep %lag%
 	sleep %lag%
-    if(GetKeyState(up, "P")) {
+    if(GetKeyState(up, "D")) {
 		send {Click, down, right}
 		sleep %lag%
 		send {Click, up, right}
     	send {e up}
     }
-    else if(GetKeyState("LShift", "P")) {
+    else if(GetKeyState(five, "D")) {
 		send {3 down}
 		sleep %lag%
 		numP := GetAllKeysPressed("P")
@@ -387,7 +388,7 @@ ZAttack:
 		send {z down}
         sleep %lag%
 		sleep %lag%
-    	if(GetKeyState(up, "P")) {
+    	if(GetKeyState(up, "D")) {
 			send {Click, down, right}
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
@@ -423,7 +424,7 @@ CAttack:
 		send {c down}
         sleep %lag%
 		sleep %lag%
-    	if(GetKeyState(up, "P")) {
+    	if(GetKeyState(up, "D")) {
 			send {Click, down, right}
 			sleep %lag%
 			numP := GetAllKeysPressed("P")
@@ -486,18 +487,18 @@ guard:
 		MaxIndex := 1
         grabHeld := 1
 		buttonDown := 0
-		while (grabHeld == 1 || GetKeyState(charge, "P")) {
+		while (grabHeld == 1 || GetKeyState(four, "D")) {
 			if(GetKeyState(weakPunch, "P") && buttonDown == 0 && grabHeld == 1) { 
 				buttonDown := 1 
 				comboInProgress := 0
                 gosub ZAttack
 			}
-			else if(GetKeyState(weakKick, "P") && buttonDown == 0 && grabHeld == 1) { 
+			else if(GetKeyState(three, "D") && buttonDown == 0 && grabHeld == 1) { 
 				buttonDown := 1 
 				comboInProgress := 0
                 gosub CAttack
 			}
-            if(GetKeyState(grab, "P") == 0) {
+            if(GetKeyState(two, "D") == 0) {
                 grabHeld := 0
             }
 			buttonDown := 0 	 
@@ -521,17 +522,17 @@ LockTarget:
 				comboInProgress := 0
                 gosub ZAttack
 			}
-			else if(GetKeyState(weakKick, "P") && buttonDown == 0 && grabHeld == 1) { 
+			else if(GetKeyState(three, "D") && buttonDown == 0 && grabHeld == 1) { 
 				buttonDown := 1 
 				comboInProgress := 0
                 gosub CAttack
 			} 
-			else if(GetKeyState(charge, "P") && buttonDown == 0 && grabHeld == 1) { 
+			else if(GetKeyState(four, "D") && buttonDown == 0 && grabHeld == 1) { 
 				buttonDown := 1 
 				comboInProgress := 0
                 gosub guard
 			} 
-            if(GetKeyState(grab, "P") == 0) {
+            if(GetKeyState(two, "D") == 0) {
                 grabHeld := 0
             }
 			buttonDown := 0 	 
