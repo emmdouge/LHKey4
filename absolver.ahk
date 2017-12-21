@@ -33,12 +33,17 @@ up := "w"
 , hardPunch := "4"
 , hardKick := "3"
 
+
+Hotkey, +%weakPunch%, ONEDOWN
+Hotkey, +%weakPunch% up, ONEUP
 Hotkey, %weakPunch%, ONEDOWN
 Hotkey, %weakPunch% up, ONEUP
 
 Hotkey, %grab%, TWODOWN
 Hotkey, %grab% up, TWOUP
 
+Hotkey, +%weakKick%, THREEDOWN
+Hotkey, +%weakKick% up, THREEUP
 Hotkey, %weakKick%, THREEDOWN
 Hotkey, %weakKick% up, THREEUP
 
@@ -54,6 +59,9 @@ comboInProgress := 0
 pollingRate := 35
 weakPunchHeld := 0
 weakKickHeld := 0
+
+;CHANGE LEFT SIDE
+RAlt::RAlt
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;	LOGIC
@@ -145,7 +153,7 @@ ONEDOWN:
                 roll := lock
                 gosub vSkill
             }
-            else if ((MaxIndex == 1 || (MaxIndex == 2 && GetKeyState(weakKick, "P"))) && weakPunchHeld == 0) {
+            else if ((MaxIndex == 1 || (MaxIndex == 2 && GetKeyState("LShift", "P")) || (MaxIndex == 2 && GetKeyState(weakKick, "P"))) && weakPunchHeld == 0) {
 			    gosub weakPunch
             }
 		}
@@ -219,7 +227,7 @@ THREEDOWN:
                 roll := lock
                 gosub vSkill
             }
-            else if ((MaxIndex == 1 || (MaxIndex == 2 && GetKeyState(weakPunch, "P"))) && weakKickHeld == 0) {
+            else if ((MaxIndex == 1 || (MaxIndex == 2 && GetKeyState("LShift", "P")) || (MaxIndex == 2 && GetKeyState(weakPunch, "P"))) && weakKickHeld == 0) {
 			    gosub weakKick
             }
 		}
@@ -283,13 +291,9 @@ threePunch:
 return
 
 threeKick:
-	send {%weakKick% down}
-	send {%mediumKick% down}
-	send {%hardKick% down}
+	send {RAlt down}
 	sleep %lag%
-	send {%weakKick% up}
-	send {%mediumKick% up}
-	send {%hardKick% up}
+	send {RAlt up}
 	roll := lock
 return
 
@@ -312,22 +316,36 @@ exKick:
 return
 
 weakPunch:
-		send {q down}
-        sleep %lag%
+    send {q down}
+    sleep %lag%
+    if(GetKeyState("LShift", "P")) {
+		send {Click, down, right}
+		sleep %lag%
+		send {Click, up, right}
+    }
+    else {
 		send {Click down}
 		sleep %lag%
 		send {Click up}
-		send {q up}
+    }
+    send {q up}
 return
 
 
 weakKick: 
-		send {e down}
-        sleep %lag%
+    send {e down}
+    sleep %lag%
+    if(GetKeyState("LShift", "P")) {
 		send {Click, down, right}
 		sleep %lag%
 		send {Click, up, right}
-		send {e up}
+    }
+    else {
+		send {Click down}
+		sleep %lag%
+		send {Click up}
+    }
+    send {e up}
 return
 
 mediumPunch:
@@ -606,8 +624,7 @@ return
 vSkill:
   if(comboInProgress == 0) { 
 		comboInProgress := 1 
-		send {%mediumPunch% down}
-		send {%mediumKick% down}
+		send {%charge% down}
 		sleep %lag% 
 		MaxIndex := 1
         grabHeld := 1
@@ -668,8 +685,7 @@ vSkill:
 			} 
 			buttonDown := 0 	 
 		}
-		send {%mediumPunch% up}
-		send {%mediumKick% up}
+		send {%charge% up}
 		comboInProgress := 0
 		roll := off 
 	}

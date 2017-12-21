@@ -1,0 +1,41 @@
+2017/12/20 21:14:31.818 Info   Starting JoyToKey Ver5.9
+2017/12/20 21:14:31.818 Info   ExeFile=C:\Users\Herby\git\Kee4\JoyToKey_en\JoyToKey.exe
+2017/12/20 21:14:31.818 Info   ConfigDir=C:\Users\Herby\git\Kee4\JoyToKey_en\
+2017/12/20 21:14:31.818 Info   IniFile=C:\Users\Herby\git\Kee4\JoyToKey_en\JoyToKey.ini
+2017/12/20 21:14:31.818 Info   Windows Version = 6.2
+2017/12/20 21:14:32.476 Info   Loaded VistaAPI.dll (Utils\Utils.cpp#226)
+2017/12/20 21:14:32.486 Info   LicenseKey "" is not valid
+2017/12/20 21:14:32.596 Info   Loading XInput1_3.dll (Joystick.cpp#128)
+2017/12/20 21:14:32.627 Info   Initialized XInput (Joystick.cpp#146)
+2017/12/20 21:14:32.686 Info   Detected a DI joystick: {C9BC4D30-CCB4-11E7-8003-444553540000}, vJoy Device, vJoy Device
+2017/12/20 21:14:32.686 Info   Preferred index = -1
+2017/12/20 21:14:32.692 Info   numAxis = 8
+2017/12/20 21:14:32.692 Info   numPOVs = 0
+2017/12/20 21:14:32.692 Info   numButtons = 10
+2017/12/20 21:14:32.692 Info   EnumDeviceObject: Axis offset=0 type=1000002 name=X Axis
+2017/12/20 21:14:32.692 Info   EnumDeviceObject: Axis offset=4 type=1000102 name=Y Axis
+2017/12/20 21:14:32.692 Info   EnumDeviceObject: Axis offset=8 type=202 name=Z Axis
+2017/12/20 21:14:32.692 Info   EnumDeviceObject: Axis offset=12 type=302 name=X Rotation
+2017/12/20 21:14:32.692 Info   EnumDeviceObject: Axis offset=16 type=402 name=Y Rotation
+2017/12/20 21:14:32.693 Info   EnumDeviceObject: Axis offset=20 type=502 name=Z Rotation
+2017/12/20 21:14:32.693 Info   EnumDeviceObject: Axis offset=24 type=602 name=Slider
+2017/12/20 21:14:32.693 Info   EnumDeviceObject: Axis offset=28 type=702 name=Dial
+2017/12/20 21:14:32.694 Info   Detected a DI joystick: {2318BFD0-23A5-11E7-8004-444553540000}, Virtual Hid Device, Virtual Hid Device
+2017/12/20 21:14:32.694 Info   Preferred index = -1
+2017/12/20 21:14:32.695 Info   numAxis = 6
+2017/12/20 21:14:32.695 Info   numPOVs = 1
+2017/12/20 21:14:32.695 Info   numButtons = 24
+2017/12/20 21:14:32.695 Info   EnumDeviceObject: Axis offset=0 type=502 name=Z Rotation
+2017/12/20 21:14:32.695 Info   EnumDeviceObject: Axis offset=4 type=402 name=Y Rotation
+2017/12/20 21:14:32.695 Info   EnumDeviceObject: Axis offset=8 type=302 name=X Rotation
+2017/12/20 21:14:32.695 Info   EnumDeviceObject: Axis offset=12 type=202 name=Z Axis
+2017/12/20 21:14:32.695 Info   EnumDeviceObject: Axis offset=16 type=102 name=Y Axis
+2017/12/20 21:14:32.695 Info   EnumDeviceObject: Axis offset=20 type=2 name=X Axis
+2017/12/20 21:14:32.695 Info   DetectJoysticks: Detected 2 DI joystick(s)
+2017/12/20 21:14:32.699 Info   Joystick #1: vJoy Device
+2017/12/20 21:14:32.699 Info   Joystick #2: Virtual Hid Device
+2017/12/20 21:14:32.699 Info   2 joysticks are detected (Joystick.cpp#168)
+2017/12/20 21:14:32.700 Info   ConfigDir=C:\Users\Herby\git\Kee4\JoyToKey_en\*.cfg (ConfigFileManager.cpp#43)
+2017/12/20 21:14:32.795 Info   Failed to find AppLink.dat (AppLink\AppLinkManager.cpp#32)
+2017/12/20 21:14:32.807 Info   TimerInit: Initializing timer with x1 speed mode (interval = 16 msec)
+2017/12/20 21:14:48.868 Info   Application terminated (Utils\LogFile.cpp#20)
