@@ -1,0 +1,29 @@
+(C)Cancel
+(V)Appearance
+	-Set window on top
+	-Transparent(experiment)
+Enable new animation control
+Animation frame rate
+Enable marquee
+Invert marquee direction
+Clear marquee
+Enable auto-clear marquee when no-input is detected
+Set a period of no-input
+(S)Screen
+	-Scalable
+	-Fixed size ratio
+(D)Input Device
+(R)Axis/POV-Switches
+(K)Skin
+(I)Config
+	-Toggle between input A/B
+	-Input A (unchecked) (default across skin)
+	-Input B (checked) (skin-specific)
+(P)Process Priority
+	-High
+	-Above normal
+	-Normal
+	-Below normal
+	-Low
+(A)Info
+(X)Exit
