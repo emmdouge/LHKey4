@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<joystick configversion="19" appversion="2.23">
+    <!--The SDL name for a joystick is included for informational purposes only.-->
+    <sdlname>USB GamePad</sdlname>
+    <!--The GUID for a joystick is included for informational purposes only.-->
+    <guid>8f0e1330000000000000504944564944</guid>
+    <sets>
+        <set index="1">
+            <axis index="1">
+                <throttle>normal</throttle>
+            </axis>
+            <axis index="2">
+                <throttle>normal</throttle>
+            </axis>
+            <axis index="3">
+                <throttle>normal</throttle>
+                <axisbutton index="1">
+                    <slots>
+                        <slot>
+                            <code>0x38</code>
+                            <mode>keyboard</mode>
+                        </slot>
+                    </slots>
+                </axisbutton>
+                <axisbutton index="2">
+                    <slots>
+                        <slot>
+                            <code>0x35</code>
+                            <mode>keyboard</mode>
+                        </slot>
+                    </slots>
+                </axisbutton>
+            </axis>
+            <axis index="4">
+                <throttle>normal</throttle>
+                <axisbutton index="1">
+                    <slots>
+                        <slot>
+                            <code>0x36</code>
+                            <mode>keyboard</mode>
+                        </slot>
+                    </slots>
+                </axisbutton>
+                <axisbutton index="2">
+                    <slots>
+                        <slot>
+                            <code>0x34</code>
+                            <mode>keyboard</mode>
+                        </slot>
+                    </slots>
+                </axisbutton>
+            </axis>
+        </set>
+    </sets>
+</joystick>

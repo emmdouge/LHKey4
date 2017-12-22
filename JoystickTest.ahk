@@ -15,8 +15,7 @@
 ; If you want to unconditionally use a specific joystick number, change
 ; the following value from 0 to the number of the joystick (1-16).
 ; A value of 0 causes the joystick number to be auto-detected:
-JoystickNumber = 0
-
+JoystickNumber = 4
 ; END OF CONFIG SECTION. Do not make changes below this point unless
 ; you wish to alter the basic functionality of the script.
 
@@ -38,7 +37,6 @@ if JoystickNumber <= 0
 		ExitApp
 	}
 }
-
 #SingleInstance
 SetFormat, float, 03  ; Omit decimal point from axis position percentages.
 GetKeyState, joy_buttons, %JoystickNumber%JoyButtons

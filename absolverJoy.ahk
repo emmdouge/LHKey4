@@ -20,6 +20,13 @@ ListLines, Off
 SendMode Input
 SetCapsLockState, AlwaysOff
 
+SetDefaultMouseSpeed, 0 
+distance := 63  how far the mouse moves each turn of the timer
+multiplier = 1.15     ; - how much farther (exponentially) the mouse moves in
+                      ;   a direction the longer you hold that direction down
+CFKM = 45             ; - how often to run the timer
+
+
 up := "w"
 , down := "s"
 , left := "a"
@@ -43,6 +50,7 @@ up := "w"
 , hardPunch := "4"
 , hardKick := "3"
 
+SetTimer, CheckForKeyMouse, %CFKM%
 
 Hotkey, +%weakPunch%, ONEDOWN
 Hotkey, +%weakPunch% up, ONEUP
@@ -73,9 +81,11 @@ weakKickHeld := 0
 ;CHANGE LEFT SIDE
 RAlt::RAlt
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;	LOGIC
 ;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 GetAllKeysPressed(mode = "P") {
 	
@@ -99,6 +109,19 @@ GetAllKeysPressed(mode = "P") {
 	;ToolTip, `nNum Buttons Down: %m%`nButtons Down: %buttons_down%`n`n(right-click the tray icon to exit)
 	return pressed
 }
+
+return
+
+CheckForKeyMouse:
+	GetKeyState("5", "D") ? (d*=multiplier) : (d:=1)
+	GetKeyState("8", "D") ? (u*=multiplier) : (u:=1)
+	GetKeyState("6", "D") ? (r*=multiplier) : (r:=1)
+	GetKeyState("4", "D") ? (l*=multiplier) : (l:=1)
+	distance := 55
+	y := (d-u) * distance
+	x := (r-l) * distance
+	MouseMove, x, y, , R
+return
 
 roll := on
 
