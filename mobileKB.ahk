@@ -166,6 +166,37 @@ UpPRESSED:
                 gosub guard
             }
             else if (MaxIndex == 1) {
+				send {%up% down}
+				sleep %lag%
+				while(GetKeyState(up, "P")) {
+					if(GetKeyState(right, "P") && MaxIndex == 2) {	
+						numP := GetAllKeysPressed("P")
+						MaxIndex := numP.MaxIndex()
+						send {%right% down}
+						while(MaxIndex == 2) {
+							numP := GetAllKeysPressed("P")
+							MaxIndex := numP.MaxIndex()
+						}
+						if(GetKeyState(up, "P")) {
+							send {%right% up}
+							continue
+						}
+					}
+					else if(GetKeyState(left, "P") && MaxIndex == 2) {	
+						numP := GetAllKeysPressed("P")
+						MaxIndex := numP.MaxIndex()
+						send {%left% down}
+						while(MaxIndex == 2) {
+							numP := GetAllKeysPressed("P")
+							MaxIndex := numP.MaxIndex()
+						}
+						if(GetKeyState(up, "P")) {
+							send {%left% up}
+							continue
+						}
+					}
+				}
+				send {%up% up}
             }
 		}
 		exit
@@ -211,6 +242,37 @@ DownPRESSED:
                 gosub guard
             }
             else if (MaxIndex == 1) {
+				send {%down% down}
+				sleep %lag%
+				while(GetKeyState(down, "P")) {
+					if(GetKeyState(right, "P") && MaxIndex == 2) {	
+						numP := GetAllKeysPressed("P")
+						MaxIndex := numP.MaxIndex()
+						send {%right% down}
+						while(MaxIndex == 2) {
+							numP := GetAllKeysPressed("P")
+							MaxIndex := numP.MaxIndex()
+						}
+						if(GetKeyState(down, "P")) {
+							send {%right% up}
+							continue
+						}
+					}
+					else if(GetKeyState(left, "P") && MaxIndex == 2) {	
+						numP := GetAllKeysPressed("P")
+						MaxIndex := numP.MaxIndex()
+						send {%left% down}
+						while(MaxIndex == 2) {
+							numP := GetAllKeysPressed("P")
+							MaxIndex := numP.MaxIndex()
+						}
+						if(GetKeyState(down, "P")) {
+							send {%left% up}
+							continue
+						}
+					}
+				}
+				send {%down% up}
             }
 		}
 		exit
@@ -260,11 +322,11 @@ LeftPRESSED:
 				send {%left% down}
 				sleep %lag%
 				while(GetKeyState(left, "P")) {
-					if(GetKeyState(right, "P")) {	
+					if(GetKeyState(right, "P") && MaxIndex == 2) {	
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%right% down}
-						while(MaxIndex == 2 && GetKeyState(right, "P")) {
+						while(MaxIndex == 2) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -273,7 +335,7 @@ LeftPRESSED:
 							continue
 						}
 					}
-					else if(GetKeyState(down, "P")) {	
+					else if(GetKeyState(down, "P") && MaxIndex == 2) {	
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%down% down}
@@ -281,9 +343,12 @@ LeftPRESSED:
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
-						send {%down% up}
+						if(GetKeyState(left, "P")) {
+							send {%down% up}
+							continue
+						}
 					}
-					else if(GetKeyState(up, "P")) {	
+					else if(GetKeyState(up, "P") && MaxIndex == 2) {	
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%up% down}
@@ -291,19 +356,13 @@ LeftPRESSED:
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
-						send {%up% up}
+						if(GetKeyState(left, "P")) {
+							send {%up% up}
+							continue
+						}
 					}
 				}
 				send {%left% up}
-				if(GetKeyState(right, "P")) {
-					goto RightPRESSED
-				}	
-				else if(GetKeyState(down, "P")) {
-					goto DownPRESSED
-				}
-				else if(GetKeyState(up, "P")) {
-					goto UpPRESSED
-				}
             }
 		}
 		exit
@@ -359,11 +418,11 @@ RightPRESSED:
 				send {%right% down}
 				sleep %lag%
 				while(GetKeyState(right, "P")) {
-					if(GetKeyState(left, "P")) {	
+					if(GetKeyState(left, "P") && MaxIndex == 2) {	
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%left% down}
-						while(MaxIndex == 2 && GetKeyState(left, "P")) {
+						while(MaxIndex == 2) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -372,7 +431,7 @@ RightPRESSED:
 							continue
 						}
 					}
-					else  if(GetKeyState(down, "P")) {	
+					else if(GetKeyState(down, "P") && MaxIndex == 2) {	
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%down% down}
@@ -380,9 +439,12 @@ RightPRESSED:
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
-						send {%down% up}
+						if(GetKeyState(right, "P")) {
+							send {%down% up}
+							continue
+						}
 					}
-					else if(GetKeyState(up, "P")) {	
+					else if(GetKeyState(up, "P") && MaxIndex == 2) {	
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%up% down}
@@ -390,25 +452,98 @@ RightPRESSED:
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
-						send {%up% up}
+						if(GetKeyState(right, "P")) {
+							send {%up% up}
+							continue
+						}
 					}
 				}
 				send {%right% up}
-				if(GetKeyState(left, "P")) {
-					goto LeftPRESSED
-				}	
-				else if(GetKeyState(down, "P")) {
-					goto DownPRESSED
-				}
-				else if(GetKeyState(up, "P")) {
-					goto UpPRESSED
-				}
             }
 		}
 		exit
 	}
 	roll := on
 exit
+
+
+UpRELEASED:
+numP := GetAllKeysPressed("P")
+MaxIndex := numP.MaxIndex()
+if(MaxIndex == 1) {
+	if(GetKeyState(right, "P")) {
+		goto RightPRESSED
+	}
+	else if(GetKeyState(left, "P")) {
+		goto LeftPRESSED
+	}
+	else if(GetKeyState(down, "P")) {
+		goto DownPRESSED
+	}
+}
+numP := GetAllKeysPressed("P")
+MaxIndex := numP.MaxIndex()
+if (MaxIndex < 1)  {
+  roll := off	;roll will be unlocked when no keys on the keyboard are pressed
+}
+exit
+
+DownRELEASED:	
+numP := GetAllKeysPressed("P")
+MaxIndex := numP.MaxIndex()
+if(MaxIndex == 1) {
+	if(GetKeyState(right, "P")) {
+		goto RightPRESSED
+	}
+	else if(GetKeyState(left, "P")) {
+		goto LeftPRESSED
+	}
+	else if(GetKeyState(up, "P")) {
+		goto UpPRESSED
+	}
+}
+if (MaxIndex < 1)  {
+  roll := off	;roll will be unlocked when no keys on the keyboard are pressed
+}
+exit 
+
+LeftRELEASED:
+numP := GetAllKeysPressed("P")
+MaxIndex := numP.MaxIndex()
+if(MaxIndex == 1) {
+	if(GetKeyState(right, "P")) {
+		goto RightPRESSED
+	}
+	else if(GetKeyState(down, "P")) {
+		goto DownPRESSED
+	}
+	else if(GetKeyState(up, "P")) {
+		goto UpPRESSED
+	}
+}
+if (MaxIndex < 1)  {
+  roll := off	;roll will be unlocked when no keys on the keyboard are pressed
+}
+exit 
+
+RightRELEASED:
+numP := GetAllKeysPressed("P")
+MaxIndex := numP.MaxIndex()
+if(MaxIndex == 1) {
+	if(GetKeyState(left, "P")) {
+		goto LeftPRESSED
+	}
+	else if(GetKeyState(down, "P")) {
+		goto DownPRESSED
+	}
+	else if(GetKeyState(up, "P")) {
+		goto UpPRESSED
+	}
+}
+if (MaxIndex < 1)  {
+  roll := off	;roll will be unlocked when no keys on the keyboard are pressed
+}
+exit  
 
 ONEDOWN:
 	numP := GetAllKeysPressed("P")
@@ -529,50 +664,6 @@ THREEDOWN:
 	}
 	roll := on
 exit
-
-UpRELEASED:	
-if(GetKeyState(right, "P")) {
-	goto RightPRESSED
-}
-else if(GetKeyState(left, "P")) {
-	goto LeftPRESSED
-}
-numP := GetAllKeysPressed("P")
-MaxIndex := numP.MaxIndex()
-if (MaxIndex < 1)  {
-  roll := off	;roll will be unlocked when no keys on the keyboard are pressed
-}
-exit
-
-DownRELEASED:	
-if(GetKeyState(right, "P")) {
-	goto RightPRESSED
-}
-else if(GetKeyState(left, "P")) {
-	goto LeftPRESSED
-}
-numP := GetAllKeysPressed("P")
-MaxIndex := numP.MaxIndex()
-if (MaxIndex < 1)  {
-  roll := off	;roll will be unlocked when no keys on the keyboard are pressed
-}
-exit 
-
-LeftRELEASED:
-numP := GetAllKeysPressed("P")
-MaxIndex := numP.MaxIndex()
-if (MaxIndex < 1)  {
-  roll := off	;roll will be unlocked when no keys on the keyboard are pressed
-}
-exit 
-
-RightRELEASED:
-numP := GetAllKeysPressed("P")
-MaxIndex := numP.MaxIndex()
-if (MaxIndex < 1)  {
-  roll := off	;roll will be unlocked when no keys on the keyboard are pressed
-}
-exit  
 
 ONEUP:
 numP := GetAllKeysPressed("P")
