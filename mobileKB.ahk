@@ -195,6 +195,19 @@ UpPRESSED:
 							continue
 						}
 					}
+					else if(GetKeyState(down, "P") && MaxIndex == 2) {	
+						numP := GetAllKeysPressed("P")
+						MaxIndex := numP.MaxIndex()
+						send {%down% down}
+						while(MaxIndex == 2) {
+							numP := GetAllKeysPressed("P")
+							MaxIndex := numP.MaxIndex()
+						}
+						if(GetKeyState(up, "P")) {
+							send {%down% up}
+							continue
+						}
+					}
 				}
 				send {%up% up}
             }
@@ -268,6 +281,19 @@ DownPRESSED:
 						}
 						if(GetKeyState(down, "P")) {
 							send {%left% up}
+							continue
+						}
+					}
+					else if(GetKeyState(up, "P") && MaxIndex == 2) {	
+						numP := GetAllKeysPressed("P")
+						MaxIndex := numP.MaxIndex()
+						send {%up% down}
+						while(MaxIndex == 2) {
+							numP := GetAllKeysPressed("P")
+							MaxIndex := numP.MaxIndex()
+						}
+						if(GetKeyState(down, "P")) {
+							send {%up% up}
 							continue
 						}
 					}
@@ -481,8 +507,6 @@ if(MaxIndex == 1) {
 		goto DownPRESSED
 	}
 }
-numP := GetAllKeysPressed("P")
-MaxIndex := numP.MaxIndex()
 if (MaxIndex < 1)  {
   roll := off	;roll will be unlocked when no keys on the keyboard are pressed
 }
