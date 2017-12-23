@@ -31,8 +31,8 @@ up := "w"
 , weakKick := "o"
 , upperE := "O"
 , charge := "Space"
-, mediumPunch := "7"
-, mediumKick := "c"
+, mediumPunch := "1"
+, mediumKick := "2"
 , hardPunch := "4"
 , hardKick := "3"
 
@@ -307,18 +307,21 @@ DownPRESSED:
 exit
 
 LeftPRESSED:
-    facingRight := 0
+	if(!instr(A_PriorKey, down))  {
+    	facingRight := 0
+	}
 	numP := GetAllKeysPressed("P")
 	MaxIndex := numP.MaxIndex()
 	if (roll == lock) {
 		exit
 	}
 	else {
-        if(instr(A_PriorKey, grab) && ((A_TimeSincePriorHotkey, grab) < combo)) {
+        if(instr(A_PriorKey, down) && ((A_TimeSincePriorHotkey, down) < combo)) {
 			roll := lock
-			KeyWait, %charge%, d t0.025                
-			;2+1
-			if ErrorLevel {       
+			KeyWait, %weakPunch%, d t0.025                
+			;down+left
+			if ErrorLevel {     
+    			facingRight := 0  
 				KeyWait, %weakKick%, d t0.050
 				;2+1
 				if ErrorLevel {       
@@ -329,8 +332,14 @@ LeftPRESSED:
                     gosub special
 				}
 			}
-			;2+1+C
+			;down+left+A
 			else {
+                if(!facingRight) {
+                    gosub qcfA
+                }
+                else {
+                    gosub qcbA
+                }
 				gosub action
 			}
 		}
@@ -397,7 +406,9 @@ LeftPRESSED:
 exit
 
 RightPRESSED:
-    facingRight := 1
+	if(!instr(A_PriorKey, down))  {
+    	facingRight := 1
+	}
 	numP := GetAllKeysPressed("P")
 	MaxIndex := numP.MaxIndex()
 	if (roll == lock) {
@@ -408,7 +419,8 @@ RightPRESSED:
 			roll := lock
 			KeyWait, %weakPunch%, d t0.025       
 			;down+right
-			if ErrorLevel {       
+			if ErrorLevel {
+    			facingRight := 1       
 				KeyWait, %weakKick%, d t0.050
 				;2+1
 				if ErrorLevel {       
@@ -425,7 +437,7 @@ RightPRESSED:
                     gosub qcfA
                 }
                 else {
-                    gosub qcBA
+                    gosub qcbA
                 }
 				gosub action
 			}
@@ -607,7 +619,7 @@ ONEDOWN:
                 gosub guard
             }
             else if ((MaxIndex == 1 || (MaxIndex == 2 && GetKeyState(upperQ, "P")) || (MaxIndex == 2 && GetKeyState(up, "P")) || (MaxIndex == 2 && GetKeyState(weakKick, "P")))) {
-			    gosub QAttack
+			    gosub weakPunch
             }
 		}
 		exit
@@ -758,63 +770,17 @@ action:
 return
 
 qcfA:
-	numP := GetAllKeysPressed("P")
-	MaxIndex := numP.MaxIndex()
-    Send {Blind}{%mediumPunch% down}
-	sleep %lag%
-	sleep %lag%
-	sleep %lag%
-	while(MaxIndex > 1) 
-	{
-	}
-    send {%mediumPunch% up}
-	roll := lock
+    send {%mediumPunch%}
 return
 
 qcbA:
-	numP := GetAllKeysPressed("P")
-	MaxIndex := numP.MaxIndex()
-    send {%mediumKick% down}
-	sleep %lag%
-	while(MaxIndex > 1) 
-	{
-	}
-    send {%mediumKick% up}
-	roll := lock
+    send {%mediumKick%}
 return
 
-QAttack:
-	if(GetKeyState("LShift", "P") == 0) {
-    	send {q down}
-	}
+weakPunch:
+	send {%weakPunch% down}
 	sleep %lag%
-	sleep %lag%
-	numP := GetAllKeysPressed("P")
-	MaxIndex := numP.MaxIndex()
-    if(GetKeyState(up, "P")) {
-		send {Click, down, right}
-		sleep %lag%
-		send {Click, up, right}
-    	send {q up}
-    }
-    else if(GetKeyState("LShift", "P")) {
-		send {1 down}
-		sleep %lag%
-		numP := GetAllKeysPressed("P")
-		MaxIndex := numP.MaxIndex()
-        while(MaxIndex > 1)
-        {
-			numP := GetAllKeysPressed("P")
-			MaxIndex := numP.MaxIndex()
-		}
-		send {1 up}
-    }
-    else {
-		send {Click down}
-		sleep %lag%
-		send {Click up}
-    	send {q up}
-    }
+	send {%weakPunch% up}
 return
 
 
