@@ -826,15 +826,45 @@ qcfA:
 return
 
 qcbA:
-    send {%mediumKick%}
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%mediumKick%  down}
+		gosub releaseDirections
+		while(GetKeyState(weakPunch, "P"))
+		{
+		}
+		send {%mediumKick%  up}
+		comboInProgress := 0
+		gosub nextDirection
+	}
 return
 
 qcfB:
-    send {%hardPunch%}
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%hardPunch%  down}
+		gosub releaseDirections
+		while(GetKeyState(weakKick, "P"))
+		{
+		}
+		send {%hardPunch%  up}
+		comboInProgress := 0
+		gosub nextDirection
+	}
 return
 
 qcbB:
-    send {%hardKick%}
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%hardKick%  down}
+		gosub releaseDirections
+		while(GetKeyState(weakKick, "P"))
+		{
+		}
+		send {%hardKick%  up}
+		comboInProgress := 0
+		gosub nextDirection
+	}
 return
 
 evade:
