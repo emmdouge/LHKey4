@@ -71,7 +71,7 @@ comboInProgress := 0
 pollingRate := 35
 weakPunchHeld := 0
 weakKickHeld := 0
-facingRight := 1
+facingRight = 1
 
 ;CHANGE LEFT SIDE
 RAlt::RAlt
@@ -132,7 +132,7 @@ exit
 UpPRESSED:
 	numP := GetAllKeysPressed("P")
 	MaxIndex := numP.MaxIndex()
-	if (roll == lock) {
+	if (roll == lock || comboInProgress == 1) {
 		exit
 	}
 	else {
@@ -169,12 +169,12 @@ UpPRESSED:
             else if (MaxIndex <= 2) {
 				send {%up% down}
 				sleep %lag%
-				while(GetKeyState(up, "P")) {
+				while(GetKeyState(up, "P") && comboInProgress == 0) {
 					if(GetKeyState(right, "P") && MaxIndex == 2) {	
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%right% down}
-						while(MaxIndex == 2) {
+						while(MaxIndex == 2 && comboInProgress == 0) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -187,7 +187,7 @@ UpPRESSED:
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%left% down}
-						while(MaxIndex == 2) {
+						while(MaxIndex == 2 && comboInProgress == 0) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -200,7 +200,7 @@ UpPRESSED:
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%down% down}
-						while(MaxIndex == 2) {
+						while(MaxIndex == 2 && comboInProgress == 0) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -221,7 +221,7 @@ exit
 DownPRESSED:
 	numP := GetAllKeysPressed("P")
 	MaxIndex := numP.MaxIndex()
-	if (roll == lock) {
+	if (roll == lock || comboInProgress == 1) {
 		exit
 	}
 	else {
@@ -258,12 +258,12 @@ DownPRESSED:
             else if (MaxIndex <= 2) {
 				send {%down% down}
 				sleep %lag%
-				while(GetKeyState(down, "P")) {
+				while(GetKeyState(down, "P") && comboInProgress == 0) {
 					if(GetKeyState(right, "P") && MaxIndex == 2) {	
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%right% down}
-						while(MaxIndex == 2) {
+						while(MaxIndex == 2 && comboInProgress == 0) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -276,7 +276,7 @@ DownPRESSED:
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%left% down}
-						while(MaxIndex == 2) {
+						while(MaxIndex == 2 && comboInProgress == 0) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -289,7 +289,7 @@ DownPRESSED:
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%up% down}
-						while(MaxIndex == 2) {
+						while(MaxIndex == 2 && comboInProgress == 0) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -313,12 +313,11 @@ LeftPRESSED:
 	}
 	numP := GetAllKeysPressed("P")
 	MaxIndex := numP.MaxIndex()
-	if (roll == lock) {
+	if (roll == lock || comboInProgress == 1) {
 		exit
 	}
 	else {
         if(instr(A_PriorKey, down) && ((A_TimeSincePriorHotkey, down) < combo)) {
-			roll := lock
 			KeyWait, %weakPunch%, d t0.025                
 			;down+left
 			if ErrorLevel {     
@@ -363,12 +362,12 @@ LeftPRESSED:
             else if (MaxIndex <= 2) {
 				send {%left% down}
 				sleep %lag%
-				while(GetKeyState(left, "P")) {
+				while(GetKeyState(left, "P") && comboInProgress == 0) {
 					if(GetKeyState(right, "P") && MaxIndex == 2) {	
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%right% down}
-						while(MaxIndex == 2) {
+						while(MaxIndex == 2 && comboInProgress == 0) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -381,7 +380,7 @@ LeftPRESSED:
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%down% down}
-						while(MaxIndex == 2) {
+						while(MaxIndex == 2 && comboInProgress == 0) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -394,7 +393,7 @@ LeftPRESSED:
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%up% down}
-						while(MaxIndex == 2) {
+						while(MaxIndex == 2 && comboInProgress == 0) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -418,24 +417,23 @@ RightPRESSED:
 	}
 	numP := GetAllKeysPressed("P")
 	MaxIndex := numP.MaxIndex()
-	if (roll == lock) {
+	if (roll == lock || comboInProgress == 1) {
 		exit
 	}
 	else {
         if(instr(A_PriorKey, down) && ((A_TimeSincePriorHotkey, down) < combo)) {
-			roll := lock
 			KeyWait, %weakPunch%, d t0.025       
 			;down+right
 			if ErrorLevel { 
 				KeyWait, %weakKick%, d t0.050
-				;down+left
+				;down+right
 				if ErrorLevel {      
-					send {%left% down}
+					send {%right% down}
 					sleep %lag%
-					send {%left% up}
-					facingRight := 0  
+					send {%right% up}
+					facingRight := 1
 				}
-				;down+left+B
+				;down+right+B
 				else {      
 					if(facingRight) {
 						gosub qcfB
@@ -468,12 +466,12 @@ RightPRESSED:
             else if (MaxIndex <= 2) {
 				send {%right% down}
 				sleep %lag%
-				while(GetKeyState(right, "P")) {
+				while(GetKeyState(right, "P") && comboInProgress == 0) {
 					if(GetKeyState(left, "P") && MaxIndex == 2) {	
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%left% down}
-						while(MaxIndex == 2) {
+						while(MaxIndex == 2 && comboInProgress == 0) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -486,7 +484,7 @@ RightPRESSED:
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%down% down}
-						while(MaxIndex == 2) {
+						while(MaxIndex == 2 && comboInProgress == 0) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -499,7 +497,7 @@ RightPRESSED:
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%up% down}
-						while(MaxIndex == 2) {
+						while(MaxIndex == 2 && comboInProgress == 0) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -782,8 +780,49 @@ action:
 	roll := lock
 return
 
+releaseDirections:
+	send {%left% up}
+	send {%right% up}
+	send {%up% up}
+	send {%down% up}
+return
+
+nextDirection:
+numP := GetAllKeysPressed("P")
+MaxIndex := numP.MaxIndex()
+gosub releaseDirections
+if(MaxIndex <= 1) {
+	if(GetKeyState(right, "P")) {
+		send {%right% down}
+		goto RightPRESSED
+	}
+	if(GetKeyState(left, "P")) {
+		send {%left% down}
+		goto LeftPRESSED
+	}
+	else if(GetKeyState(down, "P")) {
+		send {%down% down}
+		goto DownPRESSED
+	}
+	else if(GetKeyState(up, "P")) {
+		send {%up% down}
+		goto UpPRESSED
+	}
+}
+return
+
 qcfA:
-    send {%mediumPunch%}
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%mediumPunch%  down}
+		gosub releaseDirections
+		while(GetKeyState(weakPunch, "P"))
+		{
+		}
+		send {%mediumPunch%  up}
+		comboInProgress := 0
+		gosub nextDirection
+	}
 return
 
 qcbA:
