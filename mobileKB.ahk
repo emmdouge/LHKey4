@@ -324,10 +324,13 @@ LeftPRESSED:
 				KeyWait, %weakKick%, d t0.050
 				;down+left
 				if ErrorLevel {      
+					Critical  
 					send {%left% down}
-					sleep %lag%
-					send {%left% up}
 					facingRight := 0  
+					send {%down%  up} 
+					send {%left%  up} 
+					Critical,  Off
+					gosub nextDirection
 				}
 				;down+left+B
 				else {      
@@ -342,9 +345,11 @@ LeftPRESSED:
 			;down+left+A
 			else {
                 if(!facingRight) {
+					facingRight := 0  
                     gosub qcfA
                 }
                 else {
+					facingRight := 1
                     gosub qcbA
                 }
 			}
@@ -427,11 +432,14 @@ RightPRESSED:
 			if ErrorLevel { 
 				KeyWait, %weakKick%, d t0.050
 				;down+right
-				if ErrorLevel {      
+				if ErrorLevel {       
+					Critical 
 					send {%right% down}
-					sleep %lag%
-					send {%right% up}
-					facingRight := 1
+					facingRight := 1  
+					send {%down%  up} 
+					send {%right% up}  
+					Critical,  Off
+					gosub nextDirection
 				}
 				;down+right+B
 				else {      
@@ -446,9 +454,11 @@ RightPRESSED:
 			;down+right+A
 			else {
                 if(facingRight) {
+					facingRight := 1  
                     gosub qcfA
                 }
                 else {
+					facingRight := 0  
                     gosub qcbA
                 }
 			}
@@ -704,7 +714,7 @@ THREEDOWN:
                 gosub guard
             }
             else if ((MaxIndex == 1 || (MaxIndex == 2 && GetKeyState(upperE, "P")) || (MaxIndex == 2 && GetKeyState(up, "P")) || (MaxIndex == 2 && GetKeyState(weakPunch, "P")))) {
-			    gosub EAttack
+			    gosub weakKick
             }
 		}
 		exit
@@ -875,6 +885,12 @@ weakPunch:
 	send {%weakPunch% down}
 	sleep %lag%
 	send {%weakPunch% up}
+return
+
+weakKick:
+	send {%weakKick% down}
+	sleep %lag%
+	send {%weakKick% up}
 return
 
 
