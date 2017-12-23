@@ -24,6 +24,7 @@ up := "w"
 , down := "s"
 , left := "a"
 , right := "d"
+, evade := "Tab"
 , weakPunch := "u"
 , upperQ := "U"
 , grab := "i"
@@ -33,8 +34,8 @@ up := "w"
 , charge := "Space"
 , mediumPunch := "1"
 , mediumKick := "2"
-, hardPunch := "4"
-, hardKick := "3"
+, hardPunch := "3"
+, hardKick := "4"
 
 Hotkey, %up%, UpPRESSED
 Hotkey, %up% up, UpRELEASED
@@ -113,7 +114,7 @@ CHARGE:
 	;2+C
 	if(instr(A_PriorKey, grab) && ((A_TimeSincePriorHotkey, grab) < combo)) {
 		roll := lock
-		gosub qcfA
+		gosub evade
 	}
 	;3+C
 	if(instr(A_PriorKey, weakKick) && ((A_TimeSincePriorHotkey, weakKick) < combo)) {
@@ -321,15 +322,22 @@ LeftPRESSED:
 			KeyWait, %weakPunch%, d t0.025                
 			;down+left
 			if ErrorLevel {     
-    			facingRight := 0  
 				KeyWait, %weakKick%, d t0.050
-				;2+1
-				if ErrorLevel {       
-					gosub ZAttack
+				;down+left
+				if ErrorLevel {      
+					send {%left% down}
+					sleep %lag%
+					send {%left% up}
+					facingRight := 0  
 				}
-				;2+1+3
+				;down+left+B
 				else {      
-                    gosub special
+					if(!facingRight) {
+						gosub qcfB
+					}
+					else {
+						gosub qcbB
+					}
 				}
 			}
 			;down+left+A
@@ -340,7 +348,6 @@ LeftPRESSED:
                 else {
                     gosub qcbA
                 }
-				gosub action
 			}
 		}
 		else {
@@ -419,19 +426,26 @@ RightPRESSED:
 			roll := lock
 			KeyWait, %weakPunch%, d t0.025       
 			;down+right
-			if ErrorLevel {
-    			facingRight := 1       
+			if ErrorLevel { 
 				KeyWait, %weakKick%, d t0.050
-				;2+1
-				if ErrorLevel {       
-					;gosub ZAttack
+				;down+left
+				if ErrorLevel {      
+					send {%left% down}
+					sleep %lag%
+					send {%left% up}
+					facingRight := 0  
 				}
-				;2+1+3
+				;down+left+B
 				else {      
-                    ;gosub special
+					if(facingRight) {
+						gosub qcfB
+					}
+					else {
+						gosub qcbB
+					}
 				}
-			}              
-			;down+right+weakPunch
+			}      
+			;down+right+A
 			else {
                 if(facingRight) {
                     gosub qcfA
@@ -439,7 +453,6 @@ RightPRESSED:
                 else {
                     gosub qcbA
                 }
-				gosub action
 			}
 		}
 		else {
@@ -775,6 +788,18 @@ return
 
 qcbA:
     send {%mediumKick%}
+return
+
+qcfB:
+    send {%hardPunch%}
+return
+
+qcbB:
+    send {%hardKick%}
+return
+
+evade:
+    send {%evade%}
 return
 
 weakPunch:
