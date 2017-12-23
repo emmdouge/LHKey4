@@ -166,7 +166,7 @@ UpPRESSED:
                 roll := lock
                 gosub guard
             }
-            else if (MaxIndex == 1) {
+            else if (MaxIndex <= 2) {
 				send {%up% down}
 				sleep %lag%
 				while(GetKeyState(up, "P")) {
@@ -255,7 +255,7 @@ DownPRESSED:
                 roll := lock
                 gosub guard
             }
-            else if (MaxIndex == 1) {
+            else if (MaxIndex <= 2) {
 				send {%down% down}
 				sleep %lag%
 				while(GetKeyState(down, "P")) {
@@ -360,7 +360,7 @@ LeftPRESSED:
                 roll := lock
                 gosub guard
             }
-            else if (MaxIndex == 1) {
+            else if (MaxIndex <= 2) {
 				send {%left% down}
 				sleep %lag%
 				while(GetKeyState(left, "P")) {
@@ -465,7 +465,7 @@ RightPRESSED:
                 roll := lock
                 gosub guard
             }
-            else if (MaxIndex == 1) {
+            else if (MaxIndex <= 2) {
 				send {%right% down}
 				sleep %lag%
 				while(GetKeyState(right, "P")) {
