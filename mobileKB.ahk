@@ -231,7 +231,7 @@ UpPRESSED:
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%buttonR% down}
-						while(MaxIndex == 2 && GetKeyState(buttonR, "P")) {
+						while(MaxIndex >= 2 && GetKeyState(buttonR, "P")) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -354,7 +354,7 @@ DownPRESSED:
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%buttonR% down}
-						while(MaxIndex == 2 && GetKeyState(buttonR, "P")) {
+						while(MaxIndex >= 2 && GetKeyState(buttonR, "P")) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -499,7 +499,7 @@ LeftPRESSED:
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%buttonR% down}
-						while(MaxIndex == 2 && GetKeyState(buttonR, "P")) {
+						while(MaxIndex >= 2 && GetKeyState(buttonR, "P")) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -642,7 +642,7 @@ RightPRESSED:
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%buttonR% down}
-						while(MaxIndex == 2 && GetKeyState(buttonR, "P")) {
+						while(MaxIndex >= 2 && GetKeyState(buttonR, "P")) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
@@ -940,6 +940,12 @@ if(GetKeyState(down, "D")) {
 } 
 if(GetKeyState(up, "D")) { 
   send {%up% up} 
+} 
+if(GetKeyState(buttonR, "D")) { 
+  send {%buttonR% up} 
+} 
+if(GetKeyState(buttonZ, "D")) { 
+  send {%buttonZ% up} 
 } 
 return 
  
