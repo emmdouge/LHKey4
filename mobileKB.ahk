@@ -941,6 +941,12 @@ if(GetKeyState(down, "D")) {
 if(GetKeyState(up, "D")) { 
   send {%up% up} 
 } 
+if(GetKeyState(buttonA, "D")) { 
+  send {%buttonA% up} 
+} 
+if(GetKeyState(buttonB, "D")) { 
+  send {%buttonB% up} 
+} 
 if(GetKeyState(buttonR, "D")) { 
   send {%buttonR% up} 
 } 
