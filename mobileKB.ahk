@@ -166,7 +166,7 @@ UpPRESSED:
                 roll := lock
                 gosub guard
             }
-            else if (MaxIndex <= 2) {
+            else if (MaxIndex <= 1) {
 				send {%up% down}
 				sleep %lag%
 				while(GetKeyState(up, "P") && comboInProgress == 0) {
@@ -180,7 +180,11 @@ UpPRESSED:
 						}
 						if(GetKeyState(up, "P")) {
 							send {%right% up}
-							continue
+							send {%up% down}
+						}
+						else {
+							send {%up% up} 
+							goto RightPRESSED
 						}
 					}
 					else if(GetKeyState(left, "P") && MaxIndex == 2) {	
@@ -193,7 +197,11 @@ UpPRESSED:
 						}
 						if(GetKeyState(up, "P")) {
 							send {%left% up}
-							continue
+							send {%up% down}
+						}
+						else {
+							send {%up% up} 
+							goto LeftPRESSED
 						}
 					}
 					else if(GetKeyState(down, "P") && MaxIndex == 2) {	
@@ -206,11 +214,20 @@ UpPRESSED:
 						}
 						if(GetKeyState(up, "P")) {
 							send {%down% up}
-							continue
+							send {%up% down}
+						}
+						else {
+							send {%up% up} 
+							goto DownPRESSED
 						}
 					}
+					if(GetKeyState(up, "P") == 0) {
+						send {%up% up}
+					}
 				}
-				send {%up% up}
+				if(GetKeyState(up, "P") == 0) {
+					send {%up% up}
+				}
             }
 		}
 		exit
@@ -255,7 +272,7 @@ DownPRESSED:
                 roll := lock
                 gosub guard
             }
-            else if (MaxIndex <= 2) {
+            else if (MaxIndex <= 1) {
 				send {%down% down}
 				sleep %lag%
 				while(GetKeyState(down, "P") && comboInProgress == 0) {
@@ -269,7 +286,11 @@ DownPRESSED:
 						}
 						if(GetKeyState(down, "P")) {
 							send {%right% up}
-							continue
+							send {%down% down}
+						}
+						else {
+							send {%down% up} 
+							goto RightPRESSED
 						}
 					}
 					else if(GetKeyState(left, "P") && MaxIndex == 2) {	
@@ -282,7 +303,11 @@ DownPRESSED:
 						}
 						if(GetKeyState(down, "P")) {
 							send {%left% up}
-							continue
+							send {%down% down}
+						}
+						else {
+							send {%down% up} 
+							goto LeftPRESSED
 						}
 					}
 					else if(GetKeyState(up, "P") && MaxIndex == 2) {	
@@ -295,11 +320,20 @@ DownPRESSED:
 						}
 						if(GetKeyState(down, "P")) {
 							send {%up% up}
-							continue
+							send {%down% down}
+						}
+						else {
+							send {%down% up} 
+							goto UpPRESSED
 						}
 					}
+					if(GetKeyState(down, "P") == 0) {
+						send {%down% up}
+					}
 				}
-				send {%down% up}
+				if(GetKeyState(down, "P") == 0) {
+					send {%down% up}
+				}
             }
 		}
 		exit
@@ -324,13 +358,14 @@ LeftPRESSED:
 				KeyWait, %weakKick%, d t0.050
 				;down+left
 				if ErrorLevel {      
+					comboInProgress := 1
 					Critical  
 					send {%left% down}
 					facingRight := 0  
 					send {%down%  up} 
 					send {%left%  up} 
 					Critical,  Off
-					gosub nextDirection
+					comboInProgress := 0
 				}
 				;down+left+B
 				else {      
@@ -364,13 +399,14 @@ LeftPRESSED:
                 roll := lock
                 gosub guard
             }
-            else if (MaxIndex <= 2) {
+            else if (MaxIndex <= 1) {
 				send {%left% down}
 				sleep %lag%
 				while(GetKeyState(left, "P") && comboInProgress == 0) {
 					if(GetKeyState(right, "P") && MaxIndex == 2) {	
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
+						send {%left% up}
 						send {%right% down}
 						while(MaxIndex == 2 && comboInProgress == 0) {
 							numP := GetAllKeysPressed("P")
@@ -378,7 +414,11 @@ LeftPRESSED:
 						}
 						if(GetKeyState(left, "P")) {
 							send {%right% up}
-							continue
+							send {%left% down}
+						}
+						else {
+							send {%left% up} 
+							goto LeftPRESSED
 						}
 					}
 					else if(GetKeyState(down, "P") && MaxIndex == 2) {	
@@ -391,7 +431,11 @@ LeftPRESSED:
 						}
 						if(GetKeyState(left, "P")) {
 							send {%down% up}
-							continue
+							send {%left% down}
+						}
+						else {
+							send {%left% up} 
+							goto DownPRESSED
 						}
 					}
 					else if(GetKeyState(up, "P") && MaxIndex == 2) {	
@@ -404,11 +448,20 @@ LeftPRESSED:
 						}
 						if(GetKeyState(left, "P")) {
 							send {%up% up}
-							continue
+							send {%left% down}
+						}
+						else {
+							send {%left% up} 
+							goto UpPRESSED
 						}
 					}
+					if(GetKeyState(left, "P") == 0) {
+						send {%left% up}
+					}
 				}
-				send {%left% up}
+				if(GetKeyState(left, "P") == 0) {
+					send {%left% up}
+				}
             }
 		}
 		exit
@@ -433,13 +486,14 @@ RightPRESSED:
 				KeyWait, %weakKick%, d t0.050
 				;down+right
 				if ErrorLevel {       
+					comboInProgress := 1
 					Critical 
 					send {%right% down}
 					facingRight := 1  
 					send {%down%  up} 
 					send {%right% up}  
 					Critical,  Off
-					gosub nextDirection
+					comboInProgress := 0
 				}
 				;down+right+B
 				else {      
@@ -473,51 +527,67 @@ RightPRESSED:
                 roll := lock
                 gosub guard
             }
-            else if (MaxIndex <= 2) {
+            else if (MaxIndex <= 1) {
 				send {%right% down}
 				sleep %lag%
 				while(GetKeyState(right, "P") && comboInProgress == 0) {
-					if(GetKeyState(left, "P") && MaxIndex == 2) {	
-						numP := GetAllKeysPressed("P")
-						MaxIndex := numP.MaxIndex()
+					if(GetKeyState(left, "P") && MaxIndex == 2) {
+						send {%right% up}
 						send {%left% down}
-						while(MaxIndex == 2 && comboInProgress == 0) {
+						while(MaxIndex == 2) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
 						if(GetKeyState(right, "P")) {
 							send {%left% up}
-							continue
+							send {%right% down}
+						}
+						else {
+							send {%right% up} 
+							goto LeftPRESSED
 						}
 					}
 					else if(GetKeyState(down, "P") && MaxIndex == 2) {	
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%down% down}
-						while(MaxIndex == 2 && comboInProgress == 0) {
+						while(MaxIndex == 2) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
 						if(GetKeyState(right, "P")) {
 							send {%down% up}
-							continue
+							send {%right% down}
+						}
+						else {
+							send {%right% up} 
+							goto DownPRESSED
 						}
 					}
 					else if(GetKeyState(up, "P") && MaxIndex == 2) {	
 						numP := GetAllKeysPressed("P")
 						MaxIndex := numP.MaxIndex()
 						send {%up% down}
-						while(MaxIndex == 2 && comboInProgress == 0) {
+						while(MaxIndex == 2) {
 							numP := GetAllKeysPressed("P")
 							MaxIndex := numP.MaxIndex()
 						}
 						if(GetKeyState(right, "P")) {
 							send {%up% up}
-							continue
+							send {%right% down}
+						}
+						else {
+							send {%right% up} 
+							goto UpPRESSED
 						}
 					}
+					if(GetKeyState(right, "P") == 0) {
+						send {%right% up}
+					}
 				}
-				send {%right% up}
+				if(GetKeyState(right, "P") == 0) {
+					send {%right% up}
+				}
             }
 		}
 		exit
@@ -790,12 +860,65 @@ action:
 	roll := lock
 return
 
-releaseDirections:
+release: 
+if(GetKeyState(right, "P") == 0) { 
+  send {%right% up} 
+} 
+if(GetKeyState(left, "P") == 0) { 
+  send {%left% up} 
+} 
+if(GetKeyState(down, "P") == 0) { 
+  send {%down% up} 
+} 
+if(GetKeyState(up, "P") == 0) { 
+  send {%up% up} 
+} 
+return 
+ 
+releaseDirections: 
+numP := GetAllKeysPressed("P") 
+MaxIndex := numP.MaxIndex() 
+while(MaxIndex > 0) { 
+  send {%left% up} 
+  send {%right% up} 
+  send {%up% up} 
+  send {%down% up} 
+  numP := GetAllKeysPressed("P") 
+  MaxIndex := numP.MaxIndex() 
+} 
+return
+
+releaseAllDirections:
 	send {%left% up}
 	send {%right% up}
 	send {%up% up}
 	send {%down% up}
 return
+
+nextSingleDirection: 
+numP := GetAllKeysPressed("P") 
+MaxIndex := numP.MaxIndex() 
+while (MaxIndex > 1) { 
+} 
+if(MaxIndex == 1) { 
+  if(GetKeyState(right, "P")) { 
+    send {%right% down} 
+    goto RightPRESSED 
+  } 
+  if(GetKeyState(left, "P")) { 
+    send {%left% down} 
+    goto LeftPRESSED 
+  } 
+  else if(GetKeyState(down, "P")) { 
+    send {%down% down} 
+    goto DownPRESSED 
+  } 
+  else if(GetKeyState(up, "P")) { 
+    send {%up% down} 
+    goto UpPRESSED 
+  } 
+} 
+return 
 
 nextDirection:
 numP := GetAllKeysPressed("P")
@@ -806,7 +929,7 @@ if(MaxIndex <= 1) {
 		send {%right% down}
 		goto RightPRESSED
 	}
-	if(GetKeyState(left, "P")) {
+	else if(GetKeyState(left, "P")) {
 		send {%left% down}
 		goto LeftPRESSED
 	}
@@ -825,13 +948,13 @@ qcfA:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
 		send {%mediumPunch%  down}
-		gosub releaseDirections
+		gosub releaseAllDirections
 		while(GetKeyState(weakPunch, "P"))
 		{
 		}
 		send {%mediumPunch%  up}
 		comboInProgress := 0
-		gosub nextDirection
+		gosub nextSingleDirection
 	}
 return
 
@@ -839,13 +962,13 @@ qcbA:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
 		send {%mediumKick%  down}
-		gosub releaseDirections
+		gosub releaseAllDirections
 		while(GetKeyState(weakPunch, "P"))
 		{
 		}
 		send {%mediumKick%  up}
 		comboInProgress := 0
-		gosub nextDirection
+		gosub nextSingleDirection
 	}
 return
 
@@ -853,13 +976,13 @@ qcfB:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
 		send {%hardPunch%  down}
-		gosub releaseDirections
+		gosub releaseAllDirections
 		while(GetKeyState(weakKick, "P"))
 		{
 		}
 		send {%hardPunch%  up}
 		comboInProgress := 0
-		gosub nextDirection
+		gosub nextSingleDirection
 	}
 return
 
@@ -867,13 +990,13 @@ qcbB:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
 		send {%hardKick%  down}
-		gosub releaseDirections
+		gosub releaseAllDirections
 		while(GetKeyState(weakKick, "P"))
 		{
 		}
 		send {%hardKick%  up}
 		comboInProgress := 0
-		gosub nextDirection
+		gosub nextSingleDirection
 	}
 return
 
