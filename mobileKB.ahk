@@ -24,7 +24,7 @@ up := "w"
 , down := "s"
 , left := "a"
 , right := "d"
-, ZplusR := "Tab"
+, ZplusR := "e"
 , buttonA := "u"
 , modA := "U"
 , buttonZ := "i"
@@ -40,6 +40,7 @@ up := "w"
 , special5 := "5"
 , special6 := "6"
 , special7 := "7"
+, special8 := "8"
 
 Hotkey, %up%, UpPRESSED
 Hotkey, %up% up, UpRELEASED
@@ -110,7 +111,6 @@ GetAllKeysPressed(mode = "P") {
 }
 
 roll := on
-r::reload
 
 ButtonRPressed:
 	;1+C
@@ -272,20 +272,44 @@ DownPRESSED:
 			roll := lock
 			KeyWait, %right%, d t0.075                
 			;dp
-			if ErrorLevel {       
-				KeyWait, %buttonB%, d t0.075
-				;2+1
+			if ErrorLevel {
+				KeyWait, %left%, d t0.1
+				;dp
 				if ErrorLevel {
 				}
-				;2+1+3
+				;hu
 				else {      
-                    gosub dpB
+					KeyWait, %buttonA%, d t0.075
+					if ErrorLevel {       
+						KeyWait, %buttonB%, d t0.075
+						;hu
+						if ErrorLevel {
+							send {%right%}
+						}
+						;hu+B
+						else {      
+							gosub huB
+						}
+					}
+					;hu+A
+					else {
+						gosub huA
+					}
 				}
 			}
 			;dp+A
 			else {
 				KeyWait, %buttonA%, d t0.075
-				if ErrorLevel {
+				if ErrorLevel {       
+					KeyWait, %buttonB%, d t0.075
+					;dp
+					if ErrorLevel {
+						send {%right%}
+					}
+					;dp+B
+					else {      
+						gosub dpB
+					}
 				}
 				else {
 					gosub dpA
@@ -296,20 +320,44 @@ DownPRESSED:
 			roll := lock
 			KeyWait, %left%, d t0.075                
 			;dp
-			if ErrorLevel {       
-				KeyWait, %buttonB%, d t0.075
-				;2+1
+			if ErrorLevel {    
+				KeyWait, %right%, d t0.1
+				;dp
 				if ErrorLevel {
 				}
-				;2+1+3
+				;hu
 				else {      
-                    gosub dpB
-				}
+					KeyWait, %buttonA%, d t0.075
+					if ErrorLevel {       
+						KeyWait, %buttonB%, d t0.075
+						;hu
+						if ErrorLevel {
+							send {%left%}
+						}
+						;hu+B
+						else {      
+							gosub huB
+						}
+					}
+					;hu+A
+					else {
+						gosub huA
+					}
+				}   
 			}
 			;dp+A
 			else {
 				KeyWait, %buttonA%, d t0.075
 				if ErrorLevel {
+					KeyWait, %buttonB%, d t0.075
+					;dp
+					if ErrorLevel {
+						send {%left%}
+					}
+					;dp+B
+					else {      
+						gosub dpB
+					}
 				}
 				else {
 					gosub dpA
@@ -429,14 +477,6 @@ LeftPRESSED:
 				KeyWait, %buttonB%, d t0.050
 				;down+left
 				if ErrorLevel {      
-					comboInProgress := 1
-					Critical  
-					send {%left% down}
-					facingRight := 0  
-					send {%down%  up} 
-					send {%left%  up} 
-					Critical,  Off
-					comboInProgress := 0
 				}
 				;down+left+B
 				else {      
@@ -574,14 +614,6 @@ RightPRESSED:
 				KeyWait, %buttonB%, d t0.050
 				;down+right
 				if ErrorLevel {       
-					comboInProgress := 1
-					Critical 
-					send {%right% down}
-					facingRight := 1  
-					send {%down%  up} 
-					send {%right% up}  
-					Critical,  Off
-					comboInProgress := 0
 				}
 				;down+right+B
 				else {      
@@ -983,6 +1015,18 @@ if(GetKeyState(buttonR, "D")) {
 } 
 if(GetKeyState(buttonZ, "D")) { 
   send {%buttonZ% up} 
+}
+if(GetKeyState(special5, "D")) { 
+  send {%special5% up} 
+}  
+if(GetKeyState(special6, "D")) { 
+  send {%special6% up} 
+} 
+if(GetKeyState(special7, "D")) { 
+  send {%special7% up} 
+} 
+if(GetKeyState(special8, "D")) { 
+  send {%special8% up} 
 } 
 return 
  
@@ -1139,29 +1183,35 @@ dpB:
 	}
 return
 
-ewgfA:
+huA:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
-		send {%special6%  down}
+		send {%special7%  down}
 		gosub releaseAllDirections
-		while(GetKeyState(buttonA, "P"))
-		{
+		numP := GetAllKeysPressed("P")
+		MaxIndex := numP.MaxIndex()
+		while(GetKeyState(buttonA, "P") || MaxIndex > 1) {
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
 		}
-		send {%special6%  up}
+		send {%special7%  up}
 		comboInProgress := 0
 		gosub nextSingleDirection
 	}
 return
 
-ewgfB:
+huB:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
-		send {%special7%  down}
+		send {%special8%  down}
 		gosub releaseAllDirections
-		while(GetKeyState(buttonB, "P"))
-		{
+		numP := GetAllKeysPressed("P")
+		MaxIndex := numP.MaxIndex()
+		while(GetKeyState(buttonB, "P") || MaxIndex > 1) {
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
 		}
-		send {%special7%  up}
+		send {%special8%  up}
 		comboInProgress := 0
 		gosub nextSingleDirection
 	}
