@@ -37,6 +37,9 @@ up := "w"
 , special2 := "2"
 , special3 := "3"
 , special4 := "4"
+, special5 := "5"
+, special6 := "6"
+, special7 := "7"
 
 Hotkey, %up%, UpPRESSED
 Hotkey, %up% up, UpRELEASED
@@ -265,24 +268,52 @@ DownPRESSED:
 		exit
 	}
 	else {
-        if(instr(A_PriorKey, buttonZ) && ((A_TimeSincePriorHotkey, buttonZ) < combo)) {
+        if(instr(A_PriorKey, right) && ((A_TimeSincePriorHotkey, right) < combo)) {
 			roll := lock
-			KeyWait, %buttonR%, d t0.025                
-			;2+1
+			KeyWait, %right%, d t0.075                
+			;dp
 			if ErrorLevel {       
-				KeyWait, %buttonB%, d t0.050
+				KeyWait, %buttonB%, d t0.075
 				;2+1
-				if ErrorLevel {       
-					gosub ZplusA
+				if ErrorLevel {
 				}
 				;2+1+3
 				else {      
-                    gosub special0
+                    gosub dpB
 				}
 			}
-			;2+1+C
+			;dp+A
 			else {
-				gosub action
+				KeyWait, %buttonA%, d t0.075
+				if ErrorLevel {
+				}
+				else {
+					gosub dpA
+				}
+			}
+		}
+        else if(instr(A_PriorKey, left) && ((A_TimeSincePriorHotkey, left) < combo)) {
+			roll := lock
+			KeyWait, %left%, d t0.075                
+			;dp
+			if ErrorLevel {       
+				KeyWait, %buttonB%, d t0.075
+				;2+1
+				if ErrorLevel {
+				}
+				;2+1+3
+				else {      
+                    gosub dpB
+				}
+			}
+			;dp+A
+			else {
+				KeyWait, %buttonA%, d t0.075
+				if ErrorLevel {
+				}
+				else {
+					gosub dpA
+				}
 			}
 		}
 		else {
@@ -1080,8 +1111,66 @@ qcbB:
 	}
 return
 
+dpA:
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%special5%  down}
+		gosub releaseAllDirections
+		while(GetKeyState(buttonB, "P"))
+		{
+		}
+		send {%special5%  up}
+		comboInProgress := 0
+		gosub nextSingleDirection
+	}
+return
+
+dpB:
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%special6%  down}
+		gosub releaseAllDirections
+		while(GetKeyState(buttonA, "P"))
+		{
+		}
+		send {%special6%  up}
+		comboInProgress := 0
+		gosub nextSingleDirection
+	}
+return
+
+ewgfA:
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%special6%  down}
+		gosub releaseAllDirections
+		while(GetKeyState(buttonA, "P"))
+		{
+		}
+		send {%special6%  up}
+		comboInProgress := 0
+		gosub nextSingleDirection
+	}
+return
+
+ewgfB:
+	if(comboInProgress == 0) {
+		comboInProgress := 1
+		send {%special7%  down}
+		gosub releaseAllDirections
+		while(GetKeyState(buttonB, "P"))
+		{
+		}
+		send {%special7%  up}
+		comboInProgress := 0
+		gosub nextSingleDirection
+	}
+return
+
 ZplusR:
-    send {%ZplusR%}
+    send {%ZplusR% down}
+	sleep %lag%
+    send {%ZplusR% up}
 return
 
 buttonA:
