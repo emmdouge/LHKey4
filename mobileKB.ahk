@@ -992,42 +992,30 @@ action:
 return
 
 release: 
-if(GetKeyState(right, "D")) { 
+if(GetKeyState(right, "D") && !GetKeyState(right, "P")) { 
   send {%right% up} 
 } 
-if(GetKeyState(left, "D")) { 
+if(GetKeyState(left, "D") && !GetKeyState(left, "P")) { 
   send {%left% up} 
 } 
-if(GetKeyState(down, "D")) { 
+if(GetKeyState(down, "D") && !GetKeyState(down, "P")) { 
   send {%down% up} 
 } 
-if(GetKeyState(up, "D")) { 
+if(GetKeyState(up, "D") && !GetKeyState(up, "P")) { 
   send {%up% up} 
 } 
-if(GetKeyState(buttonA, "D")) { 
+if(GetKeyState(buttonA, "D") && !GetKeyState(buttonA, "P")) { 
   send {%buttonA% up} 
 } 
-if(GetKeyState(buttonB, "D")) { 
+if(GetKeyState(buttonB, "D") && !GetKeyState(buttonB, "P")) { 
   send {%buttonB% up} 
 } 
-if(GetKeyState(buttonR, "D")) { 
+if(GetKeyState(buttonR, "D") && !GetKeyState(buttonR, "P")) { 
   send {%buttonR% up} 
 } 
-if(GetKeyState(buttonZ, "D")) { 
+if(GetKeyState(buttonZ, "D") && !GetKeyState(buttonZ, "P")) { 
   send {%buttonZ% up} 
 }
-if(GetKeyState(special5, "D")) { 
-  send {%special5% up} 
-}  
-if(GetKeyState(special6, "D")) { 
-  send {%special6% up} 
-} 
-if(GetKeyState(special7, "D")) { 
-  send {%special7% up} 
-} 
-if(GetKeyState(special8, "D")) { 
-  send {%special8% up} 
-} 
 return 
  
 releaseDirections: 
