@@ -131,9 +131,7 @@ ButtonRPressed:
 	numP := GetAllKeysPressed("P")
 	MaxIndex := numP.MaxIndex()
 	;C
-	if(roll != lock && MaxIndex == 1) {
-		roll := on
-		send {%buttonR% down}
+	if(MaxIndex <= 3) {
 		gosub buttonR
 	}
 exit
@@ -230,21 +228,7 @@ UpPRESSED:
 						}
 					}
 					else if(GetKeyState(buttonR, "P") && MaxIndex <= 3) {	
-						numP := GetAllKeysPressed("P")
-						MaxIndex := numP.MaxIndex()
-						send {%buttonR% down}
-						while(MaxIndex >= 2 && GetKeyState(buttonR, "P")) {
-							numP := GetAllKeysPressed("P")
-							MaxIndex := numP.MaxIndex()
-						}
-						if(GetKeyState(up, "P")) {
-							send {%buttonR% up}
-							send {%up% down}
-						}
-						else {
-							send {%up% up} 
-							goto ButtonRPressed
-						}
+						gosub buttonR
 					}
 					if(GetKeyState(up, "P") == 0) {
 						send {%up% up}
@@ -422,21 +406,7 @@ DownPRESSED:
 						}
 					}
 					else if(GetKeyState(buttonR, "P") && MaxIndex <= 3) {	
-						numP := GetAllKeysPressed("P")
-						MaxIndex := numP.MaxIndex()
-						send {%buttonR% down}
-						while(MaxIndex >= 2 && GetKeyState(buttonR, "P")) {
-							numP := GetAllKeysPressed("P")
-							MaxIndex := numP.MaxIndex()
-						}
-						if(GetKeyState(down, "P")) {
-							send {%buttonR% up}
-							send {%down% down}
-						}
-						else {
-							send {%down% up} 
-							goto ButtonRPressed
-						}
+						gosub buttonR
 					}
 				}
 				gosub release
@@ -557,21 +527,7 @@ LeftPRESSED:
 						}
 					}
 					else if(GetKeyState(buttonR, "P") && MaxIndex <= 3) {	
-						numP := GetAllKeysPressed("P")
-						MaxIndex := numP.MaxIndex()
-						send {%buttonR% down}
-						while(MaxIndex >= 2 && GetKeyState(buttonR, "P")) {
-							numP := GetAllKeysPressed("P")
-							MaxIndex := numP.MaxIndex()
-						}
-						if(GetKeyState(left, "P")) {
-							send {%buttonR% up}
-							send {%left% down}
-						}
-						else {
-							send {%left% up} 
-							goto ButtonRPressed
-						}
+						gosub buttonR
 					}
 				}
 				gosub release
@@ -690,21 +646,7 @@ RightPRESSED:
 						}
 					}
 					else if(GetKeyState(buttonR, "P") && MaxIndex <= 3) {	
-						numP := GetAllKeysPressed("P")
-						MaxIndex := numP.MaxIndex()
-						send {%buttonR% down}
-						while(MaxIndex >= 2 && GetKeyState(buttonR, "P")) {
-							numP := GetAllKeysPressed("P")
-							MaxIndex := numP.MaxIndex()
-						}
-						if(GetKeyState(right, "P")) {
-							send {%buttonR% up}
-							send {%right% down}
-						}
-						else {
-							send {%right% up} 
-							goto ButtonRPressed
-						}
+						gosub buttonR
 					}
 				}
 				gosub release
@@ -1313,70 +1255,18 @@ modB:
 return
 
 buttonR:
-  if(comboInProgress == 0) { 
-		comboInProgress := 1 
-		send {%buttonR% down}
-		sleep %lag% 
-		MaxIndex := 1
-        buttonZHeld := 1
-		buttonDown := 0
-		while (buttonZHeld == 1 || GetKeyState(buttonR, "P")) {
-            if(GetKeyState(buttonZ, "P") == 0) {
-                buttonZHeld := 0
-            }
-			if(GetKeyState(buttonA, "P") && buttonDown == 0 && buttonZHeld == 1) { 
-				numP := GetAllKeysPressed("P") 
-				MaxIndex := numP.MaxIndex() 
-				buttonDown := 1 
-				comboInProgress := 0 
-				send {%buttonA% down} 
-				sleep %lag% 
-				while (MaxIndex > 1 && (GetKeyState(buttonA, "P"))) { 
-					sleep %lag% 
-					numP := GetAllKeysPressed("P") 
-					MaxIndex := numP.MaxIndex() 
-				} 
-				comboInProgress := 1 
-				send {%buttonA% up} 
-			}
-			else if(GetKeyState(buttonB, "P") && buttonDown == 0 && buttonZHeld == 1) { 
-				numP := GetAllKeysPressed("P") 
-				MaxIndex := numP.MaxIndex() 
-				buttonDown := 1 
-				comboInProgress := 0 
-				send {%buttonB% down} 
-				sleep %lag% 
-				while (MaxIndex > 1 && (GetKeyState(buttonZ, "P"))) { 
-					sleep %lag% 
-					numP := GetAllKeysPressed("P") 
-					MaxIndex := numP.MaxIndex() 
-				} 
-				comboInProgress := 1 
-				send {%buttonB% up} 
-			} 
-			else if(GetKeyState(buttonR, "P") && buttonDown == 0 && buttonZHeld == 1) { 
-				numP := GetAllKeysPressed("P") 
-				MaxIndex := numP.MaxIndex() 
-				buttonDown := 1 
-				comboInProgress := 0 
-				send {%buttonR% up}
-				sleep %lag% 
-				send {%buttonR% down}
-				sleep %lag% 
-				while (MaxIndex > 1 && (GetKeyState(buttonR, "P"))) { 
-					sleep %lag% 
-					numP := GetAllKeysPressed("P") 
-					MaxIndex := numP.MaxIndex() 
-				} 
-				comboInProgress := 1 
-				send {%buttonR% up}
-			} 
-			buttonDown := 0 	 
-		}
-		send {%buttonR% up}
-		comboInProgress := 0
-		roll := off 
+	send {%buttonR% down}
+	sleep %lag% 
+	MaxIndex := 1
+	buttonZHeld := 1
+	buttonDown := 0
+	while (buttonZHeld == 1 || GetKeyState(buttonR, "P")) {
+		if(GetKeyState(buttonZ, "P") == 0) {
+			buttonZHeld := 0
+		}	 
 	}
+	gosub release
+	send {%buttonR% up}
 return 
 
 doubleZ: 
