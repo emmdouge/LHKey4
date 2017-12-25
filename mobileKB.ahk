@@ -110,6 +110,12 @@ GetAllKeysPressed(mode = "P") {
 	return pressed
 }
 
+GetNextKey() {
+	Input, SingleKey, L3 T0.05, {LControl}{RControl}{LAlt}{RAlt}{LShift}{RShift}{LWin}{RWin}{AppsKey}{F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}{Left}{Right}{Up}{Down}{Home}{End}{PgUp}{PgDn}{Del}{Ins}{BS}{Capslock}{Numlock}{PrintScreen}{Pause}
+	Tooltip, %SingleKey%
+	return SingleKey
+}
+
 roll := on
 
 ButtonRPressed:
@@ -372,7 +378,7 @@ LeftPRESSED:
 	}
 	else {
         if(instr(A_PriorKey, down) && ((A_TimeSincePriorHotkey, down) < combo)) {
-			KeyWait, %buttonA%, d t0.025              
+			nextKey := GetNextKey()              
 			;down+left
 			if ErrorLevel {
 			}
@@ -381,12 +387,16 @@ LeftPRESSED:
                 if(!facingRight) {     
 					send  {%left%}
 					facingRight := 0  
-                    gosub qcfA
+					if(instr(nextKey, buttonA)){
+                    	gosub qcfA
+					}
                 }
                 else {     
 					send  {%right%}
 					facingRight := 1  
-                    gosub qcbA
+					if(instr(nextKey, buttonA)){
+                    	gosub qcbA
+					}
                 }
 			}
 		}
@@ -479,21 +489,22 @@ RightPRESSED:
 	}
 	else {
         if(instr(A_PriorKey, down) && ((A_TimeSincePriorHotkey, down) < combo)) {
-			KeyWait, %buttonA%, d t0.025       
-			;down+right
-			if ErrorLevel {
-			}      
-			;down+right+A
-			else {
-                if(facingRight) {        
+			nextKey := GetNextKey()     
+			;down+right+button
+			if (ErrorLevel) {
+                if(facingRight) {    
 					send  {%right%}
 					facingRight := 1  
-                    gosub qcfA
+					if(instr(nextKey, buttonA)){
+                    	gosub qcfA
+					}
                 }
                 else {     
 					send  {%left%}
 					facingRight := 0  
-                    gosub qcbA
+					if(instr(nextKey, buttonA)){
+                    	gosub qcbA
+					}
                 }
 			}
 		}
