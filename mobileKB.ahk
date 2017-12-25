@@ -464,13 +464,17 @@ LeftPRESSED:
 				KeyWait, %buttonB%, d t0.050
 				;down+left
 				if ErrorLevel {      
+					facingRight := 0  
+					send {%left% down}
 				}
 				;down+left+B
 				else {      
 					if(!facingRight) {
+						facingRight := 0  
 						gosub qcfB
 					}
 					else {
+						facingRight := 1  
 						gosub qcbB
 					}
 				}
@@ -515,7 +519,7 @@ LeftPRESSED:
 						}
 						else {
 							send {%left% up} 
-							goto LeftPRESSED
+							goto RightPRESSED
 						}
 					}
 					else if(GetKeyState(down, "P") && MaxIndex == 2) {	
@@ -594,14 +598,18 @@ RightPRESSED:
 			if ErrorLevel { 
 				KeyWait, %buttonB%, d t0.050
 				;down+right
-				if ErrorLevel {       
+				if ErrorLevel {      
+					facingRight := 1  
+					send {%right% down} 
 				}
 				;down+right+B
 				else {      
 					if(facingRight) {
+						facingRight := 1  
 						gosub qcfB
 					}
 					else {
+						facingRight := 0  
 						gosub qcbB
 					}
 				}
