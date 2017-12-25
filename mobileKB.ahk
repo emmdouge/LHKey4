@@ -111,6 +111,7 @@ GetAllKeysPressed(mode = "P") {
 }
 
 GetNextKey() {
+
 	Input, SingleKey, L3 T0.05, {LControl}{RControl}{LAlt}{RAlt}{LShift}{RShift}{LWin}{RWin}{AppsKey}{F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}{Left}{Right}{Up}{Down}{Home}{End}{PgUp}{PgDn}{Del}{Ins}{BS}{Capslock}{Numlock}{PrintScreen}{Pause}
 	Tooltip, %SingleKey%
 	return SingleKey
@@ -379,20 +380,16 @@ LeftPRESSED:
 	else {
         if(instr(A_PriorKey, down) && ((A_TimeSincePriorHotkey, down) < combo)) {
 			nextKey := GetNextKey()              
-			;down+left
-			if ErrorLevel {
-			}
-			;down+left+A
-			else {
-                if(!facingRight) {     
-					send  {%left%}
+			;down+left+button
+			if (ErrorLevel) {
+                if(!facingRight) {            
+					send  {%left%}    
 					facingRight := 0  
 					if(instr(nextKey, buttonA)){
                     	gosub qcfA
 					}
                 }
-                else {     
-					send  {%right%}
+                else {                   
 					facingRight := 1  
 					if(instr(nextKey, buttonA)){
                     	gosub qcbA
@@ -492,15 +489,14 @@ RightPRESSED:
 			nextKey := GetNextKey()     
 			;down+right+button
 			if (ErrorLevel) {
-                if(facingRight) {    
+                if(facingRight) {             
 					send  {%right%}
 					facingRight := 1  
 					if(instr(nextKey, buttonA)){
                     	gosub qcfA
 					}
                 }
-                else {     
-					send  {%left%}
+                else {             
 					facingRight := 0  
 					if(instr(nextKey, buttonA)){
                     	gosub qcbA
@@ -842,17 +838,21 @@ return
 nextSingleDirection: 
 numP := GetAllKeysPressed("P") 
 MaxIndex := numP.MaxIndex() 
-while (MaxIndex > 1) { 
+while (MaxIndex > 1 || (GetKeyState(buttonA, "P") || GetKeyState(buttonB, "P"))) { 
+	numP := GetAllKeysPressed("P") 
+	MaxIndex := numP.MaxIndex()
 	gosub release
 } 
-if(MaxIndex == 1) { 
-  if(GetKeyState(right, "P")) { 
+if(GetKeyState(left, "P")) {
+	facingRight := 1 
     goto RightPRESSED 
-  } 
-  else if(GetKeyState(left, "P")) { 
+}
+else if(GetKeyState(right, "P")) {
+	facingRight := 0
     goto LeftPRESSED 
-  } 
-  else if(GetKeyState(down, "P")) { 
+}
+if(MaxIndex == 1) {
+  if(GetKeyState(down, "P")) { 
     goto DownPRESSED 
   } 
   else if(GetKeyState(up, "P")) { 
@@ -888,9 +888,13 @@ qcfA:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
 		send {%special1%  down}
+		numP := GetAllKeysPressed("P")
+		MaxIndex := numP.MaxIndex()
 		gosub releaseAllDirections
-		while(GetKeyState(buttonA, "P"))
-		{
+		while(GetKeyState(buttonA, "P") || MaxIndex > 1) 
+		{	
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
 			gosub release
 		}
 		send {%special1%  up}
@@ -903,12 +907,14 @@ qcbA:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
 		send {%special2%  down}
-		gosub releaseAllDirections
-		while(GetKeyState(buttonA, "P"))
+		numP := GetAllKeysPressed("P")
+		MaxIndex := numP.MaxIndex()
+		while(GetKeyState(buttonA, "P") || MaxIndex > 1)
 		{
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
 			gosub release
 		}
-		gosub releaseAllDirections
 		send {%special2%  up}
 		comboInProgress := 0
 		gosub nextSingleDirection
@@ -919,9 +925,13 @@ qcfB:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
 		send {%special3%  down}
+		numP := GetAllKeysPressed("P")
+		MaxIndex := numP.MaxIndex()
 		gosub releaseAllDirections
-		while(GetKeyState(buttonB, "P"))
+		while(GetKeyState(buttonB, "P") || MaxIndex > 1) 
 		{
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
 			gosub release
 		}
 		send {%special3%  up}
@@ -934,9 +944,13 @@ qcbB:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
 		send {%special4%  down}
+		numP := GetAllKeysPressed("P")
+		MaxIndex := numP.MaxIndex()
 		gosub releaseAllDirections
-		while(GetKeyState(buttonB, "P"))
+		while(GetKeyState(buttonB, "P") || MaxIndex > 1) 
 		{
+			numP := GetAllKeysPressed("P")
+			MaxIndex := numP.MaxIndex()
 			gosub release
 		}
 		send {%special4%  up}
