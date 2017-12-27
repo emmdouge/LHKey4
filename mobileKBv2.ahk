@@ -392,6 +392,21 @@ LeftPRESSED:
                 }
             }
 		}
+        else if(instr(A_PriorKey, left) && ((A_TimeSincePriorHotkey, left) < combo)) {  
+            comboInProgress := 1
+            numP := GetAllKeysPressed("P")
+            MaxIndex := numP.MaxIndex()
+			key := GetNextKey()
+			facingRight := 0   
+			;left+left+down+button
+			if (ErrorLevel && instr(key, down) && MaxIndex == 2) {
+                key := GetNextKey()
+                if (ErrorLevel && instr(key, buttonA)) {
+                    gosub kbdA
+                }
+            }
+            comboInProgress := 0
+		}
 		else {
             ;pressing buttonA while middle button is held
             if((MaxIndex == 2 && GetKeyState(buttonZ, "P")) || (MaxIndex == 3 && GetKeyState(upperbuttonZ, "P"))) {
@@ -490,6 +505,21 @@ RightPRESSED:
                     gosub qcfA
                 }
             }
+		}
+        else if(instr(A_PriorKey, right) && ((A_TimeSincePriorHotkey, right) < combo)) {  
+            comboInProgress := 1
+            numP := GetAllKeysPressed("P")
+            MaxIndex := numP.MaxIndex()
+			key := GetNextKey()
+			facingRight := 1   
+			;dp
+			if (ErrorLevel && instr(key, down) && MaxIndex == 2) {
+                key := GetNextKey()
+                if (ErrorLevel && instr(key, buttonA)) {
+                    gosub kbdA
+                }
+            }
+            comboInProgress := 0
 		}
 		else {
             ;pressing buttonA while middle button is held
@@ -889,7 +919,7 @@ qcfA:
 	}
 return
 
-qcbA:
+kbdA:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
 		send {%special2%  down}
