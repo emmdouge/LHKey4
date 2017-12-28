@@ -277,6 +277,12 @@ DownPRESSED:
                     gosub dpA
                 }
             }
+			else if (ErrorLevel && instr(key, left) && MaxIndex == 2) {
+                key := GetNextKey()
+                if (ErrorLevel && instr(key, buttonA)) {
+                    gosub hcA
+                }
+            }
             comboInProgress := 0
 		}
         else if(instr(A_PriorKey, left) && ((A_TimeSincePriorHotkey, left) < combo)) {
@@ -290,6 +296,12 @@ DownPRESSED:
                 key := GetNextKey()
                 if (ErrorLevel && instr(key, buttonA)) {
                     gosub dpA
+                }
+            }
+			else if (ErrorLevel && instr(key, right) && MaxIndex == 2) {
+                key := GetNextKey()
+                if (ErrorLevel && instr(key, buttonA)) {
+                    gosub hcA
                 }
             }
             comboInProgress := 0
@@ -922,29 +934,10 @@ return
 kbdA:
 	if(comboInProgress == 0) {
 		comboInProgress := 1
-		send {%special2%  down}
-		numP := GetAllKeysPressed("P")
-		MaxIndex := numP.MaxIndex()
-		while(GetKeyState(buttonA, "P") || MaxIndex > 1)
-		{
-			numP := GetAllKeysPressed("P")
-			MaxIndex := numP.MaxIndex()
-			gosub release
-		}
-		send {%special2%  up}
-		comboInProgress := 0
-		gosub nextSingleDirection
-	}
-return
-
-qcfB:
-	if(comboInProgress == 0) {
-		comboInProgress := 1
 		send {%special3%  down}
 		numP := GetAllKeysPressed("P")
 		MaxIndex := numP.MaxIndex()
-		gosub releaseAllDirections
-		while(GetKeyState(buttonB, "P") || MaxIndex > 1) 
+		while(GetKeyState(buttonA, "P") || MaxIndex > 1)
 		{
 			numP := GetAllKeysPressed("P")
 			MaxIndex := numP.MaxIndex()
@@ -956,27 +949,8 @@ qcfB:
 	}
 return
 
-qcbB:
-	if(comboInProgress == 0) {
-		comboInProgress := 1
-		send {%special4%  down}
-		numP := GetAllKeysPressed("P")
-		MaxIndex := numP.MaxIndex()
-		gosub releaseAllDirections
-		while(GetKeyState(buttonB, "P") || MaxIndex > 1) 
-		{
-			numP := GetAllKeysPressed("P")
-			MaxIndex := numP.MaxIndex()
-			gosub release
-		}
-		send {%special4%  up}
-		comboInProgress := 0
-		gosub nextSingleDirection
-	}
-return
-
 dpA:
-    send {%special5%  down}
+    send {%special2%  down}
     numP := GetAllKeysPressed("P")
     MaxIndex := numP.MaxIndex()
     gosub releaseAllDirections
@@ -985,61 +959,23 @@ dpA:
         MaxIndex := numP.MaxIndex()
         gosub release
     }
-    send {%special5%  up}
+    send {%special2%  up}
     comboInProgress := 0
     gosub nextSingleDirection
 return
 
-dpB:
-	if(comboInProgress == 0) {
-		comboInProgress := 1
-		send {%special6%  down}
-		numP := GetAllKeysPressed("P")
-		MaxIndex := numP.MaxIndex()
-		gosub releaseAllDirections
-		while(GetKeyState(buttonB, "P") || MaxIndex > 2) {
-			numP := GetAllKeysPressed("P")
-			MaxIndex := numP.MaxIndex()
-			gosub release
-		}
-		send {%special6%  up}
-		comboInProgress := 0
-		gosub nextSingleDirection
-	}
-return
-
-huA:
-	if(comboInProgress == 0) {
-		comboInProgress := 1
-		send {%special7%  down}
-		numP := GetAllKeysPressed("P")
-		MaxIndex := numP.MaxIndex()
-		gosub releaseAllDirections
-		while(GetKeyState(buttonA, "P") || MaxIndex > 1) {
-			numP := GetAllKeysPressed("P")
-			MaxIndex := numP.MaxIndex()
-		}
-		send {%special7%  up}
-		comboInProgress := 0
-		gosub nextSingleDirection
-	}
-return
-
-huB:
-	if(comboInProgress == 0) {
-		comboInProgress := 1
-		send {%special8%  down}
-		gosub releaseAllDirections
-		numP := GetAllKeysPressed("P")
-		MaxIndex := numP.MaxIndex()
-		while(GetKeyState(buttonB, "P") || MaxIndex > 1) {
-			numP := GetAllKeysPressed("P")
-			MaxIndex := numP.MaxIndex()
-		}
-		send {%special8%  up}
-		comboInProgress := 0
-		gosub nextSingleDirection
-	}
+hcA:
+    send {%special4%  down}
+    numP := GetAllKeysPressed("P")
+    MaxIndex := numP.MaxIndex()
+    gosub releaseAllDirections
+    while(GetKeyState(buttonA, "P") || MaxIndex > 2) {
+        numP := GetAllKeysPressed("P")
+        MaxIndex := numP.MaxIndex()
+    }
+    send {%special4%  up}
+    comboInProgress := 0
+    gosub nextSingleDirection
 return
 
 ZplusR:
