@@ -120,7 +120,7 @@ int main()
             }
         }
         //left dp
-        else if(stroke_sequence[size-5] == d_down && stroke_sequence[size-4] == a_down && stroke_sequence[size-3] == d_up && stroke_sequence[size-2] == a_down) {
+        else if(stroke_sequence[size-5] == a_down && stroke_sequence[size-4] == s_down && stroke_sequence[size-3] == a_up && stroke_sequence[size-2] == a_down) {
             if(time_sequence[size-4] < combo && time_sequence[size-3] < combo && time_sequence[size-2] < combo  && time_sequence[size-1] < combo) {
                 if(stroke_sequence[size-1] == buttonA_down) {
                     new_stroke.code = SCANCODE_2;
@@ -232,6 +232,9 @@ int main()
             stroke_sequence.push_back(nothing);
             stroke_sequence.push_back(nothing);
             interception_send(context, device, (InterceptionStroke *)&new_stroke, 1);
+            last_stroke.code = s_down.code;
+            last_stroke.state = INTERCEPTION_KEY_UP;
+            interception_send(context, device, (InterceptionStroke *)&last_stroke, 1);
             this_thread::sleep_for(chrono::milliseconds(100));
             last_stroke.code = new_stroke.code;
             last_stroke.state = INTERCEPTION_KEY_UP;
