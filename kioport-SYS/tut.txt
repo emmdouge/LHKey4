@@ -1,0 +1,5 @@
+Copy kioport.sys to \windows\system32\drivers.
+Add kioport.reg to register windows.
+Reboot windows for activate service in the register of windows.
+Add kport.h in your project and kport.lib.
+Put Kport.dll in the same directory as the application.

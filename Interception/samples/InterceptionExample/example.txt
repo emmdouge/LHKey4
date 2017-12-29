@@ -1,0 +1,13 @@
+Writing this to a file.
+kb: 1 f:3
+device: 1 context:0x27ec2b0 stroke: 0x61fe24 c:45 i:0 s:0
+device: 1 context:0x27ec2b0 stroke: 0x61fe24 c:21 i:0 s:0
+kb: 1 f:3
+device: 1 context:0x27ec2b0 stroke: 0x61fe24 c:45 i:0 s:1
+device: 1 context:0x27ec2b0 stroke: 0x61fe24 c:21 i:0 s:1
+kb: 1 f:3
+device: 1 context:0x27ec2b0 stroke: 0x61fe24 c:45 i:0 s:0
+device: 1 context:0x27ec2b0 stroke: 0x61fe24 c:21 i:0 s:0
+kb: 1 f:3
+device: 1 context:0x27ec2b0 stroke: 0x61fe24 c:45 i:0 s:1
+device: 1 context:0x27ec2b0 stroke: 0x61fe24 c:21 i:0 s:1

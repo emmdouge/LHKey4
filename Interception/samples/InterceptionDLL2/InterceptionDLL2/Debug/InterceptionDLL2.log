@@ -1,0 +1,34 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (InterceptionDLL2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  interception.c
+c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.c(45): warning C4273: 'interception_create_context': inconsistent dll linkage
+  c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.h(162): note: see previous definition of 'interception_create_context'
+c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.c(88): warning C4273: 'interception_destroy_context': inconsistent dll linkage
+  c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.h(164): note: see previous definition of 'interception_destroy_context'
+c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.c(107): warning C4273: 'interception_get_precedence': inconsistent dll linkage
+  c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.h(166): note: see previous definition of 'interception_get_precedence'
+c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.c(119): warning C4273: 'interception_set_precedence': inconsistent dll linkage
+  c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.h(168): note: see previous definition of 'interception_set_precedence'
+c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.c(128): warning C4273: 'interception_get_filter': inconsistent dll linkage
+  c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.h(170): note: see previous definition of 'interception_get_filter'
+c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.c(140): warning C4273: 'interception_set_filter': inconsistent dll linkage
+  c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.h(172): note: see previous definition of 'interception_set_filter'
+c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.c(152): warning C4273: 'interception_set_KBfilter': inconsistent dll linkage
+  c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.h(174): note: see previous definition of 'interception_set_KBfilter'
+c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.c(164): warning C4273: 'interception_wait': inconsistent dll linkage
+  c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.h(176): note: see previous definition of 'interception_wait'
+c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.c(169): warning C4273: 'interception_wait_with_timeout': inconsistent dll linkage
+  c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.h(178): note: see previous definition of 'interception_wait_with_timeout'
+c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.c(197): warning C4273: 'interception_send': inconsistent dll linkage
+  c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.h(180): note: see previous definition of 'interception_send'
+c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.c(259): warning C4273: 'interception_receive': inconsistent dll linkage
+  c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.h(182): note: see previous definition of 'interception_receive'
+c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.c(317): warning C4273: 'interception_get_hardware_id': inconsistent dll linkage
+  c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.h(184): note: see previous definition of 'interception_get_hardware_id'
+c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.c(329): warning C4273: 'interception_is_invalid': inconsistent dll linkage
+  c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.h(186): note: see previous definition of 'interception_is_invalid'
+c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.c(334): warning C4273: 'interception_is_keyboard': inconsistent dll linkage
+  c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.h(188): note: see previous definition of 'interception_is_keyboard'
+c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.c(339): warning C4273: 'interception_is_mouse': inconsistent dll linkage
+  c:\users\herby\git\kee4\interception\samples\interceptiondll2\interceptiondll2\interception.h(190): note: see previous definition of 'interception_is_mouse'
+     Creating library C:\Users\Herby\git\Kee4\Interception\samples\InterceptionDLL2\InterceptionDLL2\Debug\Interception.lib and object C:\Users\Herby\git\Kee4\Interception\samples\InterceptionDLL2\InterceptionDLL2\Debug\Interception.exp
+  InterceptionDLL2.vcxproj -> C:\Users\Herby\git\Kee4\Interception\samples\InterceptionDLL2\InterceptionDLL2\Debug\Interception.dll

@@ -1,0 +1,8 @@
+# The sources for the kioport Port I/O device driver:
+TARGETNAME=kioport
+TARGETPATH=obj
+TARGETTYPE=DRIVER
+
+INCLUDES=..\
+
+SOURCES=kioport.c kioport.rc

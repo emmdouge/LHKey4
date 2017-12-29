@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1514502491 source:c:\users\herby\git\kee4\interception\samples\interceptionexample\main.cpp
+	"interception.h"
+	<fstream>
+	<iostream>
+
+1446996749 c:\users\herby\git\kee4\interception\library\interception.h
+
+1514488556 c:\users\herby\git\kee4\interception\samples\interceptionexample\interception.h
+
