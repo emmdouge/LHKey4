@@ -11,6 +11,15 @@ using namespace std;
 enum ScanCode
 {
     SCANCODE_1 = 0x02,
+    SCANCODE_2 = 0x03,
+    SCANCODE_3 = 0x04,
+    SCANCODE_4 = 0x05,
+    SCANCODE_5 = 0x06,
+    SCANCODE_6 = 0x07,
+    SCANCODE_7 = 0x08,
+    SCANCODE_8 = 0x09,
+    SCANCODE_9 = 0x0A,
+    SCANCODE_0 = 0x0B,
     SCANCODE_ESC = 0x01,
     SCANCODE_W = 0x11,
     SCANCODE_A = 0x1E,
@@ -27,6 +36,7 @@ InterceptionKeyStroke alt_down  = {0x38, INTERCEPTION_KEY_DOWN};
 InterceptionKeyStroke del_down  = {0x53, INTERCEPTION_KEY_DOWN | INTERCEPTION_KEY_E0};
 InterceptionKeyStroke w_down = {SCANCODE_W, INTERCEPTION_KEY_DOWN};
 InterceptionKeyStroke a_down = {SCANCODE_A, INTERCEPTION_KEY_DOWN};
+InterceptionKeyStroke a_up = {SCANCODE_A, INTERCEPTION_KEY_UP};
 InterceptionKeyStroke s_down = {SCANCODE_S, INTERCEPTION_KEY_DOWN};
 InterceptionKeyStroke s_up = {SCANCODE_S, INTERCEPTION_KEY_UP};
 InterceptionKeyStroke d_down = {SCANCODE_D, INTERCEPTION_KEY_DOWN};
@@ -67,12 +77,13 @@ int main()
     stroke_sequence.push_back(nothing);
     stroke_sequence.push_back(nothing);
 
-    time_sequence.push_back(INT_MAX);
-    time_sequence.push_back(INT_MAX);
-    time_sequence.push_back(INT_MAX);
-    time_sequence.push_back(INT_MAX);
-    time_sequence.push_back(INT_MAX);
-    time_sequence.push_back(INT_MAX);
+    int size = stroke_sequence.size();
+
+    for(int i = 0; i < size; i++) {
+        time_sequence.push_back(INT_MAX);
+    }
+
+    cout << "size: " << time_sequence.size() << endl;
 
     context = interception_create_context();
 
@@ -90,26 +101,135 @@ int main()
 
         time_sequence.pop_front();
         time_sequence.push_back(diff);
+        int executed = 0;
 
+        //cout << "times: (" << time_sequence[0] << " " << time_sequence[size-5] << " " << time_sequence[size-4] << " " << time_sequence[size-3] << " " << time_sequence[size-2] << " " << time_sequence[size-1] << ")" << endl;
 
-        cout << "times: (" << time_sequence[0] << " " << time_sequence[1] << " " << time_sequence[2] << " " << time_sequence[3] << " " << time_sequence[4] << " " << time_sequence[5] << ")" << endl;
-
-        if(stroke_sequence[2] == s_down && (stroke_sequence[3] == d_down || stroke_sequence[3] == a_down) && stroke_sequence[4] == s_up) {
-            int executed = 0;
-            if(time_sequence[3] < combo && time_sequence[4] < combo && time_sequence[5] < combo) {
-                if(stroke_sequence[5] == buttonA_down) {
+        //qcf
+        if(stroke_sequence[size-4] == s_down && (stroke_sequence[size-3] == d_down || stroke_sequence[size-3] == a_down) && stroke_sequence[4] == s_up) {
+            if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                if(stroke_sequence[size-1] == buttonA_down) {
                     new_stroke.code = SCANCODE_1;
+                    executed = 1;
                 }
-                cout << "State: " << stroke_sequence[3].state << " " << stroke_sequence[2].state << " " << stroke_sequence[1].state << " " << stroke_sequence[1].state << endl;
-                cout << "Keys: "  << stroke_sequence[2].code << " " << stroke_sequence[3].code << " " << stroke_sequence[2].code << " " << stroke_sequence[1].code << " " << stroke_sequence[1].code << endl;
-                stroke_sequence.clear();
-                stroke_sequence.push_back(nothing);
-                stroke_sequence.push_back(nothing);
-                stroke_sequence.push_back(nothing);
-                stroke_sequence.push_back(nothing);
-                stroke_sequence.push_back(nothing);
-                stroke_sequence.push_back(nothing);
+                else if(stroke_sequence[size-1] == buttonC_down) {
+                    new_stroke.code = SCANCODE_5;
+                    executed = 1;
+                }
             }
+        }
+        //left dp
+        else if(stroke_sequence[size-5] == d_down && stroke_sequence[size-4] == a_down && stroke_sequence[size-3] == d_up && stroke_sequence[size-2] == a_down) {
+            if(time_sequence[size-4] < combo && time_sequence[size-3] < combo && time_sequence[size-2] < combo  && time_sequence[size-1] < combo) {
+                if(stroke_sequence[size-1] == buttonA_down) {
+                    new_stroke.code = SCANCODE_2;
+                    executed = 1;
+                }
+                else if(stroke_sequence[size-1] == buttonC_down) {
+                    new_stroke.code = SCANCODE_6;
+                    executed = 1;
+                }
+            }
+        }
+        //right dp
+        else if(stroke_sequence[size-5] == d_down && stroke_sequence[size-4] == s_down && stroke_sequence[size-3] == d_up && stroke_sequence[size-2] == d_down) {
+            if(time_sequence[size-4] < combo && time_sequence[size-3] < combo && time_sequence[size-2] < combo  && time_sequence[size-1] < combo) {
+                if(stroke_sequence[size-1] == buttonA_down) {
+                    new_stroke.code = SCANCODE_2;
+                    executed = 1;
+                }
+                else if(stroke_sequence[size-1] == buttonC_down) {
+                    new_stroke.code = SCANCODE_6;
+                    executed = 1;
+                }
+            }
+        }
+        //left kbd
+        else if(stroke_sequence[size-5] == a_down && stroke_sequence[size-4] == a_up && stroke_sequence[size-3] == a_down && stroke_sequence[size-2] == s_down) {
+            if(time_sequence[size-4] < combo && time_sequence[size-3] < combo && time_sequence[size-2] < combo  && time_sequence[size-1] < combo) {
+                if(stroke_sequence[size-1] == buttonA_down) {
+                    new_stroke.code = SCANCODE_3;
+                    executed = 1;
+                }
+                else if(stroke_sequence[size-1] == buttonC_down) {
+                    new_stroke.code = SCANCODE_7;
+                    executed = 1;
+                }
+             }
+        }
+        //right kbd
+        else if(stroke_sequence[size-5] == d_down && stroke_sequence[size-4] == d_up && stroke_sequence[size-3] == d_down && stroke_sequence[size-2] == s_down) {
+            if(time_sequence[size-4] < combo && time_sequence[size-3] < combo && time_sequence[size-2] < combo  && time_sequence[size-1] < combo) {
+                if(stroke_sequence[size-1] == buttonA_down) {
+                    new_stroke.code = SCANCODE_3;
+                    executed = 1;
+                }
+                else if(stroke_sequence[size-1] == buttonC_down) {
+                    new_stroke.code = SCANCODE_7;
+                    executed = 1;
+                }
+             }
+        }
+        //left ewgf
+        else if(stroke_sequence[size-5] == a_down && stroke_sequence[size-4] == a_up && stroke_sequence[size-3] == s_down && stroke_sequence[size-2] == a_down) {
+            if(time_sequence[size-4] < combo && time_sequence[size-3] < combo && time_sequence[size-2] < combo  && time_sequence[size-1] < combo) {
+                if(stroke_sequence[size-1] == buttonA_down) {
+                    new_stroke.code = SCANCODE_4;
+                    executed = 1;
+                }
+                else if(stroke_sequence[size-1] == buttonC_down) {
+                    new_stroke.code = SCANCODE_8;
+                    executed = 1;
+                }
+             }
+        }
+        //right ewgf
+        else if(stroke_sequence[size-5] == d_down && stroke_sequence[size-4] == d_up && stroke_sequence[size-3] == s_down && stroke_sequence[size-2] == d_down) {
+            if(time_sequence[size-4] < combo && time_sequence[size-3] < combo && time_sequence[size-2] < combo  && time_sequence[size-1] < combo) {
+                if(stroke_sequence[size-1] == buttonA_down) {
+                    new_stroke.code = SCANCODE_4;
+                    executed = 1;
+                }
+                else if(stroke_sequence[size-1] == buttonC_down) {
+                    new_stroke.code = SCANCODE_8;
+                    executed = 1;
+                }
+              }
+        }
+        //left hc
+        else if(stroke_sequence[size-6] == a_down && stroke_sequence[size-5] == s_down && stroke_sequence[size-4] == a_up && stroke_sequence[size-3] == d_down && stroke_sequence[size-2] == s_up) {
+            if(time_sequence[size-5] < combo && time_sequence[size-4] < combo && time_sequence[size-3] < combo && time_sequence[size-2] < combo  && time_sequence[size-1] < combo) {
+                if(stroke_sequence[size-1] == buttonA_down) {
+                    new_stroke.code = SCANCODE_9;
+                    executed = 1;
+                }
+                else if(stroke_sequence[size-1] == buttonC_down) {
+                    new_stroke.code = SCANCODE_9;
+                    executed = 1;
+                }
+             }
+        }
+        //right hc
+        else if(stroke_sequence[size-6] == d_down && stroke_sequence[size-5] == s_down && stroke_sequence[size-4] == d_up && stroke_sequence[size-3] == a_down && stroke_sequence[size-2] == s_up) {
+            if(time_sequence[size-5] < combo && time_sequence[size-4] < combo && time_sequence[size-3] < combo && time_sequence[size-2] < combo  && time_sequence[size-1] < combo) {
+                if(stroke_sequence[size-1] == buttonA_down) {
+                    new_stroke.code = SCANCODE_0;
+                    executed = 1;
+                }
+                else if(stroke_sequence[size-1] == buttonC_down) {
+                    new_stroke.code = SCANCODE_0;
+                    executed = 1;
+                }
+             }
+        }
+        if(executed) {
+            stroke_sequence.clear();
+            stroke_sequence.push_back(nothing);
+            stroke_sequence.push_back(nothing);
+            stroke_sequence.push_back(nothing);
+            stroke_sequence.push_back(nothing);
+            stroke_sequence.push_back(nothing);
+            stroke_sequence.push_back(nothing);
         }
         interception_send(context, device, (InterceptionStroke *)&new_stroke, 1);
         last_stroke = new_stroke;
