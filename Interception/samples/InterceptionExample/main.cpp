@@ -5,6 +5,7 @@
 #include <deque>
 #include <climits>
 #include <chrono>
+#include <thread>
 
 using namespace std;
 
@@ -230,8 +231,15 @@ int main()
             stroke_sequence.push_back(nothing);
             stroke_sequence.push_back(nothing);
             stroke_sequence.push_back(nothing);
+            interception_send(context, device, (InterceptionStroke *)&new_stroke, 1);
+            this_thread::sleep_for(chrono::milliseconds(100));
+            last_stroke.code = new_stroke.code;
+            last_stroke.state = INTERCEPTION_KEY_UP;
+            interception_send(context, device, (InterceptionStroke *)&last_stroke, 1);
         }
-        interception_send(context, device, (InterceptionStroke *)&new_stroke, 1);
+        else {
+            interception_send(context, device, (InterceptionStroke *)&new_stroke, 1);
+        }
         last_stroke = new_stroke;
         oldTime = newTime;
     }
