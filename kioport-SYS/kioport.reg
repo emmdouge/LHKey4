@@ -1,9 +1,0 @@
-REGEDIT4
-
-[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\kioport]
-"Type"=dword:00000001
-"Start"=dword:00000002
-"ImagePath"="\\SystemRoot\\System32\\drivers\\kioport.sys"
-"ErrorControl"=dword:00000001
-"DisplayName"="kioport Library Driver"
-
