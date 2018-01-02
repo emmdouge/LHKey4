@@ -195,6 +195,9 @@ int main()
             }
             last_stroke = new_stroke;
             oldTime = newTime;
+            if(new_stroke.state == INTERCEPTION_KEY_UP) {
+                interception_send(context, device, (InterceptionStroke *)&new_stroke, 1);
+            }
             if(executed) {
                 int size = stroke_sequence.size();
                 stroke_sequence.clear();
