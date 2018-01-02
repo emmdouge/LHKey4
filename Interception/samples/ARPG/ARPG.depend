@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1514851664 source:c:\users\herby\git\kee4\interception\samples\arpg\main.cpp
+	"interception.h"
+	<time.h>
+	<iostream>
+	<deque>
+	<climits>
+	<chrono>
+	<thread>
+
+1514488556 c:\users\herby\git\kee4\interception\samples\arpg\interception.h
+

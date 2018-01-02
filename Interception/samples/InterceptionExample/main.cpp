@@ -1,5 +1,6 @@
 #include "interception.h"
 //MUST ADD dll to this directory and add it to project build and general build options
+//dll can be rebuilt in vs project
 #include <time.h>
 #include <iostream>
 #include <deque>
@@ -71,12 +72,10 @@ int main()
     deque<InterceptionKeyStroke> stroke_sequence;
     deque<double> time_sequence;
 
-    stroke_sequence.push_back(nothing);
-    stroke_sequence.push_back(nothing);
-    stroke_sequence.push_back(nothing);
-    stroke_sequence.push_back(nothing);
-    stroke_sequence.push_back(nothing);
-    stroke_sequence.push_back(nothing);
+    int kbBufferSize = 6;
+    for(int i = 0; i < kbBufferSize; i++) {
+        stroke_sequence.push_back(nothing);
+    }
 
     int size = stroke_sequence.size();
 
@@ -224,13 +223,11 @@ int main()
              }
         }
         if(executed) {
+            int size = stroke_sequence.size();
             stroke_sequence.clear();
-            stroke_sequence.push_back(nothing);
-            stroke_sequence.push_back(nothing);
-            stroke_sequence.push_back(nothing);
-            stroke_sequence.push_back(nothing);
-            stroke_sequence.push_back(nothing);
-            stroke_sequence.push_back(nothing);
+            for(int i = 0; i < size; i++) {
+                stroke_sequence.push_back(nothing);
+            }
             interception_send(context, device, (InterceptionStroke *)&new_stroke, 1);
             last_stroke.code = s_down.code;
             last_stroke.state = INTERCEPTION_KEY_UP;
