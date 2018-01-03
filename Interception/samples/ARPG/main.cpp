@@ -211,7 +211,7 @@ int main()
                 new_stroke.state = INTERCEPTION_KEY_DOWN;
                 interception_send(context, device, (InterceptionStroke *)&new_stroke, 1);
                 //sleep time too low will cause key to not be send
-                this_thread::sleep_for(chrono::milliseconds(30));
+                this_thread::sleep_for(chrono::milliseconds(100));
                 new_stroke.state = INTERCEPTION_KEY_UP;
                 interception_send(context, device, (InterceptionStroke *)&new_stroke, 1);
             }
