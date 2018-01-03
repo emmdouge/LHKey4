@@ -30,7 +30,9 @@ enum ScanCode
     SCANCODE_U = 0x16,
     SCANCODE_I = 0x17,
     SCANCODE_O = 0x18,
-    SCANCODE_CAPS = 0x3A
+    SCANCODE_CAPS = 0x3A,
+    SCANCODE_SPACE = 0x39,
+    SCANCODE_LALT = 0x38
 };
 
 InterceptionKeyStroke nothing = {};
@@ -50,6 +52,10 @@ InterceptionKeyStroke i_down = {SCANCODE_I, INTERCEPTION_KEY_DOWN};
 InterceptionKeyStroke o_down = {SCANCODE_O, INTERCEPTION_KEY_DOWN};
 InterceptionKeyStroke caps_down = {SCANCODE_CAPS, INTERCEPTION_KEY_DOWN};
 InterceptionKeyStroke caps_up = {SCANCODE_CAPS, INTERCEPTION_KEY_UP};
+InterceptionKeyStroke space_down = {SCANCODE_SPACE, INTERCEPTION_KEY_DOWN};
+InterceptionKeyStroke space_up = {SCANCODE_SPACE, INTERCEPTION_KEY_UP};
+InterceptionKeyStroke lalt_down = {SCANCODE_LALT, INTERCEPTION_KEY_DOWN};
+InterceptionKeyStroke lalt_up = {SCANCODE_LALT, INTERCEPTION_KEY_UP};
 
 InterceptionKeyStroke buttonA_down = u_down;
 InterceptionKeyStroke buttonB_down = i_down;
@@ -103,15 +109,13 @@ int main()
             cout << "MOD ON!" << endl;
         }
 
-        if(new_stroke != caps_up) {
-            stroke_sequence.pop_front();
-            stroke_sequence.push_back(new_stroke);
+        stroke_sequence.pop_front();
+        stroke_sequence.push_back(new_stroke);
 
-            double diff = newTime-oldTime;
+        double diff = newTime-oldTime;
 
-            time_sequence.pop_front();
-            time_sequence.push_back(diff);
-        }
+        time_sequence.pop_front();
+        time_sequence.push_back(diff);
 
         if(new_stroke == caps_up) {
             mod = 0;
@@ -123,100 +127,103 @@ int main()
         cout << "times: (" << time_sequence[0] << " " << time_sequence[size-5] << " " << time_sequence[size-4] << " " << time_sequence[size-3] << " " << time_sequence[size-2] << time_sequence[size-1] << ")" << endl;
 
         if(mod) {
-            //qcf1
-            if(stroke_sequence[size-3] == s_down && stroke_sequence[size-2] == a_down && stroke_sequence[size-1] == s_up) {
-                if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                    new_stroke.code = SCANCODE_1;
-                    executed = 1;
-                }
-            }
-            //qcf2
-            if(stroke_sequence[size-3] == s_down && stroke_sequence[size-2] == d_down && stroke_sequence[size-1] == s_up) {
-                if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                    new_stroke.code = SCANCODE_2;
-                    executed = 1;
-                }
-            }
-            //ww
-            if(stroke_sequence[size-3] == w_down && stroke_sequence[size-2] == w_up && stroke_sequence[size-1] == w_down) {
-                if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+            last_stroke = new_stroke;
+            oldTime = newTime;
+            //cw
+            if(stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == w_down) {
+                if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_3;
                     executed = 1;
                 }
             }
-            //ss
-            if(stroke_sequence[size-3] == s_down && stroke_sequence[size-2] == s_up && stroke_sequence[size-1] == s_down) {
-                if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+            //ca
+            if(stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == a_down) {
+                if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
+                    new_stroke.code = SCANCODE_1;
+                    executed = 1;
+                }
+            }
+            //cs
+            if(stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == s_down) {
+                if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_4;
                     executed = 1;
                 }
             }
-            //aa
-            if(stroke_sequence[size-3] == a_down && stroke_sequence[size-2] == a_up && stroke_sequence[size-1] == a_down) {
-                if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+            //cd
+            if(stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == d_down) {
+                if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
+                    new_stroke.code = SCANCODE_2;
+                    executed = 1;
+                }
+            }
+            //cSpace
+            if(stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == space_down) {
+                if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_5;
                     executed = 1;
                 }
             }
-            //dd
-            if(stroke_sequence[size-3] == d_down && stroke_sequence[size-2] == d_up && stroke_sequence[size-1] == d_down) {
-                if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+            //cAlt
+            if(stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == lalt_down) {
+                if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_6;
                     executed = 1;
                 }
             }
             //ccw
-            if(stroke_sequence[size-3] == caps_down && stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == w_down) {
-                if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+            if(stroke_sequence[size-4] == caps_down && stroke_sequence[size-3] == caps_up && stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == w_down) {
+                if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_7;
                     executed = 1;
                 }
             }
             //ccs
-            if(stroke_sequence[size-3] == caps_down && stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == s_down) {
-                if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+            if(stroke_sequence[size-4] == caps_down && stroke_sequence[size-3] == caps_up && stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == s_down) {
+                if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_8;
                     executed = 1;
                 }
             }
             //cca
-            if(stroke_sequence[size-3] == caps_down && stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == a_down) {
-                if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+            if(stroke_sequence[size-4] == caps_down && stroke_sequence[size-3] == caps_up && stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == a_down) {
+                if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_9;
                     executed = 1;
                 }
             }
             //ccd
-            if(stroke_sequence[size-3] == caps_down && stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == d_down) {
-                if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+            if(stroke_sequence[size-4] == caps_down && stroke_sequence[size-3] == caps_up && stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == d_down) {
+                if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_0;
                     executed = 1;
                 }
             }
             //send up stroke unconditionally
-            if(new_stroke.state == INTERCEPTION_KEY_UP) {
-                interception_send(context, device, (InterceptionStroke *)&new_stroke, 1);
-            }
-            last_stroke = new_stroke;
-            oldTime = newTime;
-            if(new_stroke.state == INTERCEPTION_KEY_UP) {
-                interception_send(context, device, (InterceptionStroke *)&new_stroke, 1);
+            if(last_stroke.state == INTERCEPTION_KEY_UP) {
+                interception_send(context, device, (InterceptionStroke *)&last_stroke, 1);
+                if(executed) {
+                    last_stroke.state = stroke_sequence[size-2].state;
+                    last_stroke.code = stroke_sequence[size-2].code;
+                    interception_send(context, device, (InterceptionStroke *)&stroke_sequence[size-2], 1);
+                }
             }
             if(executed) {
                 int size = stroke_sequence.size();
-                stroke_sequence.clear();
-                for(int i = 0; i < size; i++) {
-                    stroke_sequence.push_back(nothing);
+                for(int i = 0; i < size-2; i++) {
+                    stroke_sequence[i] = nothing;
                 }
+                interception_send(context, device, (InterceptionStroke *)&last_stroke, 1);
                 new_stroke.state = INTERCEPTION_KEY_DOWN;
                 interception_send(context, device, (InterceptionStroke *)&new_stroke, 1);
                 //sleep time too low will cause key to not be send
                 this_thread::sleep_for(chrono::milliseconds(100));
                 new_stroke.state = INTERCEPTION_KEY_UP;
                 interception_send(context, device, (InterceptionStroke *)&new_stroke, 1);
+                interception_send(context, device, (InterceptionStroke *)&last_stroke, 1);
             }
         }
-        else {
+        else if (new_stroke.state == INTERCEPTION_KEY_UP || !mod) {
             interception_send(context, device, (InterceptionStroke *)&new_stroke, 1);
         }
         cout << "State: " << stroke_sequence[0].state << " " << stroke_sequence[1].state << " " << stroke_sequence[2].state << " " << stroke_sequence[3].state << " " << stroke_sequence[4].state << endl;
