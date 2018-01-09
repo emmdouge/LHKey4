@@ -15,7 +15,7 @@
 ; If you want to unconditionally use a specific joystick number, change
 ; the following value from 0 to the number of the joystick (1-16).
 ; A value of 0 causes the joystick number to be auto-detected:
-JoystickNumber = 4
+JoystickNumber = 0
 ; END OF CONFIG SECTION. Do not make changes below this point unless
 ; you wish to alter the basic functionality of the script.
 
@@ -78,7 +78,7 @@ Loop
 	IfInString, joy_info, P
 	{
 		GetKeyState, joyp, %JoystickNumber%JoyPOV
-		axis_info = %axis_info%%a_space%%a_space%POV%joyp%
+		axis_info = %axis_info%%a_space%%a_space%POV%joyp%!
 	}
 	ToolTip, %joy_name% (#%JoystickNumber%):`n%axis_info%`nButtons Down: %buttons_down%`n`n(right-click the tray icon to exit)
 	Sleep, 100

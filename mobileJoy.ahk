@@ -4,6 +4,24 @@
 ;   Run *RunAs "%A_ScriptFullPath%"  ; Requires v1.0.92.01+
 ;   ExitApp
 ;}
+JoystickNumber = 0
+if JoystickNumber <= 0
+{
+	Loop 16  ; Query each joystick number to find out which ones exist.
+	{
+		GetKeyState, JoyName, %A_Index%JoyName
+		if JoyName <>
+		{
+			JoystickNumber = %A_Index%
+			break
+		}
+	}
+	if JoystickNumber <= 0
+	{
+		MsgBox The system does not appear to have any joysticks.
+		ExitApp
+	}
+}
 #SingleInstance force
 #Persistent
 #NoEnv
@@ -88,22 +106,29 @@ RAlt::RAlt
 
 GetAllKeysPressed(mode = "P") {
 	
-	pressed := Array()
 	i := 1 
-		
-	;removed wasd and arrow keys from keys to check	to perform command normals
-	keys = ``|1|2|3|4|5|6|7|8|9|0|-|=|[|]\|;|'|,|.|/|b|w|a|s|d|up|left|right|down|c|e|f|g|h|i|j|k|l|m|n|o|p|q|r|t|u|v|x|y|z|Esc|Tab|CapsLock|LShift|RShift|LCtrl|RCtrl|LWin|RWin|LAlt|RAlt|Space|AppsKey|Enter|BackSpace|Delete|Home|End|PGUP|PGDN|PrintScreen|ScrollLock|Pause|Insert|NumLock|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12|F13|F14|F15|F16|F17|F18|F19|F20 
-  	; '|' isn't a key itself (with '\' being the "actual" key), so okay to use is as a delimiter
-	Loop Parse, keys, |
-	{		
-		key = %A_LoopField%				
-		isDown :=  GetKeyState(key, mode)
-		if(isDown)
-		{
-			pressed[i] := key ; using 'i' instead of array.insert() for efficiency
-			i++
+	GetKeyState, joy_buttons, %JoystickNumber%JoyButtons
+	Loop, %joy_buttons%
+	{
+		GetKeyState, joy%a_index%, %JoystickNumber%joy%a_index%
+		if joy%a_index% = D
+			buttons_down = %buttons_down%%a_space%%JoystickNumber%joy%a_index%
+		i++
+	}
+	GetKeyState, joy_info, %JoystickNumber%JoyInfo
+	IfInString, joy_info, P
+	{
+		GetKeyState, joyp, %JoystickNumber%JoyPOV
+		if(joyp == 0 || joyp == 9000 || joyp == 18000 || joyp == 27000 ) {
+			buttons_down = %buttons_down%%a_space%%JoystickNumber%joy%joyP%
+		} 
+		else if(joyp == 13500 || joyp == 22500 || joyp == 31500 || joyp == 4500) {
+			buttons_down = %buttons_down%%a_space%%JoystickNumber%joy%joyP%%a_space%%JoystickNumber%joy%joyP%
 		}
-	}   
+	}
+	
+	pressed := StrSplit(buttons_down," ")
+	ToolTip, `nNum Buttons Down: %m%`nButtons Down: %buttons_down%`n`n(right-click the tray icon to exit)
 	if(pressed.MaxIndex() < 1) {
 		gosub release
 	}
@@ -158,10 +183,10 @@ UpPRESSED:
 	else {
         if(instr(A_PriorKey, buttonZ) && ((A_TimeSincePriorHotkey, buttonZ) < combo)) {
 			roll := lock
-			KeyWait, %buttonR%, d t0.025                
+			KeyWait, %four%, d t0.025                
 			;2+1
 			if ErrorLevel {       
-				KeyWait, %buttonB%, d t0.050
+				KeyWait, %three%, d t0.050
 				;2+1
 				if ErrorLevel {       
 					gosub ZplusA
@@ -274,13 +299,7 @@ DownPRESSED:
 			if (ErrorLevel && instr(key, right) && MaxIndex == 2) {
                 key := GetNextKey()
                 if (ErrorLevel && instr(key, buttonA)) {
-                    gosub dpA
-                }
-            }
-			else if (ErrorLevel && instr(key, left) && MaxIndex == 2) {
-                key := GetNextKey()
-                if (ErrorLevel && instr(key, buttonA)) {
-                    gosub hcA
+                    gosub ewgfA
                 }
             }
             comboInProgress := 0
@@ -295,13 +314,21 @@ DownPRESSED:
 			if (ErrorLevel && instr(key, left) && MaxIndex == 2) {
                 key := GetNextKey()
                 if (ErrorLevel && instr(key, buttonA)) {
-                    gosub dpA
+                    gosub ewgfA
                 }
             }
-			else if (ErrorLevel && instr(key, right) && MaxIndex == 2) {
+            comboInProgress := 0
+		}
+        else if(instr(A_PriorKey, down) && ((A_TimeSincePriorHotkey, down) < combo)) {  
+            comboInProgress := 1
+            numP := GetAllKeysPressed("P")
+            MaxIndex := numP.MaxIndex()
+			key := GetNextKey() 
+			;dowwn+dowwn+(LorR)+button
+			if (ErrorLevel && (instr(key, left) || instr(key, right))  && MaxIndex == 2) {
                 key := GetNextKey()
                 if (ErrorLevel && instr(key, buttonA)) {
-                    gosub hcA
+                    gosub ddLRA
                 }
             }
             comboInProgress := 0
@@ -397,7 +424,7 @@ LeftPRESSED:
 			MaxIndex := numP.MaxIndex()  
 			nextKey := GetNextKey()   	
 			;down+left+button
-			if (ErrorLevel && instr(nextKey, buttonA) && MaxIndex == 1) {
+			if (ErrorLevel && instr(nextKey, buttonA) && MaxIndex == 2) {
                 facingRight := 0
                 if(instr(nextKey, buttonA)){
                     gosub qcfA
@@ -511,7 +538,7 @@ RightPRESSED:
 			MaxIndex := numP.MaxIndex()  
 			nextKey := GetNextKey()   	
 			;down+right+button
-			if (ErrorLevel && instr(nextKey, buttonA) && MaxIndex == 1) {
+			if (ErrorLevel && instr(nextKey, buttonA) && MaxIndex == 2) {
                 facingRight := 1  
                 if(instr(nextKey, buttonA)){
                     gosub qcfA
@@ -949,7 +976,7 @@ kbdA:
 	}
 return
 
-dpA:
+ewgfA:
     send {%special2%  down}
     numP := GetAllKeysPressed("P")
     MaxIndex := numP.MaxIndex()
@@ -964,7 +991,7 @@ dpA:
     gosub nextSingleDirection
 return
 
-hcA:
+ddLRA:
     send {%special4%  down}
     numP := GetAllKeysPressed("P")
     MaxIndex := numP.MaxIndex()
