@@ -128,7 +128,7 @@ GetAllKeysPressed(mode = "P") {
 	}
 	
 	pressed := StrSplit(buttons_down," ")
-	ToolTip, `nNum Buttons Down: %m%`nButtons Down: %buttons_down%`n`n(right-click the tray icon to exit)
+	;ToolTip, `nNum Buttons Down: %m%`nButtons Down: %buttons_down%`n`n(right-click the tray icon to exit)
 	if(pressed.MaxIndex() < 1) {
 		gosub release
 	}
