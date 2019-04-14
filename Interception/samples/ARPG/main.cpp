@@ -23,13 +23,16 @@ enum ScanCode
     SCANCODE_9 = 0x0A,
     SCANCODE_0 = 0x0B,
     SCANCODE_ESC = 0x01,
+    SCANCODE_Q = 0x10,
     SCANCODE_W = 0x11,
+    SCANCODE_E = 0x12,
     SCANCODE_A = 0x1E,
     SCANCODE_S = 0x1F,
     SCANCODE_D = 0x20,
     SCANCODE_U = 0x16,
     SCANCODE_I = 0x17,
     SCANCODE_O = 0x18,
+    SCANCODE_TAB = 0x0F,
     SCANCODE_CAPS = 0x3A,
     SCANCODE_SPACE = 0x39,
     SCANCODE_LALT = 0x38
@@ -47,6 +50,10 @@ InterceptionKeyStroke s_down = {SCANCODE_S, INTERCEPTION_KEY_DOWN};
 InterceptionKeyStroke s_up = {SCANCODE_S, INTERCEPTION_KEY_UP};
 InterceptionKeyStroke d_down = {SCANCODE_D, INTERCEPTION_KEY_DOWN};
 InterceptionKeyStroke d_up = {SCANCODE_D, INTERCEPTION_KEY_UP};
+InterceptionKeyStroke e_down = {SCANCODE_E, INTERCEPTION_KEY_DOWN};
+InterceptionKeyStroke e_up = {SCANCODE_E, INTERCEPTION_KEY_UP};
+InterceptionKeyStroke q_down = {SCANCODE_Q, INTERCEPTION_KEY_DOWN};
+InterceptionKeyStroke q_up = {SCANCODE_Q, INTERCEPTION_KEY_UP};
 InterceptionKeyStroke u_down = {SCANCODE_U, INTERCEPTION_KEY_DOWN};
 InterceptionKeyStroke i_down = {SCANCODE_I, INTERCEPTION_KEY_DOWN};
 InterceptionKeyStroke o_down = {SCANCODE_O, INTERCEPTION_KEY_DOWN};
@@ -56,10 +63,30 @@ InterceptionKeyStroke space_down = {SCANCODE_SPACE, INTERCEPTION_KEY_DOWN};
 InterceptionKeyStroke space_up = {SCANCODE_SPACE, INTERCEPTION_KEY_UP};
 InterceptionKeyStroke lalt_down = {SCANCODE_LALT, INTERCEPTION_KEY_DOWN};
 InterceptionKeyStroke lalt_up = {SCANCODE_LALT, INTERCEPTION_KEY_UP};
+InterceptionKeyStroke tab_down = {SCANCODE_TAB, INTERCEPTION_KEY_DOWN};
+InterceptionKeyStroke tab_up = {SCANCODE_TAB, INTERCEPTION_KEY_UP};
 
-InterceptionKeyStroke buttonA_down = u_down;
-InterceptionKeyStroke buttonB_down = i_down;
-InterceptionKeyStroke buttonC_down = o_down;
+InterceptionKeyStroke up_press = q_down;
+InterceptionKeyStroke up_release = q_up;
+InterceptionKeyStroke left_press = caps_down;
+InterceptionKeyStroke left_release = caps_up;
+InterceptionKeyStroke right_press = d_down;
+InterceptionKeyStroke right_release = d_up;
+InterceptionKeyStroke down_press = a_down;
+InterceptionKeyStroke down_release = a_up;
+
+InterceptionKeyStroke modA_down = tab_down;
+InterceptionKeyStroke modA_up = tab_up;
+InterceptionKeyStroke modB_down = space_down;
+InterceptionKeyStroke modB_up = space_up;
+InterceptionKeyStroke modC_down = lalt_down;
+InterceptionKeyStroke modC_up = lalt_up;
+
+InterceptionKeyStroke buttonA_down = w_down;
+InterceptionKeyStroke buttonB_down = s_down;
+InterceptionKeyStroke buttonC_down = e_down;
+
+
 
 bool operator == (const InterceptionKeyStroke &first, const InterceptionKeyStroke &second)
 {
@@ -104,7 +131,7 @@ int main()
     {
         double newTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
-        if(new_stroke == caps_down) {
+        if(new_stroke == modA_down) {
             mod = 1;
             cout << "MOD ON!" << endl;
         }
@@ -117,7 +144,7 @@ int main()
         time_sequence.pop_front();
         time_sequence.push_back(diff);
 
-        if(new_stroke == caps_up) {
+        if(new_stroke == modA_up) {
             mod = 0;
             cout << "MOD OFF!" << endl;
         }
@@ -130,70 +157,70 @@ int main()
             last_stroke = new_stroke;
             oldTime = newTime;
             //cw
-            if(stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == w_down) {
+            if(stroke_sequence[size-2] == modA_down && stroke_sequence[size-1] == up_press) {
                 if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_3;
                     executed = 1;
                 }
             }
             //ca
-            if(stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == a_down) {
+            if(stroke_sequence[size-2] == modA_down && stroke_sequence[size-1] == left_press) {
                 if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_1;
                     executed = 1;
                 }
             }
             //cs
-            if(stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == s_down) {
+            if(stroke_sequence[size-2] == modA_down && stroke_sequence[size-1] == down_press) {
                 if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_4;
                     executed = 1;
                 }
             }
             //cd
-            if(stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == d_down) {
+            if(stroke_sequence[size-2] == modA_down && stroke_sequence[size-1] == right_press) {
                 if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_2;
                     executed = 1;
                 }
             }
             //cSpace
-            if(stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == space_down) {
+            if(stroke_sequence[size-2] == modA_down && stroke_sequence[size-1] == modB_down) {
                 if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_5;
                     executed = 1;
                 }
             }
             //cAlt
-            if(stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == lalt_down) {
+            if(stroke_sequence[size-2] == modA_down && stroke_sequence[size-1] == modC_down) {
                 if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_6;
                     executed = 1;
                 }
             }
             //ccw
-            if(stroke_sequence[size-4] == caps_down && stroke_sequence[size-3] == caps_up && stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == w_down) {
+            if(stroke_sequence[size-4] == modA_down && stroke_sequence[size-3] == modA_up && stroke_sequence[size-2] == modA_down && stroke_sequence[size-1] == up_press) {
                 if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_7;
                     executed = 1;
                 }
             }
             //ccs
-            if(stroke_sequence[size-4] == caps_down && stroke_sequence[size-3] == caps_up && stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == s_down) {
+            if(stroke_sequence[size-4] == modA_down && stroke_sequence[size-3] == modA_up && stroke_sequence[size-2] == modA_down && stroke_sequence[size-1] == down_press) {
                 if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_8;
                     executed = 1;
                 }
             }
             //cca
-            if(stroke_sequence[size-4] == caps_down && stroke_sequence[size-3] == caps_up && stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == a_down) {
+            if(stroke_sequence[size-4] == modA_down && stroke_sequence[size-3] == modA_up && stroke_sequence[size-2] == modA_down && stroke_sequence[size-1] == left_press) {
                 if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_9;
                     executed = 1;
                 }
             }
             //ccd
-            if(stroke_sequence[size-4] == caps_down && stroke_sequence[size-3] == caps_up && stroke_sequence[size-2] == caps_down && stroke_sequence[size-1] == d_down) {
+            if(stroke_sequence[size-4] == modA_down && stroke_sequence[size-3] == modA_up && stroke_sequence[size-2] == modA_down && stroke_sequence[size-1] == right_press) {
                 if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                     new_stroke.code = SCANCODE_0;
                     executed = 1;
