@@ -88,6 +88,58 @@ InterceptionKeyStroke buttonB_down = s_down;
 InterceptionKeyStroke buttonC_down = e_down;
 
 
+double xSensivity = 24;
+double ySensivity = 15;
+
+int xHitMax = 20;
+int yHitMax = 20;
+
+int xHitCounter = 0;
+int yHitCounter = 0;
+
+bool mouseX(double dist, deque<double> distX_sequence, deque<double> mouseMoveX_sequence)
+{
+    if((dist > xSensivity) || (dist <= -1*xSensivity))
+    {
+        xHitCounter++;
+        if(xHitCounter == xHitMax)
+        {
+            xHitCounter = 0;
+            mouseMoveX_sequence.pop_front();
+            mouseMoveX_sequence.push_back(dist);
+            int size = distX_sequence.size();
+            distX_sequence.clear();
+            for(int i = 0; i < size; i++) {
+                distX_sequence.push_back(INT_MAX);
+            }
+            cout << "mouseX: (" << mouseMoveX_sequence[0] << " " << mouseMoveX_sequence[size-5] << " " << mouseMoveX_sequence[size-4] << " " << mouseMoveX_sequence[size-3] << " " << mouseMoveX_sequence[size-2] << mouseMoveX_sequence[size-1] << ")" << endl;
+        }
+        return true;
+    }
+    return false;
+}
+
+bool mouseY(double dist, deque<double> distY_sequence, deque<double> mouseMoveY_sequence)
+{
+    if(dist >= ySensivity || dist < -1*ySensivity)
+    {
+        yHitCounter++;
+        if(yHitCounter == yHitMax)
+        {
+            yHitCounter = 0;
+            mouseMoveY_sequence.pop_front();
+            mouseMoveY_sequence.push_back(dist);
+            int size = distY_sequence.size();
+            distY_sequence.clear();
+            for(int i = 0; i < size; i++) {
+                distY_sequence.push_back(INT_MAX);
+            }
+            cout << "mouseY: (" << mouseMoveY_sequence[0] << " " << mouseMoveY_sequence[size-5] << " " << mouseMoveY_sequence[size-4] << " " << mouseMoveY_sequence[size-3] << " " << mouseMoveY_sequence[size-2] << mouseMoveY_sequence[size-1] << ")" << endl;
+        }
+        return true;
+    }
+    return false;
+}
 
 bool operator == (const InterceptionKeyStroke &first, const InterceptionKeyStroke &second)
 {
@@ -112,7 +164,10 @@ int main()
     deque<InterceptionKeyStroke> stroke_sequence;
     deque<InterceptionMouseStroke> mstroke_sequence;
     deque<double> time_sequence;
-    deque<double> dist_sequence;
+    deque<double> distX_sequence;
+    deque<double> distY_sequence;
+    deque<double> mouseMoveX_sequence;
+    deque<double> mouseMoveY_sequence;
 
     int kbBufferSize = 6;
     for(int i = 0; i < kbBufferSize; i++) {
@@ -124,6 +179,10 @@ int main()
 
     for(int i = 0; i < size; i++) {
         time_sequence.push_back(INT_MAX);
+        distX_sequence.push_back(INT_MAX);
+        distY_sequence.push_back(INT_MAX);
+        mouseMoveX_sequence.push_back(INT_MAX);
+        mouseMoveY_sequence.push_back(INT_MAX);
     }
 
     cout << "size: " << time_sequence.size() << endl;
@@ -133,6 +192,7 @@ int main()
     interception_set_filter(context, interception_is_keyboard, INTERCEPTION_FILTER_KEY_ALL);
     interception_set_filter(context, interception_is_mouse, INTERCEPTION_FILTER_MOUSE_MOVE);
     double oldTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    double oldDistX, oldDistY = 0;
     int combo = 200;
     while(interception_receive(context, device = interception_wait(context), (InterceptionStroke *)&new_stroke, 1) > 0)
     {
@@ -142,12 +202,28 @@ int main()
 
             if(!(mstroke.flags & INTERCEPTION_MOUSE_MOVE_ABSOLUTE) && mod)
             {
-                mstroke.y *= 0;
+                double newDistX = mstroke.x;
+                double newDistY = mstroke.y;
+                double diffX = newDistX-oldDistX;
+                double diffY = newDistY-oldDistY;
+
+                bool added = false;
+                bool xAxis = mouseX(diffX, distX_sequence, mouseMoveX_sequence);
+                bool yAxis = mouseY(diffY, distY_sequence, mouseMoveY_sequence);
+                if(xAxis)
+                {
+                    distX_sequence.pop_front();
+                    distX_sequence.push_back(diffX);
+                }
+                else if(yAxis)
+                {
+                    distY_sequence.pop_front();
+                    distY_sequence.push_back(diffY);
+                }
+                mstroke.x = 0;
+                mstroke.y = 0;
             }
-            if(!mod)
-            {
-                interception_send(context, device, &new_stroke, 1);
-            }
+            interception_send(context, device, &new_stroke, 1);
         }
         if(interception_is_keyboard(device))
         {
@@ -158,8 +234,7 @@ int main()
 
             if(kstroke == modA_down) {
                 mod = 1;
-                cout << "MOD ON!" << endl;
-
+                //cout << "MOD ON!" << endl;
             }
 
             stroke_sequence.pop_front();
@@ -177,7 +252,7 @@ int main()
 
             int executed = 0;
 
-            cout << "times: (" << time_sequence[0] << " " << time_sequence[size-5] << " " << time_sequence[size-4] << " " << time_sequence[size-3] << " " << time_sequence[size-2] << time_sequence[size-1] << ")" << endl;
+            //cout << "times: (" << time_sequence[0] << " " << time_sequence[size-5] << " " << time_sequence[size-4] << " " << time_sequence[size-3] << " " << time_sequence[size-2] << time_sequence[size-1] << ")" << endl;
             bool held = (last_stroke == modA_up) || (last_stroke == modB_up) || (last_stroke == modC_up);
             bool newStroke = last_stroke != kstroke;
             if(mod && (held || newStroke)) {
@@ -279,6 +354,12 @@ int main()
                     kstroke.state = INTERCEPTION_KEY_UP;
                     interception_send(context, device, (InterceptionStroke *)&kstroke, 1);
                     interception_send(context, device, (InterceptionStroke *)&last_stroke, 1);
+                }
+                distX_sequence.clear();
+                distY_sequence.clear();
+                for(int i = 0; i < size; i++) {
+                    distX_sequence.push_back(INT_MAX);
+                    distY_sequence.push_back(INT_MAX);
                 }
             }
             else if (kstroke.state == INTERCEPTION_KEY_UP || !mod) {
