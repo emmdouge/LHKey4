@@ -97,7 +97,7 @@ int yHitMax = 20;
 int xHitCounter = 0;
 int yHitCounter = 0;
 
-bool mouseX(double dist, deque<double> distX_sequence, deque<double> mouseMoveX_sequence)
+bool mouseX(double dist, deque<double> * distX_sequence, deque<double> * mouseMoveX_sequence, deque<double> * mouseMoveY_sequence)
 {
     if((dist > xSensivity) || (dist <= -1*xSensivity))
     {
@@ -105,21 +105,23 @@ bool mouseX(double dist, deque<double> distX_sequence, deque<double> mouseMoveX_
         if(xHitCounter == xHitMax)
         {
             xHitCounter = 0;
-            mouseMoveX_sequence.pop_front();
-            mouseMoveX_sequence.push_back(dist);
-            int size = distX_sequence.size();
-            distX_sequence.clear();
+            mouseMoveX_sequence->pop_front();
+            mouseMoveX_sequence->push_back(dist);
+            int size = distX_sequence->size();
+            distX_sequence->clear();
+            mouseMoveY_sequence->clear();
             for(int i = 0; i < size; i++) {
-                distX_sequence.push_back(INT_MAX);
+                distX_sequence->push_back(INT_MAX);
+                mouseMoveY_sequence->push_back(0);
             }
-            cout << "mouseX: (" << mouseMoveX_sequence[0] << " " << mouseMoveX_sequence[size-5] << " " << mouseMoveX_sequence[size-4] << " " << mouseMoveX_sequence[size-3] << " " << mouseMoveX_sequence[size-2] << mouseMoveX_sequence[size-1] << ")" << endl;
+            cout << "mouseX: (" << (*mouseMoveX_sequence)[0] << " " << (*mouseMoveX_sequence)[size-5] << " " << (*mouseMoveX_sequence)[size-4] << " " << (*mouseMoveX_sequence)[size-3] << " " << (*mouseMoveX_sequence)[size-2] << " " << (*mouseMoveX_sequence)[size-1] << ")" << endl;
         }
         return true;
     }
     return false;
 }
 
-bool mouseY(double dist, deque<double> distY_sequence, deque<double> mouseMoveY_sequence)
+bool mouseY(double dist, deque<double> * distY_sequence, deque<double> * mouseMoveY_sequence, deque<double> * mouseMoveX_sequence)
 {
     if(dist >= ySensivity || dist < -1*ySensivity)
     {
@@ -127,14 +129,16 @@ bool mouseY(double dist, deque<double> distY_sequence, deque<double> mouseMoveY_
         if(yHitCounter == yHitMax)
         {
             yHitCounter = 0;
-            mouseMoveY_sequence.pop_front();
-            mouseMoveY_sequence.push_back(dist);
-            int size = distY_sequence.size();
-            distY_sequence.clear();
+            mouseMoveY_sequence->pop_front();
+            mouseMoveY_sequence->push_back(dist);
+            int size = distY_sequence->size();
+            distY_sequence->clear();
+            mouseMoveX_sequence->clear();
             for(int i = 0; i < size; i++) {
-                distY_sequence.push_back(INT_MAX);
+                distY_sequence->push_back(INT_MAX);
+                mouseMoveX_sequence->push_back(0);
             }
-            cout << "mouseY: (" << mouseMoveY_sequence[0] << " " << mouseMoveY_sequence[size-5] << " " << mouseMoveY_sequence[size-4] << " " << mouseMoveY_sequence[size-3] << " " << mouseMoveY_sequence[size-2] << mouseMoveY_sequence[size-1] << ")" << endl;
+            cout << "mouseY: (" << (*mouseMoveY_sequence)[0] << " " << (*mouseMoveY_sequence)[size-5] << " " << (*mouseMoveY_sequence)[size-4] << " " << (*mouseMoveY_sequence)[size-3] << " " << (*mouseMoveY_sequence)[size-2] << " " << (*mouseMoveY_sequence)[size-1] << ")" << endl;
         }
         return true;
     }
@@ -179,10 +183,10 @@ int main()
 
     for(int i = 0; i < size; i++) {
         time_sequence.push_back(INT_MAX);
-        distX_sequence.push_back(INT_MAX);
-        distY_sequence.push_back(INT_MAX);
-        mouseMoveX_sequence.push_back(INT_MAX);
-        mouseMoveY_sequence.push_back(INT_MAX);
+        distX_sequence.push_back(0);
+        distY_sequence.push_back(0);
+        mouseMoveX_sequence.push_back(0);
+        mouseMoveY_sequence.push_back(0);
     }
 
     cout << "size: " << time_sequence.size() << endl;
@@ -193,7 +197,7 @@ int main()
     interception_set_filter(context, interception_is_mouse, INTERCEPTION_FILTER_MOUSE_MOVE);
     double oldTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     double oldDistX, oldDistY = 0;
-    int combo = 200;
+    int combo = 500;
     while(interception_receive(context, device = interception_wait(context), (InterceptionStroke *)&new_stroke, 1) > 0)
     {
         if(interception_is_mouse(device))
@@ -208,8 +212,8 @@ int main()
                 double diffY = newDistY-oldDistY;
 
                 bool added = false;
-                bool xAxis = mouseX(diffX, distX_sequence, mouseMoveX_sequence);
-                bool yAxis = mouseY(diffY, distY_sequence, mouseMoveY_sequence);
+                bool xAxis = mouseX(diffX, &distX_sequence, &mouseMoveX_sequence, &mouseMoveY_sequence);
+                bool yAxis = mouseY(diffY, &distY_sequence, &mouseMoveY_sequence, &mouseMoveX_sequence);
                 if(xAxis)
                 {
                     distX_sequence.pop_front();
@@ -248,12 +252,22 @@ int main()
             if(kstroke == modA_up) {
                 mod = 0;
                 cout << "MOD OFF!" << endl;
+                mouseMoveX_sequence.clear();
+                mouseMoveY_sequence.clear();
+                distX_sequence.clear();
+                distY_sequence.clear();
+                for(int i = 0; i < size; i++) {
+                    distX_sequence.push_back(0);
+                    distY_sequence.push_back(0);
+                    mouseMoveX_sequence.push_back(0);
+                    mouseMoveY_sequence.push_back(0);
+                }
             }
 
             int executed = 0;
 
             //cout << "times: (" << time_sequence[0] << " " << time_sequence[size-5] << " " << time_sequence[size-4] << " " << time_sequence[size-3] << " " << time_sequence[size-2] << time_sequence[size-1] << ")" << endl;
-            bool held = (last_stroke == modA_up) || (last_stroke == modB_up) || (last_stroke == modC_up);
+            bool held = (last_stroke == modA_up); //|| (last_stroke == modB_up) || (last_stroke == modC_up);
             bool newStroke = last_stroke != kstroke;
             if(mod && (held || newStroke)) {
                 last_stroke = kstroke;
@@ -263,7 +277,7 @@ int main()
                 cout << "Keys: "  << stroke_sequence[0].code << " " << stroke_sequence[1].code << " " << stroke_sequence[2].code << " " << stroke_sequence[3].code << " " << stroke_sequence[5].code << endl;
 
                 //cw
-                if(stroke_sequence[size-2] == modA_down && stroke_sequence[size-1] == up_press) {
+                if(stroke_sequence[size-2] == modA_down && mouseMoveY_sequence[size-1] < 0  && stroke_sequence[size-1] == modB_down) {
                     if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
                         kstroke.code = SCANCODE_3;
                         executed = 1;
@@ -287,13 +301,6 @@ int main()
                 if(stroke_sequence[size-2] == modA_down && stroke_sequence[size-1] == right_press) {
                     if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
                         kstroke.code = SCANCODE_2;
-                        executed = 1;
-                    }
-                }
-                //cSpace
-                if(stroke_sequence[size-2] == modA_down && stroke_sequence[size-1] == modB_down) {
-                    if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_5;
                         executed = 1;
                     }
                 }
@@ -358,8 +365,8 @@ int main()
                 distX_sequence.clear();
                 distY_sequence.clear();
                 for(int i = 0; i < size; i++) {
-                    distX_sequence.push_back(INT_MAX);
-                    distY_sequence.push_back(INT_MAX);
+                    distX_sequence.push_back(0);
+                    distY_sequence.push_back(0);
                 }
             }
             else if (kstroke.state == INTERCEPTION_KEY_UP || !mod) {
