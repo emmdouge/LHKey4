@@ -98,7 +98,7 @@ InterceptionKeyStroke buttonB_down = s_down;
 InterceptionKeyStroke buttonC_down = space_down;
 
 
-double xSensivity = 20;
+double xSensivity = 17;
 double ySensivity = 15;
 
 int xHitMax = 15;
@@ -268,7 +268,7 @@ int main()
 
             if(kstroke == modA_up) {
                 mod = 0;
-                cout << "MOD OFF!" << endl;
+                //cout << "MOD OFF!" << endl;
                 mouseMoveX_sequence.clear();
                 mouseMoveY_sequence.clear();
                 distX_sequence.clear();
@@ -290,8 +290,8 @@ int main()
                 last_stroke = kstroke;
                 oldTime = newTime;
 
-                cout << "State: " << stroke_sequence[0].state << " " << stroke_sequence[1].state << " " << stroke_sequence[2].state << " " << stroke_sequence[3].state << " " << stroke_sequence[4].state << endl;
-                cout << "Keys: "  << stroke_sequence[0].code << " " << stroke_sequence[1].code << " " << stroke_sequence[2].code << " " << stroke_sequence[3].code << " " << stroke_sequence[5].code << endl;
+                //cout << "State: " << stroke_sequence[0].state << " " << stroke_sequence[1].state << " " << stroke_sequence[2].state << " " << stroke_sequence[3].state << " " << stroke_sequence[4].state << endl;
+                //cout << "Keys: "  << stroke_sequence[0].code << " " << stroke_sequence[1].code << " " << stroke_sequence[2].code << " " << stroke_sequence[3].code << " " << stroke_sequence[5].code << endl;
 
                 //L Up A
                 if(mouseMoveY_sequence[size-1] < 0  && stroke_sequence[size-1] == buttonA_down) {
