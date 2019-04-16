@@ -84,11 +84,11 @@ InterceptionKeyStroke buttonB_down = s_down;
 InterceptionKeyStroke buttonC_down = space_down;
 
 
-double xSensivity = 24;
+double xSensivity = 20;
 double ySensivity = 15;
 
-int xHitMax = 20;
-int yHitMax = 20;
+int xHitMax = 15;
+int yHitMax = 15;
 
 int xHitCounter = 0;
 int yHitCounter = 0;
@@ -193,7 +193,7 @@ int main()
     interception_set_filter(context, interception_is_mouse, INTERCEPTION_FILTER_MOUSE_MOVE);
     double oldTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     double oldDistX, oldDistY = 0;
-    int combo = 600;
+    int combo = 1000;
     while(interception_receive(context, device = interception_wait(context), (InterceptionStroke *)&new_stroke, 1) > 0)
     {
         if(interception_is_mouse(device))
@@ -219,6 +219,13 @@ int main()
                 {
                     distY_sequence.pop_front();
                     distY_sequence.push_back(diffY);
+                }
+                if(xAxis || yAxis)
+                {
+                    double newTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                    double diff = newTime-oldTime;
+                    time_sequence.pop_front();
+                    time_sequence.push_back(diff);
                 }
                 mstroke.x = 0;
                 mstroke.y = 0;
@@ -274,29 +281,59 @@ int main()
 
                 //L Up A
                 if(mouseMoveY_sequence[size-1] < 0  && stroke_sequence[size-1] == buttonA_down) {
-                    if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                         kstroke.code = SCANCODE_1;
                         executed = 1;
                     }
                 }
                 //L Down A
                 if(mouseMoveY_sequence[size-1] > 0  && stroke_sequence[size-1] == buttonA_down) {
-                    if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                         kstroke.code = SCANCODE_2;
                         executed = 1;
                     }
                 }
                 //L Left A
                 if(mouseMoveX_sequence[size-1] < 0  && stroke_sequence[size-1] == buttonA_down) {
-                    if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                         kstroke.code = SCANCODE_3;
                         executed = 1;
                     }
                 }
                 //L Right A
                 if(mouseMoveX_sequence[size-1] > 0  && stroke_sequence[size-1] == buttonA_down) {
-                    if(time_sequence[size-1] < combo && time_sequence[size-1] < combo) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                         kstroke.code = SCANCODE_4;
+                        executed = 1;
+                    }
+                }
+
+
+                //H Up A
+                if(mouseMoveY_sequence[size-2] < 0 && mouseMoveY_sequence[size-1] < 0  && stroke_sequence[size-1] == buttonA_down) {
+                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_5;
+                        executed = 1;
+                    }
+                }
+                //H Down A
+                if(mouseMoveY_sequence[size-2] > 0 && mouseMoveY_sequence[size-1] > 0  && stroke_sequence[size-1] == buttonA_down) {
+                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_6;
+                        executed = 1;
+                    }
+                }
+                //H Left A
+                if(mouseMoveX_sequence[size-2] < 0 && mouseMoveX_sequence[size-1] < 0 && mouseMoveX_sequence[size-1] < 0  && stroke_sequence[size-1] == buttonA_down) {
+                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_7;
+                        executed = 1;
+                    }
+                }
+                //H Right A
+                if(mouseMoveX_sequence[size-2] > 0 && mouseMoveX_sequence[size-1] > 0  && stroke_sequence[size-1] == buttonA_down) {
+                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_8;
                         executed = 1;
                     }
                 }
@@ -326,11 +363,15 @@ int main()
                     //this line makes it so that the last stroke made to complete the command is sent AFTER the command is sent
                     //interception_send(context, device, (InterceptionStroke *)&last_stroke, 1);
                 }
+                mouseMoveX_sequence.clear();
+                mouseMoveY_sequence.clear();
                 distX_sequence.clear();
                 distY_sequence.clear();
                 for(int i = 0; i < size; i++) {
                     distX_sequence.push_back(0);
                     distY_sequence.push_back(0);
+                    mouseMoveX_sequence.push_back(0);
+                    mouseMoveY_sequence.push_back(0);
                 }
             }
             else if (kstroke.state == INTERCEPTION_KEY_UP || !mod) {
