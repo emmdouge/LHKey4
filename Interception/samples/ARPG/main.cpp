@@ -12,16 +12,30 @@ using namespace std;
 
 enum ScanCode
 {
+    //Light A
     SCANCODE_1 = 0x02,
     SCANCODE_2 = 0x03,
     SCANCODE_3 = 0x04,
     SCANCODE_4 = 0x05,
+
+    //Heavy A
     SCANCODE_5 = 0x06,
     SCANCODE_6 = 0x07,
     SCANCODE_7 = 0x08,
     SCANCODE_8 = 0x09,
+
+    //Light B
     SCANCODE_9 = 0x0A,
     SCANCODE_0 = 0x0B,
+    SCANCODE_MINUS = 0x0C,
+    SCANCODE_EQUALS = 0x0D,
+
+    //Heavy B
+    SCANCODE_NUMPLUS = 0x4E,
+    SCANCODE_NUMSTAR = 0x37,
+    SCANCODE_TILDE = 0x29,
+    SCANCODE_BKSL = 0x2B,
+
     SCANCODE_ESC = 0x01,
     SCANCODE_Q = 0x10,
     SCANCODE_W = 0x11,
@@ -308,7 +322,6 @@ int main()
                     }
                 }
 
-
                 //H Up A
                 if(mouseMoveY_sequence[size-2] < 0 && mouseMoveY_sequence[size-1] < 0  && stroke_sequence[size-1] == buttonA_down) {
                     if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
@@ -324,7 +337,7 @@ int main()
                     }
                 }
                 //H Left A
-                if(mouseMoveX_sequence[size-2] < 0 && mouseMoveX_sequence[size-1] < 0 && mouseMoveX_sequence[size-1] < 0  && stroke_sequence[size-1] == buttonA_down) {
+                if(mouseMoveX_sequence[size-2] < 0 && mouseMoveX_sequence[size-1] < 0 && stroke_sequence[size-1] == buttonA_down) {
                     if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                         kstroke.code = SCANCODE_7;
                         executed = 1;
@@ -334,6 +347,64 @@ int main()
                 if(mouseMoveX_sequence[size-2] > 0 && mouseMoveX_sequence[size-1] > 0  && stroke_sequence[size-1] == buttonA_down) {
                     if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                         kstroke.code = SCANCODE_8;
+                        executed = 1;
+                    }
+                }
+
+                //L Up B
+                if(mouseMoveY_sequence[size-1] < 0  && stroke_sequence[size-1] == buttonB_down) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_9;
+                        executed = 1;
+                    }
+                }
+                //L Down B
+                if(mouseMoveY_sequence[size-1] > 0  && stroke_sequence[size-1] == buttonB_down) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_0;
+                        executed = 1;
+                    }
+                }
+                //L Left B
+                if(mouseMoveX_sequence[size-1] < 0  && stroke_sequence[size-1] == buttonB_down) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_MINUS;
+                        executed = 1;
+                    }
+                }
+                //L Right B
+                if(mouseMoveX_sequence[size-1] > 0  && stroke_sequence[size-1] == buttonB_down) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_EQUALS;
+                        executed = 1;
+                    }
+                }
+
+                //H Up B
+                if(mouseMoveY_sequence[size-2] < 0 && mouseMoveY_sequence[size-1] < 0  && stroke_sequence[size-1] == buttonB_down) {
+                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_NUMPLUS;
+                        executed = 1;
+                    }
+                }
+                //H Down B
+                if(mouseMoveY_sequence[size-2] > 0 && mouseMoveY_sequence[size-1] > 0  && stroke_sequence[size-1] == buttonB_down) {
+                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_NUMSTAR;
+                        executed = 1;
+                    }
+                }
+                //H Left B
+                if(mouseMoveX_sequence[size-2] < 0 && mouseMoveX_sequence[size-1] < 0 && stroke_sequence[size-1] == buttonB_down) {
+                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_TILDE;
+                        executed = 1;
+                    }
+                }
+                //H Right B
+                if(mouseMoveX_sequence[size-2] > 0 && mouseMoveX_sequence[size-1] > 0  && stroke_sequence[size-1] == buttonB_down) {
+                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_BKSL;
                         executed = 1;
                     }
                 }
