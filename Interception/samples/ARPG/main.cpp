@@ -99,7 +99,7 @@ InterceptionKeyStroke buttonC_down = space_down;
 
 
 const double xReqSpeedDef = 10;
-const double yReqSpeedDef = 17;
+const double yReqSpeedDef = 12;
 
 double xReqSpeed = xReqSpeedDef;
 double yReqSpeed = yReqSpeedDef;
