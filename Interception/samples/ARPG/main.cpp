@@ -81,40 +81,54 @@ InterceptionKeyStroke lalt_up = {SCANCODE_LALT, INTERCEPTION_KEY_UP};
 InterceptionKeyStroke tab_down = {SCANCODE_TAB, INTERCEPTION_KEY_DOWN};
 InterceptionKeyStroke tab_up = {SCANCODE_TAB, INTERCEPTION_KEY_UP};
 
-InterceptionKeyStroke up_press = q_down;
-InterceptionKeyStroke up_release = q_up;
-InterceptionKeyStroke left_press = caps_down;
-InterceptionKeyStroke left_release = caps_up;
+InterceptionKeyStroke up_press = w_down;
+InterceptionKeyStroke up_release = w_up;
+InterceptionKeyStroke left_press = a_down;
+InterceptionKeyStroke left_release = a_up;
 InterceptionKeyStroke right_press = d_down;
 InterceptionKeyStroke right_release = d_up;
-InterceptionKeyStroke down_press = a_down;
-InterceptionKeyStroke down_release = a_up;
+InterceptionKeyStroke down_press = s_down;
+InterceptionKeyStroke down_release = s_up;
 
-InterceptionKeyStroke modA_down = tab_down;
-InterceptionKeyStroke modA_up = tab_up;
+InterceptionKeyStroke modA_down = caps_down;
+InterceptionKeyStroke modA_up = caps_up;
 
-InterceptionKeyStroke buttonA_down = w_down;
-InterceptionKeyStroke buttonB_down = s_down;
+InterceptionKeyStroke buttonA_down = space_down;
+InterceptionKeyStroke buttonB_down = lalt_down;
 InterceptionKeyStroke buttonC_down = space_down;
 
 
-double xSensivity = 17;
-double ySensivity = 15;
+const double xReqSpeedDef = 10;
+const double yReqSpeedDef = 17;
 
-int xHitMax = 15;
-int yHitMax = 15;
+double xReqSpeed = xReqSpeedDef;
+double yReqSpeed = yReqSpeedDef;
+
+const int xHitMaxDef = 15;
+const int yHitMaxDef = 8;
+
+int xHitMax = xHitMaxDef;
+int yHitMax = yHitMaxDef;
+
+int xHitMaxMod = (int)(xHitMaxDef/1.8);
+int yHitMaxMod = (int)(yHitMaxDef/2);
+
+int xReqSpeedMod = (int)(xHitMaxDef/2);
+int yReqSpeedMod = (int)(yHitMaxDef/2);
 
 int xHitCounter = 0;
 int yHitCounter = 0;
 
 bool mouseX(double dist, deque<double> * distX_sequence, deque<double> * mouseMoveX_sequence, deque<double> * mouseMoveY_sequence)
 {
-    if((dist > xSensivity) || (dist <= -1*xSensivity))
+    if((dist > xReqSpeed) || (dist <= -1*xReqSpeed))
     {
         xHitCounter++;
         if(xHitCounter == xHitMax)
         {
             xHitCounter = 0;
+            xHitMax -= xHitMaxMod;
+            yHitMax = yHitMaxDef;
             mouseMoveX_sequence->pop_front();
             mouseMoveX_sequence->push_back(dist);
             int size = distX_sequence->size();
@@ -133,12 +147,22 @@ bool mouseX(double dist, deque<double> * distX_sequence, deque<double> * mouseMo
 
 bool mouseY(double dist, deque<double> * distY_sequence, deque<double> * mouseMoveY_sequence, deque<double> * mouseMoveX_sequence)
 {
-    if(dist >= ySensivity || dist < -1*ySensivity)
+    if(dist >= yReqSpeed || dist < -1*yReqSpeed)
     {
         yHitCounter++;
+        //cout << yHitMaxMod << endl;
         if(yHitCounter == yHitMax)
         {
-            yHitCounter = 0;
+            if(dist < -1*yReqSpeed)
+            {
+                yHitCounter = (int)yHitMaxDef*0.25;
+            }
+            else
+            {
+                yHitCounter = -1*(int)yHitMaxDef*0.50;
+            }
+            //yHitMax = yHitMaxMod;
+            xHitMax = xHitMaxDef;
             mouseMoveY_sequence->pop_front();
             mouseMoveY_sequence->push_back(dist);
             int size = distY_sequence->size();
@@ -207,7 +231,7 @@ int main()
     interception_set_filter(context, interception_is_mouse, INTERCEPTION_FILTER_MOUSE_MOVE);
     double oldTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     double oldDistX, oldDistY = 0;
-    int combo = 1000;
+    int combo = 1500;
     while(interception_receive(context, device = interception_wait(context), (InterceptionStroke *)&new_stroke, 1) > 0)
     {
         if(interception_is_mouse(device))
@@ -240,6 +264,32 @@ int main()
                     double diff = newTime-oldTime;
                     time_sequence.pop_front();
                     time_sequence.push_back(diff);
+                    //cout << diff << endl;
+                    oldTime = newTime;
+                }
+                else if(time_sequence[size-2] > combo)
+                {
+                    mouseMoveX_sequence.clear();
+                    mouseMoveY_sequence.clear();
+                    distX_sequence.clear();
+                    distY_sequence.clear();
+                    for(int i = 0; i < size; i++) {
+                        distX_sequence.push_back(0);
+                        distY_sequence.push_back(0);
+                        mouseMoveX_sequence.push_back(0);
+                        mouseMoveY_sequence.push_back(0);
+                        time_sequence[i] = INT_MAX;
+                    }
+                }
+                if(!xAxis)
+                {
+                    xHitCounter = 0;
+                    xHitMax = xHitMaxDef;
+                }
+                if(!yAxis)
+                {
+                    yHitCounter = 0;
+                    yHitMax = yHitMaxDef;
                 }
                 mstroke.x = 0;
                 mstroke.y = 0;
@@ -258,13 +308,21 @@ int main()
                 //cout << "MOD ON!" << endl;
             }
 
-            stroke_sequence.pop_front();
-            stroke_sequence.push_back(kstroke);
-
             double diff = newTime-oldTime;
 
-            time_sequence.pop_front();
-            time_sequence.push_back(diff);
+            bool up = kstroke == up_press || kstroke == up_release;
+            bool down = kstroke == down_press || kstroke == down_release;
+            bool left = kstroke == left_press || kstroke == left_release;
+            bool right = kstroke == right_press || kstroke == right_release;
+            if(!up && !down && !left && !right)
+            {
+                stroke_sequence.pop_front();
+                stroke_sequence.push_back(kstroke);
+                time_sequence.pop_front();
+                time_sequence.push_back(diff);
+            }
+
+
 
             if(kstroke == modA_up) {
                 mod = 0;
@@ -287,6 +345,8 @@ int main()
             bool held = (last_stroke == modA_up); //|| (last_stroke == modB_up) || (last_stroke == modC_up);
             bool newStroke = last_stroke != kstroke;
             if(mod && (held || newStroke)) {
+                xHitMax = xHitMaxDef;
+                yHitMax = yHitMaxDef;
                 last_stroke = kstroke;
                 oldTime = newTime;
 
@@ -422,6 +482,7 @@ int main()
                     int size = stroke_sequence.size();
                     for(int i = 0; i < size-2; i++) {
                         stroke_sequence[i] = nothing;
+                        time_sequence[i] = INT_MAX;
                     }
                     //this line makes it so that the last stroke made to complete the command is sent BEFORE the command is sent
                     //interception_send(context, device, (InterceptionStroke *)&last_stroke, 1);
