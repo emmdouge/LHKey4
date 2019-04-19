@@ -104,7 +104,7 @@ const double yReqSpeedDef = 12;
 double xReqSpeed = xReqSpeedDef;
 double yReqSpeed = yReqSpeedDef;
 
-const int xHitMaxDef = 13;
+const int xHitMaxDef = 17;
 const int yHitMaxDef = 8;
 
 int xHitMax = xHitMaxDef;
@@ -155,7 +155,7 @@ bool mouseY(double dist, deque<double> * distY_sequence, deque<double> * mouseMo
         {
             if(dist < -1*yReqSpeed)
             {
-                yHitCounter = (int)yHitMaxDef*0.25;
+                yHitCounter = (int)yHitMaxDef*0.20;
             }
             else
             {
@@ -229,15 +229,18 @@ int main()
     int mod = 0;
     interception_set_filter(context, interception_is_keyboard, INTERCEPTION_FILTER_KEY_ALL);
     interception_set_filter(context, interception_is_mouse, INTERCEPTION_FILTER_MOUSE_MOVE);
+    InterceptionDevice kbDevice;
     double oldTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     double oldDistX, oldDistY = 0;
     int combo = 2000;
     while(interception_receive(context, device = interception_wait(context), (InterceptionStroke *)&new_stroke, 1) > 0)
     {
+
+        int executed = 0;
+        InterceptionKeyStroke &kstroke = *(InterceptionKeyStroke *) &new_stroke;
         if(interception_is_mouse(device))
         {
             InterceptionMouseStroke &mstroke = *(InterceptionMouseStroke *) &new_stroke;
-
             if(!(mstroke.flags & INTERCEPTION_MOUSE_MOVE_ABSOLUTE) && mod)
             {
                 double newDistX = mstroke.x;
@@ -266,8 +269,46 @@ int main()
                     time_sequence.push_back(diff);
                     //cout << diff << endl;
                     oldTime = newTime;
+                    //H Left A
+                    if(mouseMoveX_sequence[size-2] < 0 && mouseMoveX_sequence[size-1] < 0) {
+                        if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                            cout << "key7" << endl;
+                            kstroke.code = SCANCODE_7;
+                            kstroke.information = 0;
+                            executed = 1;
+                            xHitMax = xHitMaxDef;
+                        }
+                    }
+                    //H Up A
+                    if(mouseMoveY_sequence[size-2] < 0 && mouseMoveY_sequence[size-1] < 0) {
+                        if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                            kstroke.code = SCANCODE_5;
+                            kstroke.information = 0;
+                            executed = 1;
+                            xHitMax = xHitMaxDef;
+                        }
+                    }
+                    //H Down A
+                    if(mouseMoveY_sequence[size-2] > 0 && mouseMoveY_sequence[size-1] > 0) {
+                        if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                            kstroke.code = SCANCODE_6;
+                            kstroke.information = 0;
+                            executed = 1;
+                            xHitMax = xHitMaxDef;
+                        }
+                    }
+
+                    //H Right A
+                    if(mouseMoveX_sequence[size-2] > 0 && mouseMoveX_sequence[size-1] > 0) {
+                        if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                            kstroke.code = SCANCODE_8;
+                            kstroke.information = 0;
+                            executed = 1;
+                            xHitMax = xHitMaxDef;
+                        }
+                    }
                 }
-                else if(time_sequence[size-2] > combo)
+                if(executed)
                 {
                     mouseMoveX_sequence.clear();
                     mouseMoveY_sequence.clear();
@@ -280,6 +321,12 @@ int main()
                         mouseMoveY_sequence.push_back(0);
                         time_sequence[i] = INT_MAX;
                     }
+                    kstroke.state = INTERCEPTION_KEY_DOWN;
+                    interception_send(context, kbDevice, (InterceptionStroke *)&kstroke, 1);
+                    //sleep time too low will cause key to not be send
+                    this_thread::sleep_for(chrono::milliseconds(100));
+                    kstroke.state = INTERCEPTION_KEY_UP;
+                    interception_send(context, kbDevice, (InterceptionStroke *)&kstroke, 1);
                 }
                 if(!xAxis)
                 {
@@ -294,12 +341,14 @@ int main()
                 mstroke.x = 0;
                 mstroke.y = 0;
             }
-            interception_send(context, device, &new_stroke, 1);
+            if(!mod)
+            {
+                interception_send(context, device, (InterceptionStroke *)&mstroke, 1);
+            }
         }
         if(interception_is_keyboard(device))
         {
-
-            InterceptionKeyStroke &kstroke = *(InterceptionKeyStroke *) &new_stroke;
+            kbDevice = device;
 
             double newTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
@@ -321,8 +370,6 @@ int main()
                 time_sequence.pop_front();
                 time_sequence.push_back(diff);
             }
-
-            int executed = 0;
 
             //cout << "times: (" << time_sequence[0] << " " << time_sequence[size-5] << " " << time_sequence[size-4] << " " << time_sequence[size-3] << " " << time_sequence[size-2] << time_sequence[size-1] << ")" << endl;
             bool held = (kstroke == modA_up); //|| (last_stroke == modB_up) || (last_stroke == modC_up);
@@ -361,35 +408,6 @@ int main()
                 if(mouseMoveX_sequence[size-1] > 0  && stroke_sequence[size-1] == modA_up) {
                     if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                         kstroke.code = SCANCODE_4;
-                        executed = 1;
-                    }
-                }
-
-                //H Up A
-                if(mouseMoveY_sequence[size-2] < 0 && mouseMoveY_sequence[size-1] < 0  && stroke_sequence[size-1] == modA_up) {
-                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_5;
-                        executed = 1;
-                    }
-                }
-                //H Down A
-                if(mouseMoveY_sequence[size-2] > 0 && mouseMoveY_sequence[size-1] > 0  && stroke_sequence[size-1] == modA_up) {
-                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_6;
-                        executed = 1;
-                    }
-                }
-                //H Left A
-                if(mouseMoveX_sequence[size-2] < 0 && mouseMoveX_sequence[size-1] < 0 && stroke_sequence[size-1] == modA_up) {
-                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_7;
-                        executed = 1;
-                    }
-                }
-                //H Right A
-                if(mouseMoveX_sequence[size-2] > 0 && mouseMoveX_sequence[size-1] > 0  && stroke_sequence[size-1] == modA_up) {
-                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_8;
                         executed = 1;
                     }
                 }
@@ -461,25 +479,7 @@ int main()
                         interception_send(context, device, (InterceptionStroke *)&stroke_sequence[size-2], 1);
                     }
                 }
-                if(executed) {
-                    //put this line on individual command is you want mod to be holdable to execute commands
-                    mod = 0;
-                    int size = stroke_sequence.size();
-                    for(int i = 0; i < size-2; i++) {
-                        stroke_sequence[i] = nothing;
-                        time_sequence[i] = INT_MAX;
-                    }
-                    //this line makes it so that the last stroke made to complete the command is sent BEFORE the command is sent
-                    //interception_send(context, device, (InterceptionStroke *)&last_stroke, 1);
-                    kstroke.state = INTERCEPTION_KEY_DOWN;
-                    interception_send(context, device, (InterceptionStroke *)&kstroke, 1);
-                    //sleep time too low will cause key to not be send
-                    this_thread::sleep_for(chrono::milliseconds(100));
-                    kstroke.state = INTERCEPTION_KEY_UP;
-                    interception_send(context, device, (InterceptionStroke *)&kstroke, 1);
-                    //this line makes it so that the last stroke made to complete the command is sent AFTER the command is sent
-                    //interception_send(context, device, (InterceptionStroke *)&last_stroke, 1);
-                }
+
                 mouseMoveX_sequence.clear();
                 mouseMoveY_sequence.clear();
                 distX_sequence.clear();
@@ -491,17 +491,37 @@ int main()
                     mouseMoveY_sequence.push_back(0);
                 }
             }
+            if(executed) {
+                //put this line on individual command is you want mod to be holdable to execute commands
+                mod = 0;
+                int size = stroke_sequence.size();
+                for(int i = 0; i < size-2; i++) {
+                    stroke_sequence[i] = nothing;
+                    time_sequence[i] = INT_MAX;
+                }
+                //this line makes it so that the last stroke made to complete the command is sent BEFORE the command is sent
+                //interception_send(context, device, (InterceptionStroke *)&last_stroke, 1);
+                kstroke.state = INTERCEPTION_KEY_DOWN;
+                interception_send(context, kbDevice, (InterceptionStroke *)&kstroke, 1);
+                //sleep time too low will cause key to not be send
+                this_thread::sleep_for(chrono::milliseconds(100));
+                kstroke.state = INTERCEPTION_KEY_UP;
+                interception_send(context, kbDevice, (InterceptionStroke *)&kstroke, 1);
+                //this line makes it so that the last stroke made to complete the command is sent AFTER the command is sent
+                //interception_send(context, device, (InterceptionStroke *)&last_stroke, 1);
+                executed = 0;
+            }
+            if (kstroke.state == INTERCEPTION_KEY_UP && kstroke == modA_up) {
+                mod = 0;
+            }
             if (kstroke.state == INTERCEPTION_KEY_UP || !mod) {
-                interception_send(context, device, (InterceptionStroke *)&kstroke, 1);
+                interception_send(context, kbDevice, (InterceptionStroke *)&kstroke, 1);
             }
-            else if (kstroke.state == INTERCEPTION_KEY_UP && kstroke == modA_up) {
-                mod = 0;
-                interception_send(context, device, (InterceptionStroke *)&kstroke, 1);
-            }
-            //allows keys to pass through even if mod is pressed and stops repeating modA presses
+            //keys to pass through even if mod is pressed and stops repeating modA presses
             else if (kstroke.state == INTERCEPTION_KEY_DOWN && mod && kstroke != modA_down) {
-                mod = 0;
-                interception_send(context, device, (InterceptionStroke *)&kstroke, 1);
+                //uncomment to unlock cam after key is pressed while mod is on
+                //mod = 0;
+                interception_send(context, kbDevice, (InterceptionStroke *)&kstroke, 1);
             }
         }
     }
