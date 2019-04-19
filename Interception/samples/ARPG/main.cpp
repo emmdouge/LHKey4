@@ -500,6 +500,7 @@ int main()
             }
             //allows keys to pass through even if mod is pressed and stops repeating modA presses
             else if (kstroke.state == INTERCEPTION_KEY_DOWN && mod && kstroke != modA_down) {
+                mod = 0;
                 interception_send(context, device, (InterceptionStroke *)&kstroke, 1);
             }
         }
