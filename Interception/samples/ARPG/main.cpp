@@ -99,22 +99,16 @@ InterceptionKeyStroke buttonC_down = space_down;
 
 
 const double xReqSpeedDef = 3;
-const double yReqSpeedDef = 12;
+const double yReqSpeedDef = 3;
 
 double xReqSpeed = xReqSpeedDef;
 double yReqSpeed = yReqSpeedDef;
 
-const int xHitMaxDef = 17;
-const int yHitMaxDef = 8;
+const int xHitMaxDef = 12;
+const int yHitMaxDef = 12;
 
 int xHitMax = xHitMaxDef;
 int yHitMax = yHitMaxDef;
-
-int xHitMaxMod = (int)(xHitMaxDef/1.8);
-int yHitMaxMod = (int)(yHitMaxDef/2);
-
-int xReqSpeedMod = (int)(xHitMaxDef/2);
-int yReqSpeedMod = (int)(yHitMaxDef/2);
 
 int xHitCounter = 0;
 int yHitCounter = 0;
@@ -126,9 +120,14 @@ bool mouseX(double dist, deque<double> * distX_sequence, deque<double> * mouseMo
         xHitCounter++;
         if(xHitCounter == xHitMax)
         {
-            xHitCounter = 0;
-            xHitMax -= xHitMaxMod;
-            yHitMax = yHitMaxDef;
+            if(dist < -1*xReqSpeed)
+            {
+                xHitCounter = -1*(int)xHitMaxDef*0.25;
+            }
+            else
+            {
+                xHitCounter = -1*(int)xHitMaxDef*0.20;
+            }
             mouseMoveX_sequence->pop_front();
             mouseMoveX_sequence->push_back(dist);
             int size = distX_sequence->size();
@@ -153,13 +152,15 @@ bool mouseY(double dist, deque<double> * distY_sequence, deque<double> * mouseMo
         //cout << yHitMaxMod << endl;
         if(yHitCounter == yHitMax)
         {
+            //up
             if(dist < -1*yReqSpeed)
             {
-                yHitCounter = (int)yHitMaxDef*0.20;
+                yHitCounter = (int)yHitMaxDef*0.44;
             }
+            //down
             else
             {
-                yHitCounter = -1*(int)yHitMaxDef*0.50;
+                yHitCounter = (int)yHitMaxDef*0.22;
             }
             //yHitMax = yHitMaxMod;
             xHitMax = xHitMaxDef;
@@ -285,7 +286,7 @@ int main()
                             kstroke.code = SCANCODE_5;
                             kstroke.information = 0;
                             executed = 1;
-                            xHitMax = xHitMaxDef;
+                            yHitMax = yHitMaxDef;
                         }
                     }
                     //H Down A
@@ -294,7 +295,7 @@ int main()
                             kstroke.code = SCANCODE_6;
                             kstroke.information = 0;
                             executed = 1;
-                            xHitMax = xHitMaxDef;
+                            yHitMax = yHitMaxDef;
                         }
                     }
 
@@ -310,6 +311,8 @@ int main()
                 }
                 if(executed)
                 {
+                    xHitCounter = 0;
+                    yHitCounter = 0;
                     mouseMoveX_sequence.clear();
                     mouseMoveY_sequence.clear();
                     distX_sequence.clear();
