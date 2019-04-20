@@ -106,7 +106,7 @@ double yReqSpeed = yReqSpeedDef;
 
 const int xHitMaxDef = 12;
 const int yHitMaxDef = 12;
-const int rollMaxDef = 10;
+const int rollMaxDef = 3;
 
 int xHitMax = xHitMaxDef;
 int yHitMax = yHitMaxDef;
@@ -209,6 +209,16 @@ bool operator != (const InterceptionKeyStroke &first, const InterceptionKeyStrok
     return !(first == second);
 }
 
+bool operator == (const InterceptionMouseStroke &first, const InterceptionMouseStroke &second)
+{
+    return first.flags == second.flags && first.state == second.state;
+}
+
+bool operator != (const InterceptionMouseStroke &first, const InterceptionMouseStroke &second)
+{
+    return !(first == second);
+}
+
 int main()
 {
     using namespace std;
@@ -249,7 +259,9 @@ int main()
     context = interception_create_context();
     int mod = 0;
     interception_set_filter(context, interception_is_keyboard, INTERCEPTION_FILTER_KEY_ALL);
-    interception_set_filter(context, interception_is_mouse, INTERCEPTION_FILTER_MOUSE_MOVE | INTERCEPTION_FILTER_MOUSE_WHEEL);
+    interception_set_filter(context, interception_is_mouse, INTERCEPTION_FILTER_MOUSE_MOVE | INTERCEPTION_FILTER_MOUSE_WHEEL |
+        INTERCEPTION_FILTER_MOUSE_LEFT_BUTTON_DOWN | INTERCEPTION_FILTER_MOUSE_RIGHT_BUTTON_DOWN
+    );
     InterceptionDevice kbDevice;
     double oldTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     double oldDistX = 0, oldDistY = 0;
@@ -291,7 +303,7 @@ int main()
                     time_sequence.push_back(diff);
                     //cout << diff << endl;
                     oldTime = newTime;
-                    //H Left A
+                    //H Left
                     if(mouseMoveX_sequence[size-2] < 0 && mouseMoveX_sequence[size-1] < 0) {
                         if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                             cout << "key7" << endl;
@@ -301,7 +313,7 @@ int main()
                             xHitMax = xHitMaxDef;
                         }
                     }
-                    //H Up A
+                    //H Up
                     if(mouseMoveY_sequence[size-2] < 0 && mouseMoveY_sequence[size-1] < 0) {
                         if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                             kstroke.code = SCANCODE_5;
@@ -310,7 +322,7 @@ int main()
                             yHitMax = yHitMaxDef;
                         }
                     }
-                    //H Down A
+                    //H Down
                     if(mouseMoveY_sequence[size-2] > 0 && mouseMoveY_sequence[size-1] > 0) {
                         if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                             kstroke.code = SCANCODE_6;
@@ -320,7 +332,7 @@ int main()
                         }
                     }
 
-                    //H Right A
+                    //H Right
                     if(mouseMoveX_sequence[size-2] > 0 && mouseMoveX_sequence[size-1] > 0) {
                         if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                             kstroke.code = SCANCODE_8;
@@ -352,19 +364,144 @@ int main()
                     double diff = newTime-oldTime;
                     time_sequence.pop_front();
                     time_sequence.push_back(diff);
-                    cout << "do a barrel roll!" << endl;
+                    //cout << "do a barrel roll!" << endl;
                     oldTime = newTime;
+                    int rollUp = roll_sequence[size-1] > 0;
+                    int rollDown = roll_sequence[size-1] < 0;
 
-                    if(roll_sequence[size-1] > 0 && mouseMoveX_sequence[size-1] == 0 && mouseMoveY_sequence[size-1] == 0)
-                    {
+//                    if(rollUp && mouseMoveX_sequence[size-1] == 0 && mouseMoveY_sequence[size-1] == 0)
+//                    {
+//                        kstroke.code = SCANCODE_9;
+//                        kstroke.information = 0;
+//                        executed = 1;
+//                    }
+//                    else if(rollDown && mouseMoveX_sequence[size-1] == 0 && mouseMoveY_sequence[size-1] == 0)
+//                    {
+//                        kstroke.code = SCANCODE_0;
+//                        kstroke.information = 0;
+//                        executed = 1;
+//                    }
+
+                    //L Up RollUp
+                    if(mouseMoveY_sequence[size-1] < 0 && rollUp) {
+                        if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                            kstroke.code = SCANCODE_9;
+                            executed = 1;
+                        }
+                    }
+                    //L Down RollUp
+                    if(mouseMoveY_sequence[size-1] > 0 && rollUp) {
+                        if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                            kstroke.code = SCANCODE_0;
+                            executed = 1;
+                        }
+                    }
+                    //L Left RollUp
+                    if(mouseMoveX_sequence[size-1] < 0 && rollUp) {
+                        if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                            kstroke.code = SCANCODE_MINUS;
+                            executed = 1;
+                        }
+                    }
+                    //L Right RollUp
+                    if(mouseMoveX_sequence[size-1] > 0 && rollUp) {
+                        if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                            kstroke.code = SCANCODE_EQUALS;
+                            executed = 1;
+                        }
+                    }
+                    //L Up RollDown
+                    if(mouseMoveY_sequence[size-1] < 0 && rollDown) {
+                        if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                            kstroke.code = SCANCODE_9;
+                            executed = 1;
+                        }
+                    }
+                    //L Down RollDown
+                    if(mouseMoveY_sequence[size-1] > 0 && rollDown) {
+                        if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                            kstroke.code = SCANCODE_0;
+                            executed = 1;
+                        }
+                    }
+                    //L Left RollDown
+                    if(mouseMoveX_sequence[size-1] < 0 && rollDown) {
+                        if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                            kstroke.code = SCANCODE_MINUS;
+                            executed = 1;
+                        }
+                    }
+                    //L Right RollDown
+                    if(mouseMoveX_sequence[size-1] > 0 && rollDown) {
+                        if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                            kstroke.code = SCANCODE_EQUALS;
+                            executed = 1;
+                        }
+                    }
+                }
+            }
+            if(mstroke.state == INTERCEPTION_MOUSE_LEFT_BUTTON_DOWN || mstroke.state == INTERCEPTION_MOUSE_RIGHT_BUTTON_DOWN)
+            {
+                double newTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                double diff = newTime-oldTime;
+                time_sequence.pop_front();
+                time_sequence.push_back(diff);
+                oldTime = newTime;
+                int left = mstroke.state == INTERCEPTION_MOUSE_LEFT_BUTTON_DOWN;
+                int right = mstroke.state == INTERCEPTION_MOUSE_RIGHT_BUTTON_DOWN;
+                //L Up LC
+                if(mouseMoveY_sequence[size-1] < 0 && left) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                         kstroke.code = SCANCODE_9;
-                        kstroke.information = 0;
                         executed = 1;
                     }
-                    else if(roll_sequence[size-1] < 0)
-                    {
+                }
+                //L Down LC
+                if(mouseMoveY_sequence[size-1] > 0 && left) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                         kstroke.code = SCANCODE_0;
-                        kstroke.information = 0;
+                        executed = 1;
+                    }
+                }
+                //L Left LC
+                if(mouseMoveX_sequence[size-1] < 0 && left) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_MINUS;
+                        executed = 1;
+                    }
+                }
+                //L Right LC
+                if(mouseMoveX_sequence[size-1] > 0 && left) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_EQUALS;
+                        executed = 1;
+                    }
+                }
+                //L Up RC
+                if(mouseMoveY_sequence[size-1] < 0 && right) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_9;
+                        executed = 1;
+                    }
+                }
+                //L Down RC
+                if(mouseMoveY_sequence[size-1] > 0 && right) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_0;
+                        executed = 1;
+                    }
+                }
+                //L Left RC
+                if(mouseMoveX_sequence[size-1] < 0 && right) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_MINUS;
+                        executed = 1;
+                    }
+                }
+                //L Right RC
+                if(mouseMoveX_sequence[size-1] > 0 && right) {
+                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
+                        kstroke.code = SCANCODE_EQUALS;
                         executed = 1;
                     }
                 }
@@ -436,89 +573,31 @@ int main()
                 //cout << "State: " << stroke_sequence[0].state << " " << stroke_sequence[1].state << " " << stroke_sequence[2].state << " " << stroke_sequence[3].state << " " << stroke_sequence[4].state << endl;
                 cout << "Keys: "  << stroke_sequence[0].code << " " << stroke_sequence[1].code << " " << stroke_sequence[2].code << " " << stroke_sequence[3].code << " " << stroke_sequence[5].code << endl;
 
-                //L Up A
+                //L Up
                 if(mouseMoveY_sequence[size-1] < 0  && stroke_sequence[size-1] == modA_up) {
                     if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                         kstroke.code = SCANCODE_1;
                         executed = 1;
                     }
                 }
-                //L Down A
+                //L Down
                 if(mouseMoveY_sequence[size-1] > 0  && stroke_sequence[size-1] == modA_up) {
                     if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                         kstroke.code = SCANCODE_2;
                         executed = 1;
                     }
                 }
-                //L Left A
+                //L Left
                 if(mouseMoveX_sequence[size-1] < 0  && stroke_sequence[size-1] == modA_up) {
                     if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                         kstroke.code = SCANCODE_3;
                         executed = 1;
                     }
                 }
-                //L Right A
+                //L Right
                 if(mouseMoveX_sequence[size-1] > 0  && stroke_sequence[size-1] == modA_up) {
                     if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
                         kstroke.code = SCANCODE_4;
-                        executed = 1;
-                    }
-                }
-
-                //L Up B
-                if(mouseMoveY_sequence[size-1] < 0  && stroke_sequence[size-1] == buttonA_down) {
-                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_9;
-                        executed = 1;
-                    }
-                }
-                //L Down B
-                if(mouseMoveY_sequence[size-1] > 0  && stroke_sequence[size-1] == buttonA_down) {
-                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_0;
-                        executed = 1;
-                    }
-                }
-                //L Left B
-                if(mouseMoveX_sequence[size-1] < 0  && stroke_sequence[size-1] == buttonA_down) {
-                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_MINUS;
-                        executed = 1;
-                    }
-                }
-                //L Right B
-                if(mouseMoveX_sequence[size-1] > 0  && stroke_sequence[size-1] == buttonA_down) {
-                    if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_EQUALS;
-                        executed = 1;
-                    }
-                }
-
-                //H Up B
-                if(mouseMoveY_sequence[size-2] < 0 && mouseMoveY_sequence[size-1] < 0  && stroke_sequence[size-1] == buttonA_down) {
-                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_NUMPLUS;
-                        executed = 1;
-                    }
-                }
-                //H Down B
-                if(mouseMoveY_sequence[size-2] > 0 && mouseMoveY_sequence[size-1] > 0  && stroke_sequence[size-1] == buttonA_down) {
-                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_NUMSTAR;
-                        executed = 1;
-                    }
-                }
-                //H Left B
-                if(mouseMoveX_sequence[size-2] < 0 && mouseMoveX_sequence[size-1] < 0 && stroke_sequence[size-1] == buttonA_down) {
-                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_TILDE;
-                        executed = 1;
-                    }
-                }
-                //H Right B
-                if(mouseMoveX_sequence[size-2] > 0 && mouseMoveX_sequence[size-1] > 0  && stroke_sequence[size-1] == buttonA_down) {
-                    if(time_sequence[size-3] < combo && time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_BKSL;
                         executed = 1;
                     }
                 }
@@ -548,7 +627,7 @@ int main()
                 }
             }
             if(executed) {
-                //put this line on individual command is you want mod to be holdable to execute commands
+                //put this line on individual commands is you want mod to be holdable to execute commands
                 mod = 0;
                 int size = stroke_sequence.size();
                 for(int i = 0; i < size-2; i++) {
