@@ -106,12 +106,14 @@ double yReqSpeed = yReqSpeedDef;
 
 const int xHitMaxDef = 12;
 const int yHitMaxDef = 12;
+const int rollMaxDef = 10;
 
 int xHitMax = xHitMaxDef;
 int yHitMax = yHitMaxDef;
 
 int xHitCounter = 0;
 int yHitCounter = 0;
+int rollCounter = 0;
 
 bool mouseX(double dist, deque<double> * distX_sequence, deque<double> * mouseMoveX_sequence, deque<double> * mouseMoveY_sequence)
 {
@@ -180,6 +182,23 @@ bool mouseY(double dist, deque<double> * distY_sequence, deque<double> * mouseMo
     return false;
 }
 
+bool roll(double rolling, deque<double> * roll_sequence)
+{
+    if(rolling > 0 || rolling < 0)
+    {
+        rollCounter++;
+        if(rollCounter == rollMaxDef)
+        {
+            int size = roll_sequence->size();
+            roll_sequence->pop_front();
+            roll_sequence->push_back(rolling);
+            cout << "roll: (" << (*roll_sequence)[0] << " " << (*roll_sequence)[size-5] << " " << (*roll_sequence)[size-4] << " " << (*roll_sequence)[size-3] << " " << (*roll_sequence)[size-2] << " " << (*roll_sequence)[size-1] << ")" << endl;
+        }
+        return true;
+    }
+    return false;
+}
+
 bool operator == (const InterceptionKeyStroke &first, const InterceptionKeyStroke &second)
 {
     return first.code == second.code && first.state == second.state;
@@ -198,7 +217,6 @@ int main()
     InterceptionDevice device;
     InterceptionStroke new_stroke;
     InterceptionKeyStroke last_stroke;
-    InterceptionMouseStroke mlast_stroke;
 
     deque<InterceptionKeyStroke> stroke_sequence;
     deque<InterceptionMouseStroke> mstroke_sequence;
@@ -207,6 +225,7 @@ int main()
     deque<double> distY_sequence;
     deque<double> mouseMoveX_sequence;
     deque<double> mouseMoveY_sequence;
+    deque<double> roll_sequence;
 
     int kbBufferSize = 6;
     for(int i = 0; i < kbBufferSize; i++) {
@@ -222,6 +241,7 @@ int main()
         distY_sequence.push_back(0);
         mouseMoveX_sequence.push_back(0);
         mouseMoveY_sequence.push_back(0);
+        roll_sequence.push_back(0);
     }
 
     cout << "size: " << time_sequence.size() << endl;
@@ -229,10 +249,10 @@ int main()
     context = interception_create_context();
     int mod = 0;
     interception_set_filter(context, interception_is_keyboard, INTERCEPTION_FILTER_KEY_ALL);
-    interception_set_filter(context, interception_is_mouse, INTERCEPTION_FILTER_MOUSE_MOVE);
+    interception_set_filter(context, interception_is_mouse, INTERCEPTION_FILTER_MOUSE_MOVE | INTERCEPTION_FILTER_MOUSE_WHEEL);
     InterceptionDevice kbDevice;
     double oldTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-    double oldDistX, oldDistY = 0;
+    double oldDistX = 0, oldDistY = 0;
     int combo = 2000;
     while(interception_receive(context, device = interception_wait(context), (InterceptionStroke *)&new_stroke, 1) > 0)
     {
@@ -242,14 +262,15 @@ int main()
         if(interception_is_mouse(device))
         {
             InterceptionMouseStroke &mstroke = *(InterceptionMouseStroke *) &new_stroke;
-            if(!(mstroke.flags & INTERCEPTION_MOUSE_MOVE_ABSOLUTE) && mod)
+            int wheel = !(mstroke.flags & INTERCEPTION_MOUSE_WHEEL);
+            int mouse = !(mstroke.flags & INTERCEPTION_MOUSE_MOVE_ABSOLUTE);
+            if(mouse && mod)
             {
                 double newDistX = mstroke.x;
                 double newDistY = mstroke.y;
                 double diffX = newDistX-oldDistX;
                 double diffY = newDistY-oldDistY;
 
-                bool added = false;
                 bool xAxis = mouseX(diffX, &distX_sequence, &mouseMoveX_sequence, &mouseMoveY_sequence);
                 bool yAxis = mouseY(diffY, &distY_sequence, &mouseMoveY_sequence, &mouseMoveX_sequence);
                 if(xAxis)
@@ -309,28 +330,6 @@ int main()
                         }
                     }
                 }
-                if(executed)
-                {
-                    xHitCounter = 0;
-                    yHitCounter = 0;
-                    mouseMoveX_sequence.clear();
-                    mouseMoveY_sequence.clear();
-                    distX_sequence.clear();
-                    distY_sequence.clear();
-                    for(int i = 0; i < size; i++) {
-                        distX_sequence.push_back(0);
-                        distY_sequence.push_back(0);
-                        mouseMoveX_sequence.push_back(0);
-                        mouseMoveY_sequence.push_back(0);
-                        time_sequence[i] = INT_MAX;
-                    }
-                    kstroke.state = INTERCEPTION_KEY_DOWN;
-                    interception_send(context, kbDevice, (InterceptionStroke *)&kstroke, 1);
-                    //sleep time too low will cause key to not be send
-                    this_thread::sleep_for(chrono::milliseconds(100));
-                    kstroke.state = INTERCEPTION_KEY_UP;
-                    interception_send(context, kbDevice, (InterceptionStroke *)&kstroke, 1);
-                }
                 if(!xAxis)
                 {
                     xHitCounter = 0;
@@ -343,6 +342,57 @@ int main()
                 }
                 mstroke.x = 0;
                 mstroke.y = 0;
+            }
+            if(wheel && mod)
+            {
+                bool validRoll = roll(mstroke.rolling, &roll_sequence);
+                if(validRoll)
+                {
+                    double newTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                    double diff = newTime-oldTime;
+                    time_sequence.pop_front();
+                    time_sequence.push_back(diff);
+                    cout << "do a barrel roll!" << endl;
+                    oldTime = newTime;
+
+                    if(roll_sequence[size-1] > 0 && mouseMoveX_sequence[size-1] == 0 && mouseMoveY_sequence[size-1] == 0)
+                    {
+                        kstroke.code = SCANCODE_9;
+                        kstroke.information = 0;
+                        executed = 1;
+                    }
+                    else if(roll_sequence[size-1] < 0)
+                    {
+                        kstroke.code = SCANCODE_0;
+                        kstroke.information = 0;
+                        executed = 1;
+                    }
+                }
+            }
+            if(executed)
+            {
+                xHitCounter = 0;
+                yHitCounter = 0;
+                rollCounter = 0;
+                mouseMoveX_sequence.clear();
+                mouseMoveY_sequence.clear();
+                distX_sequence.clear();
+                distY_sequence.clear();
+                roll_sequence.clear();
+                for(int i = 0; i < size; i++) {
+                    distX_sequence.push_back(0);
+                    distY_sequence.push_back(0);
+                    mouseMoveX_sequence.push_back(0);
+                    mouseMoveY_sequence.push_back(0);
+                    roll_sequence.push_back(0);
+                    time_sequence[i] = INT_MAX;
+                }
+                kstroke.state = INTERCEPTION_KEY_DOWN;
+                interception_send(context, kbDevice, (InterceptionStroke *)&kstroke, 1);
+                //sleep time too low will cause key to not be send
+                this_thread::sleep_for(chrono::milliseconds(100));
+                kstroke.state = INTERCEPTION_KEY_UP;
+                interception_send(context, kbDevice, (InterceptionStroke *)&kstroke, 1);
             }
             if(!mod)
             {
@@ -483,8 +533,10 @@ int main()
                     }
                 }
 
+                //clear mouse inputs everytime a button is pressed while modded
                 mouseMoveX_sequence.clear();
                 mouseMoveY_sequence.clear();
+                roll_sequence.clear();
                 distX_sequence.clear();
                 distY_sequence.clear();
                 for(int i = 0; i < size; i++) {
@@ -492,6 +544,7 @@ int main()
                     distY_sequence.push_back(0);
                     mouseMoveX_sequence.push_back(0);
                     mouseMoveY_sequence.push_back(0);
+                    roll_sequence.push_back(0);
                 }
             }
             if(executed) {
