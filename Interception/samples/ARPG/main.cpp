@@ -12,25 +12,42 @@ using namespace std;
 
 enum ScanCode
 {
-    //Light A
+    //Light
     SCANCODE_1 = 0x02,
     SCANCODE_2 = 0x03,
     SCANCODE_3 = 0x04,
     SCANCODE_4 = 0x05,
 
-    //Heavy A
+    //Heavy
     SCANCODE_5 = 0x06,
     SCANCODE_6 = 0x07,
     SCANCODE_7 = 0x08,
     SCANCODE_8 = 0x09,
 
-    //Light B
+    //Light LC
     SCANCODE_9 = 0x0A,
     SCANCODE_0 = 0x0B,
     SCANCODE_MINUS = 0x0C,
     SCANCODE_EQUALS = 0x0D,
 
-    //Heavy B
+    //Light RC
+    SCANCODE_PGUP = 0x49,
+    SCANCODE_PGDN = 0x51,
+    SCANCODE_HOME = 0x47,
+    SCANCODE_END = 0x4F,
+
+    //Light RollUp
+    SCANCODE_F1 = 0x3B,
+    SCANCODE_F2 = 0x3C,
+    SCANCODE_F3 = 0x3D,
+    SCANCODE_F4 = 0x3E,
+
+    //Light RollDown
+    SCANCODE_F5 = 0x3F,
+    SCANCODE_F6 = 0x2F,
+    SCANCODE_F7 = 0x40,
+    SCANCODE_F8 = 0x41,
+
     SCANCODE_NUMPLUS = 0x4E,
     SCANCODE_NUMSTAR = 0x37,
     SCANCODE_TILDE = 0x29,
@@ -385,56 +402,56 @@ int main()
                     //L Up RollUp
                     if(mouseMoveY_sequence[size-1] < 0 && rollUp) {
                         if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                            kstroke.code = SCANCODE_9;
+                            kstroke.code = SCANCODE_F1;
                             executed = 1;
                         }
                     }
                     //L Down RollUp
                     if(mouseMoveY_sequence[size-1] > 0 && rollUp) {
                         if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                            kstroke.code = SCANCODE_0;
+                            kstroke.code = SCANCODE_F2;
                             executed = 1;
                         }
                     }
                     //L Left RollUp
                     if(mouseMoveX_sequence[size-1] < 0 && rollUp) {
                         if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                            kstroke.code = SCANCODE_MINUS;
+                            kstroke.code = SCANCODE_F3;
                             executed = 1;
                         }
                     }
                     //L Right RollUp
                     if(mouseMoveX_sequence[size-1] > 0 && rollUp) {
                         if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                            kstroke.code = SCANCODE_EQUALS;
+                            kstroke.code = SCANCODE_F4;
                             executed = 1;
                         }
                     }
                     //L Up RollDown
                     if(mouseMoveY_sequence[size-1] < 0 && rollDown) {
                         if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                            kstroke.code = SCANCODE_9;
+                            kstroke.code = SCANCODE_F5;
                             executed = 1;
                         }
                     }
                     //L Down RollDown
                     if(mouseMoveY_sequence[size-1] > 0 && rollDown) {
                         if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                            kstroke.code = SCANCODE_0;
+                            kstroke.code = SCANCODE_F6;
                             executed = 1;
                         }
                     }
                     //L Left RollDown
                     if(mouseMoveX_sequence[size-1] < 0 && rollDown) {
                         if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                            kstroke.code = SCANCODE_MINUS;
+                            kstroke.code = SCANCODE_F7;
                             executed = 1;
                         }
                     }
                     //L Right RollDown
                     if(mouseMoveX_sequence[size-1] > 0 && rollDown) {
                         if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                            kstroke.code = SCANCODE_EQUALS;
+                            kstroke.code = SCANCODE_F8;
                             executed = 1;
                         }
                     }
@@ -480,28 +497,28 @@ int main()
                 //L Up RC
                 if(mouseMoveY_sequence[size-1] < 0 && right) {
                     if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_9;
+                        kstroke.code = SCANCODE_PGUP;
                         executed = 1;
                     }
                 }
                 //L Down RC
                 if(mouseMoveY_sequence[size-1] > 0 && right) {
                     if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_0;
+                        kstroke.code = SCANCODE_PGDN;
                         executed = 1;
                     }
                 }
                 //L Left RC
                 if(mouseMoveX_sequence[size-1] < 0 && right) {
                     if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_MINUS;
+                        kstroke.code = SCANCODE_HOME;
                         executed = 1;
                     }
                 }
                 //L Right RC
                 if(mouseMoveX_sequence[size-1] > 0 && right) {
                     if(time_sequence[size-2] < combo && time_sequence[size-1] < combo) {
-                        kstroke.code = SCANCODE_EQUALS;
+                        kstroke.code = SCANCODE_END;
                         executed = 1;
                     }
                 }
